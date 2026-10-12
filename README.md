@@ -1,0 +1,2 @@
+# Academit
+Simple Academic Manager
