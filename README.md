@@ -6,7 +6,7 @@ TP Integrador - Taller de Lenguajes de Programación III (Taller 3).
 
 ---
 
-## 🛠️ Stack Tecnológico
+## Stack Tecnológico
 
 - **Base de Datos**: PostgreSQL 16
 - **Backend**: Java 21, Spring Boot 3, Gradle
@@ -15,7 +15,7 @@ TP Integrador - Taller de Lenguajes de Programación III (Taller 3).
 
 ---
 
-## 📁 Estructura del Repositorio
+## Estructura del Repositorio
 
 ```text
 Academit/
@@ -37,7 +37,7 @@ Academit/
 
 ---
 
-## 🚀 Cómo arrancar el proyecto paso a paso
+## Cómo arrancar el proyecto paso a paso
 
 ### 1. Ingresar al entorno reproducible
 Desde la raíz del repositorio, ejecutá:
@@ -78,18 +78,7 @@ La aplicación web estará disponible en `http://localhost:5173`.
 
 ---
 
-## 📚 Documentación
+## Documentación
 
 - [Índice General de Documentación](docs/README.md)
 - [Flujo de Trabajo del Equipo (Git, Ramas y Commits)](docs/flujo-de-trabajo.md)
-
----
-
-## 👥 Equipo
-
-| Integrante | Rol | Área |
-| :--- | :--- | :--- |
-| | | |
-| | | |
-| | | |
-| | | |
