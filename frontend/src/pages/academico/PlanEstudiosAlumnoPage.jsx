@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react'
 import { Card, Row, Col, Badge, ListGroup } from 'react-bootstrap'
 import PageHeader from '../../components/PageHeader'
 import StatusBadge from '../../components/StatusBadge'
-import { getMaterias } from '../../api/materias'
+import { getMateriasDePlan } from '../../api/planes'
 
 export const PlanEstudiosAlumnoPage = () => {
   const [materias, setMaterias] = useState([])
 
   useEffect(() => {
-    getMaterias().then(setMaterias).catch(() => {})
+    getMateriasDePlan(1).then(setMaterias).catch(() => {})
   }, [])
 
   // Agrupar materias por año
@@ -69,11 +69,14 @@ export const PlanEstudiosAlumnoPage = () => {
                           <div className="mt-2 pt-2 border-top border-secondary border-opacity-10 small">
                             <span className="text-muted">Correlativas requeridas: </span>
                             {m.correlativas.length > 0 ? (
-                              m.correlativas.map((c, idx) => (
-                                <Badge key={idx} bg="dark" className="me-1 border border-secondary">
-                                  {c}
-                                </Badge>
-                              ))
+                              m.correlativas.map((c, idx) => {
+                                const nombre = typeof c === 'number' ? (materias.find((mat) => mat.idMateria === c)?.nombre || `Materia #${c}`) : c
+                                return (
+                                  <Badge key={idx} bg="dark" className="me-1 border border-secondary">
+                                    {nombre}
+                                  </Badge>
+                                )
+                              })
                             ) : (
                               <span className="text-success fst-italic">Ninguna (Inicial)</span>
                             )}

@@ -1,33 +1,32 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Card, Row, Col, Badge, Button, ListGroup, Form } from 'react-bootstrap'
 import PageHeader from '../../components/PageHeader'
 import FormModal from '../../components/FormModal'
 import { useToast } from '../../context/ToastContext'
 import { useModo } from '../../hooks/useModo'
-import { getMaterias, updateMateria } from '../../api/materias'
-import { getCarreras, getPlanesEstudio } from '../../api/carreras'
+import { updateMateria } from '../../api/materias'
+import { getCarreras } from '../../api/carreras'
+import { getPlanesEstudio, getMateriasDePlan } from '../../api/planes'
 
 export const GestionPlanEstudiosPage = () => {
   const { showToast } = useToast()
   const modo = useModo()
   const esLectura = modo === 'lectura'
 
-  const [materias, setMaterias] = useState([])
   const [carreras, setCarreras] = useState([])
   const [planes, setPlanes] = useState([])
+  const [materiasPlan, setMateriasPlan] = useState([])
   const [selectedCarreraId, setSelectedCarreraId] = useState(1)
   const [editingMateria, setEditingMateria] = useState(null)
   const [correlativasTexto, setCorrelativasTexto] = useState('')
   const [loading, setLoading] = useState(false)
 
-  const cargar = async () => {
+  const cargarDatos = async () => {
     try {
-      const [mats, cars, pls] = await Promise.all([
-        getMaterias(),
+      const [cars, pls] = await Promise.all([
         getCarreras(),
         getPlanesEstudio(),
       ])
-      setMaterias(mats)
       setCarreras(cars)
       setPlanes(pls)
     } catch {
@@ -36,20 +35,43 @@ export const GestionPlanEstudiosPage = () => {
   }
 
   useEffect(() => {
-    cargar()
+    cargarDatos()
   }, [])
 
   const carreraActual = carreras.find((c) => c.idCarrera === Number(selectedCarreraId)) || carreras[0]
   const planActual = planes.find((p) => p.idCarrera === Number(selectedCarreraId))
 
-  // Materias filtradas por la carrera elegida
-  const materiasCarrera = materias.filter(
-    (m) => !m.idCarrera || m.idCarrera === Number(selectedCarreraId)
-  )
+  const cargarMateriasPlan = useCallback(async (idPlan) => {
+    if (!idPlan) {
+      setMateriasPlan([])
+      return
+    }
+    try {
+      const mats = await getMateriasDePlan(idPlan)
+      setMateriasPlan(mats)
+    } catch {
+      showToast('Error al cargar materias del plan', 'danger')
+    }
+  }, [showToast])
+
+  useEffect(() => {
+    if (planActual?.idPlan) {
+      cargarMateriasPlan(planActual.idPlan)
+    } else {
+      setMateriasPlan([])
+    }
+  }, [planActual?.idPlan, cargarMateriasPlan])
 
   const handleOpenEditarCorrelativas = (m) => {
     setEditingMateria(m)
-    setCorrelativasTexto(m.correlativas.join(', '))
+    const nombres = (m.correlativas || []).map((c) => {
+      if (typeof c === 'number') {
+        const encontrada = materiasPlan.find((x) => x.idMateria === c)
+        return encontrada ? encontrada.nombre : c
+      }
+      return c
+    })
+    setCorrelativasTexto(nombres.join(', '))
   }
 
   const handleGuardarCorrelativas = async (e) => {
@@ -61,11 +83,17 @@ export const GestionPlanEstudiosPage = () => {
         .split(',')
         .map((s) => s.trim())
         .filter(Boolean)
+        .map((nomOId) => {
+          const encontrada = materiasPlan.find((x) => x.nombre.toLowerCase() === nomOId.toLowerCase())
+          return encontrada ? encontrada.idMateria : nomOId
+        })
 
       await updateMateria(editingMateria.idMateria, { correlativas })
       showToast(`Correlatividades actualizadas para ${editingMateria.nombre}`, 'success')
       setEditingMateria(null)
-      cargar()
+      if (planActual?.idPlan) {
+        cargarMateriasPlan(planActual.idPlan)
+      }
     } catch (err) {
       showToast(err.message || 'Error al actualizar', 'danger')
     } finally {
@@ -124,7 +152,7 @@ export const GestionPlanEstudiosPage = () => {
                   </div>
                 </div>
                 <Badge bg="secondary">
-                  {materiasCarrera.length} asignaturas totales
+                  {materiasPlan.length} asignaturas totales
                 </Badge>
               </div>
             </Col>
@@ -134,7 +162,7 @@ export const GestionPlanEstudiosPage = () => {
 
       <Row className="g-4">
         {anios.map((anio) => {
-          const mats = materiasCarrera.filter((m) => m.anio === anio)
+          const mats = materiasPlan.filter((m) => m.anio === anio)
           return (
             <Col key={anio} lg={4}>
               <Card className="border-0 shadow-sm h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
@@ -184,11 +212,16 @@ export const GestionPlanEstudiosPage = () => {
                           <div className="mt-2 pt-2 border-top border-secondary border-opacity-10 small">
                             <span className="text-muted">Correlativas: </span>
                             {m.correlativas.length > 0 ? (
-                              m.correlativas.map((c, idx) => (
-                                <Badge key={idx} bg="dark" className="me-1 border border-secondary">
-                                  {c}
-                                </Badge>
-                              ))
+                              m.correlativas.map((c, idx) => {
+                                const nombre = typeof c === 'number'
+                                  ? (materiasPlan.find((x) => x.idMateria === c)?.nombre || `Materia #${c}`)
+                                  : c
+                                return (
+                                  <Badge key={idx} bg="dark" className="me-1 border border-secondary">
+                                    {nombre}
+                                  </Badge>
+                                )
+                              })
                             ) : (
                               <span className="text-muted fst-italic">Sin requisitos previos</span>
                             )}
