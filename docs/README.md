@@ -4,10 +4,10 @@ Bienvenido al índice central de documentación técnica y metodológica de **Ac
 
 ## Índice General
 
-1. [Flujo de Trabajo del Equipo](file:///home/ezequiel/Proyectos/Academit/docs/flujo-de-trabajo.md): Convenciones de Git, ramas principales y de trabajo, nomenclatura de commits, plantilla de Pull Request y lista de control.
-2. [Análisis del Sistema (Entregable 1)](file:///home/ezequiel/Proyectos/Academit/docs/analisis/README.md): Alcance del proyecto, actores del instituto, matriz de Requisitos Funcionales (RF01 - RF57) y Reglas de Negocio (RN01 - RN14).
-3. [Diagramas UML](file:///home/ezequiel/Proyectos/Academit/docs/uml/README.md): Diagramas de casos de uso, clases, secuencia y modelo entidad-relación (DER).
-4. [Documentación del Frontend](file:///home/ezequiel/Proyectos/Academit/docs/frontend/README.md): Arquitectura de la aplicación React + Vite, guía para agregar pantallas, capa de servicios API y mocks, catálogo de componentes y mapa de pantallas.
+1. [Flujo de Trabajo del Equipo](flujo-de-trabajo.md): Convenciones de Git, ramas principales y de trabajo, nomenclatura de commits, plantilla de Pull Request y lista de control.
+2. [Análisis del Sistema (Entregable 1)](analisis/README.md): Alcance del proyecto, actores del instituto, matriz de Requisitos Funcionales (RF01 - RF57) y Reglas de Negocio (RN01 - RN14).
+3. [Diagramas UML](uml/README.md): Diagramas de casos de uso, clases, secuencia y modelo entidad-relación (DER).
+4. [Documentación del Frontend](frontend/README.md): Arquitectura de la aplicación React + Vite, guía para agregar pantallas, capa de servicios API y mocks, catálogo de componentes y mapa de pantallas.
 
 ---
 
