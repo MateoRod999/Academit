@@ -1,0 +1,21 @@
+# Dependencias y artefactos compilados
+node_modules/
+dist/
+build/
+.gradle/
+
+# Datos locales del entorno y base de datos
+.pgdata/
+.env
+.env*.local
+
+# IDEs y editores
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs y paquetes
+*.log
+logs/
+*.zip

@@ -1,0 +1,403 @@
+/**
+ * Banco unificado y coherente de datos mockeados para Academit.
+ * Alumno de referencia: Lucía Benítez (ALU-1001, DNI 42111222).
+ */
+
+export const mockDb = {
+  // 1. Alumnos
+  alumnos: [
+    {
+      idAlumno: 1,
+      legajo: 'ALU-1001',
+      nombre: 'Lucía',
+      apellido: 'Benítez',
+      dni: '42111222',
+      email: 'lucia.benitez@instituto.edu.ar',
+      telefono: '11-4567-8901',
+      fechaNacimiento: '2001-04-18',
+      direccion: 'Av. Corrientes 1234, CABA',
+      carrera: 'Tecnicatura Superior en Desarrollo de Software',
+      idCarrera: 1,
+      idCurso: 1,
+      cursoNombre: '1° Año - Turno Mañana',
+      idMatricula: 1,
+      estadoMatricula: 'ACTIVA',
+      cicloLectivo: 2026,
+      estado: 'ACTIVO',
+    },
+    {
+      idAlumno: 2,
+      legajo: 'ALU-1002',
+      nombre: 'Martín',
+      apellido: 'Rodríguez',
+      dni: '43333444',
+      email: 'martin.rodriguez@instituto.edu.ar',
+      telefono: '11-4567-8902',
+      fechaNacimiento: '2002-08-22',
+      direccion: 'Calle Falsa 123, CABA',
+      carrera: 'Tecnicatura Superior en Desarrollo de Software',
+      idCarrera: 1,
+      idCurso: 1,
+      cursoNombre: '1° Año - Turno Mañana',
+      idMatricula: 2,
+      estadoMatricula: 'ACTIVA',
+      cicloLectivo: 2026,
+      estado: 'ACTIVO',
+    },
+    {
+      idAlumno: 3,
+      legajo: 'ALU-1003',
+      nombre: 'Camila',
+      apellido: 'Suárez',
+      dni: '41555666',
+      email: 'camila.suarez@instituto.edu.ar',
+      telefono: '11-4567-8903',
+      fechaNacimiento: '2000-11-05',
+      direccion: 'Belgrano 456, CABA',
+      carrera: 'Tecnicatura Superior en Desarrollo de Software',
+      idCarrera: 1,
+      idCurso: 2,
+      cursoNombre: '2° Año - Turno Tarde',
+      idMatricula: 3,
+      estadoMatricula: 'PENDIENTE',
+      cicloLectivo: 2026,
+      estado: 'REGULAR',
+    },
+    {
+      idAlumno: 4,
+      legajo: 'ALU-1004',
+      nombre: 'Esteban',
+      apellido: 'Morales',
+      dni: '44777888',
+      email: 'esteban.morales@instituto.edu.ar',
+      telefono: '11-4567-8904',
+      fechaNacimiento: '2003-01-30',
+      direccion: 'Rivadavia 7890, CABA',
+      carrera: 'Tecnicatura Superior en Desarrollo de Software',
+      idCarrera: 1,
+      idCurso: 1,
+      cursoNombre: '1° Año - Turno Mañana',
+      idMatricula: 4,
+      estadoMatricula: 'CANCELADA',
+      cicloLectivo: 2026,
+      estado: 'INACTIVO',
+    },
+  ],
+
+  // 2. Docentes
+  docentes: [
+    {
+      idDocente: 1,
+      legajo: 'DOC-201',
+      nombre: 'Carlos',
+      apellido: 'Gómez',
+      dni: '30111222',
+      email: 'carlos.gomez@instituto.edu.ar',
+      especialidad: 'Programación y Algoritmos',
+      telefono: '11-5555-1234',
+      estado: 'ACTIVO',
+    },
+    {
+      idDocente: 2,
+      legajo: 'DOC-202',
+      nombre: 'Mariana',
+      apellido: 'Peralta',
+      dni: '32444555',
+      email: 'mariana.peralta@instituto.edu.ar',
+      especialidad: 'Bases de Datos y Modelado',
+      telefono: '11-5555-5678',
+      estado: 'ACTIVO',
+    },
+    {
+      idDocente: 3,
+      legajo: 'DOC-203',
+      nombre: 'Roberto',
+      apellido: 'Sánchez',
+      dni: '28999000',
+      email: 'roberto.sanchez@instituto.edu.ar',
+      especialidad: 'Matemática y Lógica',
+      telefono: '11-5555-9012',
+      estado: 'ACTIVO',
+    },
+    {
+      idDocente: 4,
+      legajo: 'DOC-204',
+      nombre: 'Elena',
+      apellido: 'Fabbri',
+      dni: '31222333',
+      email: 'elena.fabbri@instituto.edu.ar',
+      especialidad: 'Arquitectura y Sistemas Operativos',
+      telefono: '11-5555-3456',
+      estado: 'ACTIVO',
+    },
+  ],
+
+  // 3. Materias
+  materias: [
+    { idMateria: 1, codigo: 'MAT-101', nombre: 'Programación I', anio: 1, regimen: 'Anual', horasSemanales: 6, correlativas: [] },
+    { idMateria: 2, codigo: 'MAT-102', nombre: 'Bases de Datos I', anio: 1, regimen: '1° Cuatrimestre', horasSemanales: 4, correlativas: [] },
+    { idMateria: 3, codigo: 'MAT-103', nombre: 'Sistemas de Computación', anio: 1, regimen: '1° Cuatrimestre', horasSemanales: 4, correlativas: [] },
+    { idMateria: 4, codigo: 'MAT-104', nombre: 'Matemática Discreta', anio: 1, regimen: '2° Cuatrimestre', horasSemanales: 4, correlativas: [] },
+    { idMateria: 5, codigo: 'MAT-201', nombre: 'Programación II', anio: 2, regimen: 'Anual', horasSemanales: 6, correlativas: ['Programación I'] },
+    { idMateria: 6, codigo: 'MAT-202', nombre: 'Bases de Datos II', anio: 2, regimen: '1° Cuatrimestre', horasSemanales: 4, correlativas: ['Bases de Datos I'] },
+    { idMateria: 7, codigo: 'MAT-203', nombre: 'Ingeniería de Software', anio: 2, regimen: '2° Cuatrimestre', horasSemanales: 4, correlativas: ['Programación I'] },
+    { idMateria: 8, codigo: 'MAT-301', nombre: 'Práctica Profesionalizante', anio: 3, regimen: 'Anual', horasSemanales: 8, correlativas: ['Programación II', 'Bases de Datos II'] },
+    { idMateria: 9, codigo: 'MAT-302', nombre: 'Seguridad y Auditoría', anio: 3, regimen: '1° Cuatrimestre', horasSemanales: 4, correlativas: ['Sistemas de Computación'] },
+  ],
+
+  // 4. Cursos (Comisiones)
+  cursos: [
+    {
+      idCurso: 1,
+      codigo: '1A-INF-TM',
+      nombre: '1° Año - Turno Mañana',
+      turno: 'MAÑANA',
+      capacidadMaxima: 35,
+      inscriptos: 29,
+      cuposDisponibles: 6,
+      cicloLectivo: 2026,
+      aula: 'Aula 101 (Pabellón A)',
+    },
+    {
+      idCurso: 2,
+      codigo: '2A-INF-TT',
+      nombre: '2° Año - Turno Tarde',
+      turno: 'TARDE',
+      capacidadMaxima: 30,
+      inscriptos: 28,
+      cuposDisponibles: 2,
+      cicloLectivo: 2026,
+      aula: 'Laboratorio de Sistemas 2',
+    },
+    {
+      idCurso: 3,
+      codigo: '1B-INF-TN',
+      nombre: '1° Año - Turno Noche',
+      turno: 'NOCHE',
+      capacidadMaxima: 40,
+      inscriptos: 40,
+      cuposDisponibles: 0,
+      cicloLectivo: 2026,
+      aula: 'Aula Magna 3',
+    },
+  ],
+
+  // 5. Ciclos Lectivos
+  ciclosLectivos: [
+    { idCiclo: 1, anio: 2026, nombre: 'Ciclo Lectivo 2026', fechaInicio: '2026-03-01', fechaFin: '2026-12-20', estado: 'ACTIVO' },
+    { idCiclo: 2, anio: 2025, nombre: 'Ciclo Lectivo 2025', fechaInicio: '2025-03-01', fechaFin: '2025-12-20', estado: 'CERRADO' },
+  ],
+
+  // 6. Asignaciones Docente - Curso - Materia
+  asignaciones: [
+    { idAsignacion: 1, idDocente: 1, docenteNombre: 'Carlos Gómez', idMateria: 1, materiaNombre: 'Programación I', idCurso: 1, cursoNombre: '1° Año - Turno Mañana', rolDocente: 'Titular' },
+    { idAsignacion: 2, idDocente: 2, docenteNombre: 'Mariana Peralta', idMateria: 2, materiaNombre: 'Bases de Datos I', idCurso: 1, cursoNombre: '1° Año - Turno Mañana', rolDocente: 'Titular' },
+    { idAsignacion: 3, idDocente: 4, docenteNombre: 'Elena Fabbri', idMateria: 3, materiaNombre: 'Sistemas de Computación', idCurso: 1, cursoNombre: '1° Año - Turno Mañana', rolDocente: 'Titular' },
+    { idAsignacion: 4, idDocente: 1, docenteNombre: 'Carlos Gómez', idMateria: 5, materiaNombre: 'Programación II', idCurso: 2, cursoNombre: '2° Año - Turno Tarde', rolDocente: 'Titular' },
+  ],
+
+  // 7. Inscripciones de Alumnos a Cursos
+  inscripciones: [
+    { idInscripcion: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', idCurso: 1, cursoNombre: '1° Año - Turno Mañana', cicloLectivo: 2026, fechaInscripcion: '2026-02-15', estado: 'CONFIRMADA' },
+    { idInscripcion: 2, idAlumno: 2, alumnoNombre: 'Martín Rodríguez', idCurso: 1, cursoNombre: '1° Año - Turno Mañana', cicloLectivo: 2026, fechaInscripcion: '2026-02-16', estado: 'CONFIRMADA' },
+    { idInscripcion: 3, idAlumno: 3, alumnoNombre: 'Camila Suárez', idCurso: 2, cursoNombre: '2° Año - Turno Tarde', cicloLectivo: 2026, fechaInscripcion: '2026-02-18', estado: 'CONFIRMADA' },
+    { idInscripcion: 4, idAlumno: 4, alumnoNombre: 'Esteban Morales', idCurso: 1, cursoNombre: '1° Año - Turno Mañana', cicloLectivo: 2026, fechaInscripcion: '2026-02-20', estado: 'CANCELADA' },
+  ],
+
+  // 8. Evaluaciones (creadas por docentes)
+  evaluaciones: [
+    { idEvaluacion: 1, idMateria: 1, materiaNombre: 'Programación I', idCurso: 1, cursoNombre: '1° Año - TM', fecha: '2026-04-15', tipo: 'PARCIAL', descripcion: 'Primer Parcial - Lógica, Funciones y Punteros', ponderacion: '30%' },
+    { idEvaluacion: 2, idMateria: 1, materiaNombre: 'Programación I', idCurso: 1, cursoNombre: '1° Año - TM', fecha: '2026-05-10', tipo: 'TRABAJO_PRACTICO', descripcion: 'TP Integrador 1 - Sistema de Archivos en C', ponderacion: '20%' },
+    { idEvaluacion: 3, idMateria: 2, materiaNombre: 'Bases de Datos I', idCurso: 1, cursoNombre: '1° Año - TM', fecha: '2026-04-22', tipo: 'PARCIAL', descripcion: 'Primer Parcial - Modelo Relacional y Normalización', ponderacion: '40%' },
+    { idEvaluacion: 4, idMateria: 2, materiaNombre: 'Bases de Datos I', idCurso: 1, cursoNombre: '1° Año - TM', fecha: '2026-05-18', tipo: 'TRABAJO_PRACTICO', descripcion: 'TP 1 - DDL y DML en PostgreSQL', ponderacion: '20%' },
+  ],
+
+  // 9. Calificaciones obtenidas
+  calificaciones: [
+    // Alumno 1: Lucía Benítez
+    { idCalificacion: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', idMateria: 1, materiaNombre: 'Programación I', evaluacionNombre: 'Primer Parcial', tipo: 'PARCIAL', nota: 8, fecha: '2026-04-15', condicion: 'APROBADO', observacion: 'Excelente desarrollo de algoritmos' },
+    { idCalificacion: 2, idAlumno: 1, alumnoNombre: 'Lucía Benítez', idMateria: 1, materiaNombre: 'Programación I', evaluacionNombre: 'TP Integrador 1', tipo: 'TRABAJO_PRACTICO', nota: 10, fecha: '2026-05-10', condicion: 'APROBADO', observacion: 'Código limpio y pruebas completas' },
+    { idCalificacion: 3, idAlumno: 1, alumnoNombre: 'Lucía Benítez', idMateria: 2, materiaNombre: 'Bases de Datos I', evaluacionNombre: 'Primer Parcial', tipo: 'PARCIAL', nota: 9, fecha: '2026-04-22', condicion: 'APROBADO', observacion: 'Muy buen diagrama DER' },
+    { idCalificacion: 4, idAlumno: 1, alumnoNombre: 'Lucía Benítez', idMateria: 2, materiaNombre: 'Bases de Datos I', evaluacionNombre: 'TP 1 - DDL y DML', tipo: 'TRABAJO_PRACTICO', nota: 9, fecha: '2026-05-18', condicion: 'APROBADO', observacion: 'Consultas optimizadas' },
+    // Alumno 2: Martín Rodríguez
+    { idCalificacion: 5, idAlumno: 2, alumnoNombre: 'Martín Rodríguez', idMateria: 1, materiaNombre: 'Programación I', evaluacionNombre: 'Primer Parcial', tipo: 'PARCIAL', nota: 7, fecha: '2026-04-15', condicion: 'APROBADO', observacion: 'Aprobado con sugerencias' },
+    { idCalificacion: 6, idAlumno: 2, alumnoNombre: 'Martín Rodríguez', idMateria: 2, materiaNombre: 'Bases de Datos I', evaluacionNombre: 'Primer Parcial', tipo: 'PARCIAL', nota: 6, fecha: '2026-04-22', condicion: 'APROBADO', observacion: 'Ajustar normalización' },
+  ],
+
+  // 10. Asistencias
+  asistencias: [
+    { idAsistencia: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', idMateria: 1, materiaNombre: 'Programación I', idCurso: 1, fecha: '2026-04-01', estado: 'PRESENTE' },
+    { idAsistencia: 2, idAlumno: 1, alumnoNombre: 'Lucía Benítez', idMateria: 1, materiaNombre: 'Programación I', idCurso: 1, fecha: '2026-04-03', estado: 'PRESENTE' },
+    { idAsistencia: 3, idAlumno: 1, alumnoNombre: 'Lucía Benítez', idMateria: 1, materiaNombre: 'Programación I', idCurso: 1, fecha: '2026-04-08', estado: 'TARDANZA' },
+    { idAsistencia: 4, idAlumno: 1, alumnoNombre: 'Lucía Benítez', idMateria: 1, materiaNombre: 'Programación I', idCurso: 1, fecha: '2026-04-10', estado: 'JUSTIFICADO' },
+    { idAsistencia: 5, idAlumno: 1, alumnoNombre: 'Lucía Benítez', idMateria: 1, materiaNombre: 'Programación I', idCurso: 1, fecha: '2026-04-15', estado: 'PRESENTE' },
+    { idAsistencia: 6, idAlumno: 1, alumnoNombre: 'Lucía Benítez', idMateria: 1, materiaNombre: 'Programación I', idCurso: 1, fecha: '2026-04-17', estado: 'PRESENTE' },
+    { idAsistencia: 7, idAlumno: 1, alumnoNombre: 'Lucía Benítez', idMateria: 2, materiaNombre: 'Bases de Datos I', idCurso: 1, fecha: '2026-04-02', estado: 'PRESENTE' },
+    { idAsistencia: 8, idAlumno: 1, alumnoNombre: 'Lucía Benítez', idMateria: 2, materiaNombre: 'Bases de Datos I', idCurso: 1, fecha: '2026-04-09', estado: 'PRESENTE' },
+    { idAsistencia: 9, idAlumno: 1, alumnoNombre: 'Lucía Benítez', idMateria: 2, materiaNombre: 'Bases de Datos I', idCurso: 1, fecha: '2026-04-16', estado: 'AUSENTE' },
+    { idAsistencia: 10, idAlumno: 1, alumnoNombre: 'Lucía Benítez', idMateria: 2, materiaNombre: 'Bases de Datos I', idCurso: 1, fecha: '2026-04-23', estado: 'PRESENTE' },
+  ],
+
+  // 11. Mesas de Examen
+  mesasExamen: [
+    {
+      idMesa: 1,
+      idMateria: 1,
+      materiaNombre: 'Programación I',
+      fecha: '2026-05-15',
+      hora: '09:00 hs',
+      turno: 'MAÑANA',
+      tribunal: 'Prof. Carlos Gómez / Prof. Mariana Peralta',
+      aula: 'Aula Magna 1',
+      cupoMaximo: 30,
+      inscriptos: 12,
+      estadoMesa: 'ABIERTA',
+      alumnosInscriptosIds: [1], // Lucía Benítez inscripta
+    },
+    {
+      idMesa: 2,
+      idMateria: 2,
+      materiaNombre: 'Bases de Datos I',
+      fecha: '2026-05-22',
+      hora: '14:00 hs',
+      turno: 'TARDE',
+      tribunal: 'Prof. Mariana Peralta / Prof. Roberto Sánchez',
+      aula: 'Laboratorio 2',
+      cupoMaximo: 25,
+      inscriptos: 8,
+      estadoMesa: 'ABIERTA',
+      alumnosInscriptosIds: [],
+    },
+    {
+      idMesa: 3,
+      idMateria: 3,
+      materiaNombre: 'Sistemas de Computación',
+      fecha: '2026-05-29',
+      hora: '09:00 hs',
+      turno: 'MAÑANA',
+      tribunal: 'Prof. Elena Fabbri / Prof. Carlos Gómez',
+      aula: 'Aula 104',
+      cupoMaximo: 25,
+      inscriptos: 15,
+      estadoMesa: 'ABIERTA',
+      alumnosInscriptosIds: [],
+    },
+    {
+      idMesa: 4,
+      idMateria: 4,
+      materiaNombre: 'Matemática Discreta',
+      fecha: '2026-06-05',
+      hora: '18:00 hs',
+      turno: 'NOCHE',
+      tribunal: 'Prof. Roberto Sánchez / Prof. Carlos Gómez',
+      aula: 'Aula 202',
+      cupoMaximo: 30,
+      inscriptos: 5,
+      estadoMesa: 'ABIERTA',
+      alumnosInscriptosIds: [],
+    },
+  ],
+
+  // 12. Matrículas anuales
+  matriculas: [
+    {
+      idMatricula: 1,
+      idAlumno: 1,
+      alumnoNombre: 'Lucía Benítez',
+      cicloLectivo: 2026,
+      monto: 35000,
+      fechaAlta: '2026-02-10',
+      estado: 'ACTIVA',
+      estadoPago: 'PAGADA',
+    },
+    {
+      idMatricula: 2,
+      idAlumno: 2,
+      alumnoNombre: 'Martín Rodríguez',
+      cicloLectivo: 2026,
+      monto: 35000,
+      fechaAlta: '2026-02-12',
+      estado: 'ACTIVA',
+      estadoPago: 'PAGADA',
+    },
+    {
+      idMatricula: 3,
+      idAlumno: 3,
+      alumnoNombre: 'Camila Suárez',
+      cicloLectivo: 2026,
+      monto: 35000,
+      fechaAlta: '2026-02-15',
+      estado: 'PENDIENTE',
+      estadoPago: 'PENDIENTE',
+    },
+    {
+      idMatricula: 4,
+      idAlumno: 4,
+      alumnoNombre: 'Esteban Morales',
+      cicloLectivo: 2026,
+      monto: 35000,
+      fechaAlta: '2026-02-01',
+      estado: 'CANCELADA',
+      estadoPago: 'ANULADA',
+    },
+  ],
+
+  // 13. Cuotas y Seguros (12 cuotas mensuales + 3 seguros cuatrimestrales para Lucía Benítez)
+  cuotas: [
+    // Cuotas mensuales de Lucía Benítez (idAlumno: 1)
+    { idCuota: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 1 - Enero 2026', tipo: 'CUOTA_MENSUAL', periodo: 'Enero 2026', numeroCuota: 1, monto: 28000, fechaVencimiento: '2026-01-10', estado: 'PAGADA', fechaPago: '2026-01-08', comprobante: 'REC-2026-0112' },
+    { idCuota: 2, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 2 - Febrero 2026', tipo: 'CUOTA_MENSUAL', periodo: 'Febrero 2026', numeroCuota: 2, monto: 28000, fechaVencimiento: '2026-02-10', estado: 'PAGADA', fechaPago: '2026-02-09', comprobante: 'REC-2026-0225' },
+    { idCuota: 3, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 3 - Marzo 2026', tipo: 'CUOTA_MENSUAL', periodo: 'Marzo 2026', numeroCuota: 3, monto: 28000, fechaVencimiento: '2026-03-10', estado: 'PAGADA', fechaPago: '2026-03-05', comprobante: 'REC-2026-0341' },
+    { idCuota: 4, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 4 - Abril 2026', tipo: 'CUOTA_MENSUAL', periodo: 'Abril 2026', numeroCuota: 4, monto: 28000, fechaVencimiento: '2026-04-10', estado: 'VENCIDA', fechaPago: null, comprobante: null },
+    { idCuota: 5, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 5 - Mayo 2026', tipo: 'CUOTA_MENSUAL', periodo: 'Mayo 2026', numeroCuota: 5, monto: 28000, fechaVencimiento: '2026-05-10', estado: 'PENDIENTE', fechaPago: null, comprobante: null },
+    { idCuota: 6, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 6 - Junio 2026', tipo: 'CUOTA_MENSUAL', periodo: 'Junio 2026', numeroCuota: 6, monto: 28000, fechaVencimiento: '2026-06-10', estado: 'PENDIENTE', fechaPago: null, comprobante: null },
+    { idCuota: 7, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 7 - Julio 2026', tipo: 'CUOTA_MENSUAL', periodo: 'Julio 2026', numeroCuota: 7, monto: 28000, fechaVencimiento: '2026-07-10', estado: 'PENDIENTE', fechaPago: null, comprobante: null },
+    { idCuota: 8, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 8 - Agosto 2026', tipo: 'CUOTA_MENSUAL', periodo: 'Agosto 2026', numeroCuota: 8, monto: 28000, fechaVencimiento: '2026-08-10', estado: 'PENDIENTE', fechaPago: null, comprobante: null },
+    { idCuota: 9, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 9 - Septiembre 2026', tipo: 'CUOTA_MENSUAL', periodo: 'Septiembre 2026', numeroCuota: 9, monto: 28000, fechaVencimiento: '2026-09-10', estado: 'PENDIENTE', fechaPago: null, comprobante: null },
+    { idCuota: 10, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 10 - Octubre 2026', tipo: 'CUOTA_MENSUAL', periodo: 'Octubre 2026', numeroCuota: 10, monto: 28000, fechaVencimiento: '2026-10-10', estado: 'PENDIENTE', fechaPago: null, comprobante: null },
+    { idCuota: 11, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 11 - Noviembre 2026', tipo: 'CUOTA_MENSUAL', periodo: 'Noviembre 2026', numeroCuota: 11, monto: 28000, fechaVencimiento: '2026-11-10', estado: 'PENDIENTE', fechaPago: null, comprobante: null },
+    { idCuota: 12, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 12 - Diciembre 2026', tipo: 'CUOTA_MENSUAL', periodo: 'Diciembre 2026', numeroCuota: 12, monto: 28000, fechaVencimiento: '2026-12-10', estado: 'PENDIENTE', fechaPago: null, comprobante: null },
+    // 3 Seguros cuatrimestrales de Lucía Benítez (idAlumno: 1)
+    { idCuota: 13, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Seguro Cuatrimestral 1/3', tipo: 'SEGURO_CUATRIMESTRAL', periodo: '1° Cuatrimestre 2026', numeroCuota: 1, monto: 8000, fechaVencimiento: '2026-03-10', estado: 'PAGADA', fechaPago: '2026-03-05', comprobante: 'REC-2026-0342' },
+    { idCuota: 14, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Seguro Cuatrimestral 2/3', tipo: 'SEGURO_CUATRIMESTRAL', periodo: '2° Cuatrimestre 2026', numeroCuota: 2, monto: 8000, fechaVencimiento: '2026-07-10', estado: 'PENDIENTE', fechaPago: null, comprobante: null },
+    { idCuota: 15, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Seguro Cuatrimestral 3/3', tipo: 'SEGURO_CUATRIMESTRAL', periodo: '3° Cuatrimestre 2026', numeroCuota: 3, monto: 8000, fechaVencimiento: '2026-11-10', estado: 'PENDIENTE', fechaPago: null, comprobante: null },
+    // Cuotas de otros alumnos
+    { idCuota: 16, idAlumno: 2, alumnoNombre: 'Martín Rodríguez', concepto: 'Cuota 4 - Abril 2026', tipo: 'CUOTA_MENSUAL', periodo: 'Abril 2026', numeroCuota: 4, monto: 28000, fechaVencimiento: '2026-04-10', estado: 'PAGADA', fechaPago: '2026-04-02', comprobante: 'REC-2026-0410' },
+    { idCuota: 17, idAlumno: 3, alumnoNombre: 'Camila Suárez', concepto: 'Cuota 4 - Abril 2026', tipo: 'CUOTA_MENSUAL', periodo: 'Abril 2026', numeroCuota: 4, monto: 28000, fechaVencimiento: '2026-04-10', estado: 'VENCIDA', fechaPago: null, comprobante: null },
+  ],
+
+  // 14. Registro de Pagos
+  pagos: [
+    { idPago: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Matrícula Anual 2026', monto: 35000, fechaPago: '2026-02-15', medioPago: 'TRANSFERENCIA', comprobante: 'REC-2026-0001', estado: 'ACREDITADO' },
+    { idPago: 2, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 1 - Enero 2026', monto: 28000, fechaPago: '2026-01-08', medioPago: 'TRANSFERENCIA', comprobante: 'REC-2026-0112', estado: 'ACREDITADO' },
+    { idPago: 3, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 2 - Febrero 2026', monto: 28000, fechaPago: '2026-02-09', medioPago: 'TARJETA', comprobante: 'REC-2026-0225', estado: 'ACREDITADO' },
+    { idPago: 4, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 3 - Marzo 2026', monto: 28000, fechaPago: '2026-03-05', medioPago: 'EFECTIVO', comprobante: 'REC-2026-0341', estado: 'ACREDITADO' },
+    { idPago: 5, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Seguro Cuatrimestral 1/3', monto: 8000, fechaPago: '2026-03-05', medioPago: 'EFECTIVO', comprobante: 'REC-2026-0342', estado: 'ACREDITADO' },
+    { idPago: 6, idAlumno: 2, alumnoNombre: 'Martín Rodríguez', concepto: 'Cuota 4 - Abril 2026', monto: 28000, fechaPago: '2026-04-02', medioPago: 'TRANSFERENCIA', comprobante: 'REC-2026-0410', estado: 'ACREDITADO' },
+  ],
+
+  // 15. Solicitudes de Alumnos
+  solicitudes: [
+    { idSolicitud: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', tipo: 'Constancia de Alumno Regular', fechaSolicitud: '2026-03-10', motivo: 'Presentación laboral en empresa tecnológica', estado: 'APROBADA', fechaResolucion: '2026-03-12', respuesta: 'Constancia emitida y firmada digitalmente.' },
+    { idSolicitud: 2, idAlumno: 1, alumnoNombre: 'Lucía Benítez', tipo: 'Declaración jurada de materias a cursar', fechaSolicitud: '2026-03-15', motivo: 'Inscripción condicional a cursada de 2° año', estado: 'APROBADA', fechaResolucion: '2026-03-18', respuesta: 'Aprobada según plan de correlatividades.' },
+    { idSolicitud: 3, idAlumno: 1, alumnoNombre: 'Lucía Benítez', tipo: 'Inscripción a pasantías', fechaSolicitud: '2026-04-02', motivo: 'Postulación a Pasantía en Software Dev S.A.', estado: 'EN_PROCESO', fechaResolucion: null, respuesta: 'En revisión por el coordinador de pasantías.' },
+    { idSolicitud: 4, idAlumno: 1, alumnoNombre: 'Lucía Benítez', tipo: 'Solicitud de título intermedio', fechaSolicitud: '2026-04-12', motivo: 'Cumplimiento del 70% de la carga horaria', estado: 'PENDIENTE', fechaResolucion: null, respuesta: null },
+    { idSolicitud: 5, idAlumno: 2, alumnoNombre: 'Martín Rodríguez', tipo: 'Solicitudes académicas generales', fechaSolicitud: '2026-04-05', motivo: 'Revisión de asistencia en Bases de Datos', estado: 'RECHAZADA', fechaResolucion: '2026-04-08', respuesta: 'El límite de justificación venció el 01/04.' },
+  ],
+
+  // 16. Documentación legal/académica del Alumno
+  documentacion: [
+    { idDocumento: 1, idAlumno: 1, tipo: 'DNI (Frente y Dorso)', obligatorio: true, estado: 'ENTREGADO', fechaEntrega: '2026-02-10', observaciones: 'Copia certificada' },
+    { idDocumento: 2, idAlumno: 1, tipo: 'Título Secundario / Certificado Analítico', obligatorio: true, estado: 'ENTREGADO', fechaEntrega: '2026-02-10', observaciones: 'Legalizado por Ministerio' },
+    { idDocumento: 3, idAlumno: 1, tipo: 'Certificado de Aptitud Médica', obligatorio: true, estado: 'PENDIENTE', fechaEntrega: null, observaciones: 'Vencimiento próximo: 30/05/2026' },
+    { idDocumento: 4, idAlumno: 1, tipo: 'Fotos 4x4 (2 unidades)', obligatorio: true, estado: 'ENTREGADO', fechaEntrega: '2026-02-10', observaciones: 'Entregadas en secretaría' },
+  ],
+
+  // 17. Usuarios del Sistema y Roles
+  usuarios: [
+    { idUsuario: 1, username: 'admin', nombre: 'Administrador General', email: 'admin@instituto.edu.ar', rol: 'ADMINISTRADOR', estado: 'ACTIVO', ultimoAcceso: '2026-10-12 21:00' },
+    { idUsuario: 2, username: 'administrativo', nombre: 'Personal Administrativo', email: 'administracion@instituto.edu.ar', rol: 'ADMINISTRATIVO', estado: 'ACTIVO', ultimoAcceso: '2026-10-12 20:30' },
+    { idUsuario: 3, username: 'docente', nombre: 'Profesor Carlos Gómez', email: 'carlos.gomez@instituto.edu.ar', rol: 'DOCENTE', estado: 'ACTIVO', ultimoAcceso: '2026-10-12 19:45' },
+    { idUsuario: 4, username: 'alumno', nombre: 'Lucía Benítez', email: 'lucia.benitez@instituto.edu.ar', rol: 'ALUMNO', estado: 'ACTIVO', ultimoAcceso: '2026-10-12 21:15' },
+  ],
+}

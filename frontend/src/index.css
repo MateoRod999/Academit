@@ -1,0 +1,362 @@
+/*
+   TIPOGRAFÍA
+*/
+@font-face {
+  font-family: 'GoMono Nerd Font';
+  src: local('GoMono Nerd Font'),
+    local('GoMonoNerdFont-Regular'),
+    local('GoMono Nerd Font Regular'),
+    url('/fonts/GoMonoNerdFont-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'GoMono Nerd Font';
+  src: local('GoMono Nerd Font Bold'),
+    local('GoMonoNerdFont-Bold'),
+    url('/fonts/GoMonoNerdFont-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* 
+   PALETA DE COLORES 
+*/
+:root {
+  --m-primary: #E8E0B6;
+  --m-on-primary: #2E2523;
+  --m-secondary: #737658;
+  --m-on-secondary: #2E2523;
+  --m-tertiary: #8A7A73;
+  --m-on-tertiary: #2E2523;
+  --m-error: #B57171;
+  --m-on-error: #2E2523;
+  --m-surface: #2E2523;
+  --m-on-surface: #F1F1EF;
+  --m-surface-variant: #453835;
+  --m-on-surface-variant: #F1F1EF;
+  --m-outline: #6B5853;
+  --m-shadow: #14100F;
+  --m-hover: #544440;
+  --m-on-hover: #F1F1EF;
+
+  --terminal-black: #6B5853;
+  --terminal-red: #B57171;
+  --terminal-green: #737658;
+  --terminal-yellow: #E8E0B6;
+  --terminal-blue: #8A7A73;
+  --terminal-cyan: #7C8A73;
+  --terminal-white: #F1F1EF;
+}
+
+/* Base */
+body {
+  margin: 0;
+  min-height: 100vh;
+  background-color: var(--m-surface);
+  color: var(--m-on-surface);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--m-surface);
+}
+
+/* Glifos de Nerd Fonts renderizados con GoMono Nerd Font */
+.nf-glyph {
+  font-family: 'GoMono Nerd Font', 'GoMono Nerd Font Mono', 'GoMono NF', monospace !important;
+  font-style: normal;
+  font-weight: normal;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  text-rendering: optimizeLegibility;
+  width: 1.25em;
+  height: 1.25em;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+/* Elementos monoespaciados que utilizan GoMono Nerd Font */
+code,
+kbd,
+samp,
+pre,
+.font-mono,
+.table th,
+.sidebar-link,
+.top-navbar {
+  font-family: 'GoMono Nerd Font', 'Inter', monospace;
+}
+
+/* 
+   LAYOUT CON BARRA LATERAL PERMANENTE EN ESCRITORIO
+*/
+.app-container {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--m-surface);
+}
+
+/* Barra lateral de escritorio (siempre visible en >= 992px) */
+.desktop-sidebar {
+  width: 260px;
+  min-width: 260px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  background-color: var(--m-surface-variant);
+  border-right: 1px solid var(--m-outline);
+  display: flex;
+  flex-direction: column;
+  z-index: 1020;
+}
+
+/* Contenido principal */
+.content-wrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background-color: var(--m-surface);
+}
+
+/* Barra superior */
+.top-navbar {
+  background-color: var(--m-surface) !important;
+  border-bottom: 1px solid var(--m-outline);
+  padding: 0.75rem 1.25rem;
+  z-index: 1010;
+}
+
+/* Enlaces de la barra lateral con caja cuadrada fija para los glifos */
+.sidebar-link {
+  color: var(--m-on-surface-variant) !important;
+  text-decoration: none;
+  padding: 0.55rem 0.85rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  font-size: 0.92rem;
+  font-weight: 500;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.sidebar-link .nf-glyph {
+  font-size: 1.2rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  min-width: 1.5rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--m-primary);
+  flex-shrink: 0;
+}
+
+.sidebar-link:hover {
+  background-color: var(--m-hover) !important;
+  color: var(--m-primary) !important;
+}
+
+.sidebar-link.active {
+  background-color: var(--m-primary) !important;
+  color: var(--m-on-primary) !important;
+  font-weight: 600;
+}
+
+.sidebar-link.active .nf-glyph {
+  color: var(--m-on-primary) !important;
+}
+
+/* 
+   COMPONENTES BOOTSTRAP ADAPTADOS A LA PALETA
+*/
+
+/* Tarjetas */
+.card {
+  background-color: var(--m-surface-variant) !important;
+  border: 1px solid var(--m-outline) !important;
+  color: var(--m-on-surface-variant) !important;
+  border-radius: 8px;
+}
+
+.card-title,
+.card-header,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--m-primary);
+}
+
+.text-muted {
+  color: var(--m-tertiary) !important;
+}
+
+/* Tablas */
+.table {
+  color: var(--m-on-surface) !important;
+  border-color: var(--m-outline) !important;
+  background-color: transparent !important;
+}
+
+.table th {
+  background-color: var(--m-hover) !important;
+  color: var(--m-primary) !important;
+  border-bottom: 1px solid var(--m-outline) !important;
+  font-family: 'GoMono Nerd Font', monospace !important;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  padding: 0.85rem 1rem !important;
+}
+
+.table td {
+  background-color: var(--m-surface-variant) !important;
+  color: var(--m-on-surface) !important;
+  border-bottom: 1px solid var(--m-outline) !important;
+  padding: 0.85rem 1rem !important;
+}
+
+.table-hover tbody tr:hover td {
+  background-color: var(--m-hover) !important;
+}
+
+/* Botones */
+.btn-primary {
+  background-color: var(--m-primary) !important;
+  border-color: var(--m-primary) !important;
+  color: var(--m-on-primary) !important;
+  font-weight: 600;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: #d6ce9f !important;
+  border-color: #d6ce9f !important;
+  color: var(--m-on-primary) !important;
+}
+
+.btn-outline-primary {
+  border-color: var(--m-primary) !important;
+  color: var(--m-primary) !important;
+}
+
+.btn-outline-primary:hover {
+  background-color: var(--m-primary) !important;
+  color: var(--m-on-primary) !important;
+}
+
+.btn-outline-light,
+.btn-outline-secondary {
+  border-color: var(--m-outline) !important;
+  color: var(--m-on-surface) !important;
+  background-color: transparent !important;
+}
+
+.btn-outline-light:hover,
+.btn-outline-secondary:hover {
+  background-color: var(--m-hover) !important;
+  border-color: var(--m-outline) !important;
+  color: var(--m-primary) !important;
+}
+
+.btn-outline-danger {
+  border-color: var(--m-error) !important;
+  color: var(--m-error) !important;
+}
+
+.btn-outline-danger:hover {
+  background-color: var(--m-error) !important;
+  color: var(--m-on-error) !important;
+}
+
+/* Badges */
+.badge.bg-primary {
+  background-color: var(--m-primary) !important;
+  color: var(--m-on-primary) !important;
+}
+
+.badge.bg-secondary {
+  background-color: var(--m-secondary) !important;
+  color: var(--m-on-secondary) !important;
+}
+
+.badge.bg-success {
+  background-color: var(--m-secondary) !important;
+  color: var(--m-on-secondary) !important;
+}
+
+.badge.bg-info {
+  background-color: var(--terminal-cyan) !important;
+  color: var(--m-on-secondary) !important;
+}
+
+.badge.bg-warning {
+  background-color: var(--terminal-yellow) !important;
+  color: var(--m-on-primary) !important;
+}
+
+.badge.bg-danger {
+  background-color: var(--m-error) !important;
+  color: var(--m-on-error) !important;
+}
+
+/* Inputs de formulario */
+.form-control {
+  background-color: var(--m-surface) !important;
+  border: 1px solid var(--m-outline) !important;
+  color: var(--m-on-surface) !important;
+}
+
+.form-control:focus {
+  background-color: var(--m-surface) !important;
+  border-color: var(--m-primary) !important;
+  color: var(--m-on-surface) !important;
+  box-shadow: 0 0 0 0.25rem rgba(232, 224, 182, 0.2) !important;
+}
+
+.form-control::placeholder {
+  color: var(--m-outline) !important;
+}
+
+/* Alertas */
+.alert-danger {
+  background-color: var(--m-surface-variant) !important;
+  border-color: var(--m-error) !important;
+  color: var(--m-error) !important;
+}
+
+.alert-info {
+  background-color: var(--m-surface-variant) !important;
+  border-color: var(--m-secondary) !important;
+  color: var(--m-primary) !important;
+}
+
+/* Offcanvas (Sidebar móvil) */
+.offcanvas {
+  background-color: var(--m-surface-variant) !important;
+  color: var(--m-on-surface) !important;
+  border-right: 1px solid var(--m-outline) !important;
+}
+
+.offcanvas-header {
+  border-bottom: 1px solid var(--m-outline) !important;
+  background-color: var(--m-surface) !important;
+}
+
+.btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
