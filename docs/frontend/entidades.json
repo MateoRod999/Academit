@@ -1,7 +1,4 @@
 {
-  "version": "1.0.0",
-  "descripcion": "Inventario de entidades, campos, relaciones y pantallas del sistema Academit",
-  "totalEntidades": 22,
   "entidades": [
     {
       "nombre": "Alumno",
@@ -57,7 +54,7 @@
           "descripcion": "Teléfono de contacto."
         },
         {
-          "nombre": "direccion",
+          "nombre": "domicilio",
           "tipo": "string",
           "obligatorio": false,
           "enums": null,
@@ -243,11 +240,11 @@
           "descripcion": "Teléfono de contacto."
         },
         {
-          "nombre": "especialidad",
+          "nombre": "titulo",
           "tipo": "string",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "Área de especialidad académica o titulación."
+          "descripcion": "Título académico o área de habilitación docente."
         },
         {
           "nombre": "estado",
@@ -302,11 +299,11 @@
           "descripcion": "Título expedido al egresar."
         },
         {
-          "nombre": "duracion",
-          "tipo": "string",
+          "nombre": "duracionAnios",
+          "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Duración de cursada (ej. '3 años')."
+          "descripcion": "Duración de cursada en años (ej. 3)."
         },
         {
           "nombre": "resolucion",
@@ -351,7 +348,7 @@
     },
     {
       "nombre": "PlanEstudio",
-      "descripcion": "Currícula de materias estructurada para una cohorte y carrera.",
+      "descripcion": "Currícula de materias estructurada para una cohorte y carrera. En el modelo relacional físico se vincula a través de la relación muchos a muchos PlanMateria (con anio_plan). En el frontend se consume la lista de materias del plan mediante el endpoint GET /api/planes-estudio/{id}/materias.",
       "campos": [
         {
           "nombre": "idPlan",
@@ -440,7 +437,7 @@
     },
     {
       "nombre": "Materia",
-      "descripcion": "Asignatura perteneciente a un plan de estudios.",
+      "descripcion": "Asignatura curricular del instituto. En base de datos la asociación a planes es muchos a muchos (PlanMateria). En frontend se consulta por plan con su régimen y correlatividades.",
       "campos": [
         {
           "nombre": "idMateria",
@@ -513,7 +510,7 @@
           "tipo": "array of numbers",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "Lista de idMateria de asignaturas correlativas previas."
+          "descripcion": "Lista de identificadores idMateria de correlativas requeridas."
         }
       ],
       "relaciones": [
@@ -919,7 +916,7 @@
           "descripcion": "Año del ciclo lectivo."
         },
         {
-          "nombre": "monto",
+          "nombre": "importe",
           "tipo": "number (Monetario)",
           "obligatorio": true,
           "enums": null,
@@ -972,7 +969,7 @@
     },
     {
       "nombre": "Cuota",
-      "descripcion": "Obligación de pago arancelario periódica (cuota mensual o seguro).",
+      "descripcion": "Obligación de pago arancelario periódica (cuota mensual o seguro cuatrimestral).",
       "campos": [
         {
           "nombre": "idCuota",
@@ -1013,11 +1010,11 @@
           "descripcion": "Tipo de obligación arancelaria."
         },
         {
-          "nombre": "numeroCuota",
+          "nombre": "numero",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Número ordinal de cuota (1 a 10)."
+          "descripcion": "Número ordinal de cuota."
         },
         {
           "nombre": "periodo",
@@ -1027,7 +1024,7 @@
           "descripcion": "Mes y año correspondiente (ej. 'Marzo 2026')."
         },
         {
-          "nombre": "monto",
+          "nombre": "importe",
           "tipo": "number (Monetario)",
           "obligatorio": true,
           "enums": null,
@@ -1085,7 +1082,7 @@
     },
     {
       "nombre": "Pago",
-      "descripcion": "Transacción financiera de cobro de una cuota o arancel.",
+      "descripcion": "Transacción financiera de cobro de una cuota o arancel. Se realiza por el importe exacto de la cuota (RN09) y el usuario cobrador se obtiene de la sesión autenticada.",
       "campos": [
         {
           "nombre": "idPago",
@@ -1116,7 +1113,7 @@
           "descripcion": "Concepto cancelado."
         },
         {
-          "nombre": "monto",
+          "nombre": "importe",
           "tipo": "number (Monetario)",
           "obligatorio": true,
           "enums": null,
@@ -1632,7 +1629,7 @@
     },
     {
       "nombre": "Solicitud",
-      "descripcion": "Trámite institucional o académico gestionado por un estudiante.",
+      "descripcion": "Trámite institucional o académico gestionado por un estudiante. NOTA: Solicitud es un artefacto de la interfaz de usuario del frontend requerido para su operativa; en la base de datos se persistirá según el esquema y definiciones que se adopten en etapas posteriores.",
       "campos": [
         {
           "nombre": "idSolicitud",
@@ -1791,7 +1788,7 @@
     },
     {
       "nombre": "Documentacion",
-      "descripcion": "Requisito documental o legal que el alumno debe presentar para su legajo.",
+      "descripcion": "Requisito documental o legal que el alumno debe presentar para su legajo. NOTA: Documentacion es un artefacto de la interfaz de usuario del frontend requerido para su operativa; en la base de datos se persistirá según el esquema y definiciones que se adopten en etapas posteriores.",
       "campos": [
         {
           "nombre": "idDocumento",
@@ -1894,6 +1891,20 @@
           "obligatorio": true,
           "enums": null,
           "descripcion": "Correo electrónico registrado."
+        },
+        {
+          "nombre": "telefono",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Teléfono de contacto."
+        },
+        {
+          "nombre": "domicilio",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Domicilio residencial del usuario."
         },
         {
           "nombre": "rol",
