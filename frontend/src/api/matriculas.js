@@ -36,20 +36,23 @@ export const updateMatricula = async (idMatricula, data) => {
 
 /**
  * Registra la cancelación definitiva de matrícula de un alumno (RF27).
- * REST: POST /api/matriculas/cancelar
- * @param {number|string} [idAlumno=1] - Identificador del alumno
- * @param {string} [motivo=''] - Motivo de la baja voluntaria
+ * REST: PATCH /api/matriculas/{id}
+ * @param {number|string} idMatricula - Identificador de la matrícula a cancelar (o idAlumno)
+ * @param {string} [motivo=''] - Motivo opcional de la baja
  * @returns {Promise<Object>}
  */
-export const cancelarMatricula = async (idAlumno = 1, motivo = '') => {
+export const cancelarMatricula = async (idMatricula = 1, motivo = '') => {
+  const idNum = Number(idMatricula)
+
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 250))
-    const matricula = mockDb.matriculas.find((m) => m.idAlumno === Number(idAlumno))
+    const matricula = mockDb.matriculas.find((m) => m.idMatricula === idNum || m.idAlumno === idNum)
     if (matricula) {
       matricula.estado = 'CANCELADA'
     }
 
-    const alumno = mockDb.alumnos.find((a) => a.idAlumno === Number(idAlumno))
+    const idAlumno = matricula ? matricula.idAlumno : idNum
+    const alumno = mockDb.alumnos.find((a) => a.idAlumno === idAlumno)
     if (alumno) {
       alumno.estadoMatricula = 'CANCELADA'
       alumno.estado = 'INACTIVO'
@@ -59,7 +62,7 @@ export const cancelarMatricula = async (idAlumno = 1, motivo = '') => {
     const nuevoIdSol = Math.max(...mockDb.solicitudes.map((s) => s.idSolicitud), 0) + 1
     mockDb.solicitudes.unshift({
       idSolicitud: nuevoIdSol,
-      idAlumno: Number(idAlumno),
+      idAlumno,
       alumnoNombre: alumno ? `${alumno.nombre} ${alumno.apellido}` : 'Alumno',
       tipo: 'Cancelación definitiva de matrícula',
       fechaSolicitud: new Date().toISOString().split('T')[0],
@@ -71,9 +74,11 @@ export const cancelarMatricula = async (idAlumno = 1, motivo = '') => {
 
     return { success: true, matricula }
   }
-  const response = await apiClient.post(`/matriculas/cancelar`, { idAlumno, motivo })
+
+  const response = await apiClient.patch(`/matriculas/${idNum}`, { estado: 'CANCELADA' })
   return response.data
 }
+
 
 /**
  * Genera el plan de 12 cuotas mensuales y 3 seguros cuatrimestrales para una matrícula individual.

@@ -31,7 +31,8 @@ export const CancelarMatriculaPage = () => {
   const handleConfirmCancelacion = async () => {
     setLoading(true)
     try {
-      await cancelarMatricula(alumnoId, motivo)
+      const idMat = matricula ? matricula.idMatricula : alumnoId
+      await cancelarMatricula(idMat, motivo)
       showToast('La matrícula ha sido formalmente cancelada (RF27)', 'warning')
       setShowConfirm(false)
       cargar()

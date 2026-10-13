@@ -45,7 +45,7 @@ export const BandejaSolicitudesPage = () => {
     try {
       await resolverSolicitud(resolviendo.solicitud.idSolicitud, {
         estado: resolviendo.nuevoEstado,
-        respuesta: respuestaTexto,
+        observacion: respuestaTexto,
       })
       showToast(
         `Solicitud ${resolviendo.nuevoEstado === 'APROBADA' ? 'aprobada' : 'rechazada'} exitosamente`,
