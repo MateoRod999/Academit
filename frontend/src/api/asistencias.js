@@ -1,6 +1,12 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
 
+/**
+ * Obtiene el registro de asistencias con filtros opcionales (idAlumno, idCurso, fecha).
+ * REST: GET /api/asistencias
+ * @param {Object} [filtros={}] - Filtros de búsqueda (idAlumno, idCurso, fecha)
+ * @returns {Promise<Array<Object>>}
+ */
 export const getAsistencias = async (filtros = {}) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))
@@ -20,6 +26,12 @@ export const getAsistencias = async (filtros = {}) => {
   return response.data
 }
 
+/**
+ * Registra o actualiza la asistencia de una lista de alumnos en lote.
+ * REST: POST /api/asistencias/lote
+ * @param {Array<Object>} asistenciasList - Lista de registros a guardar
+ * @returns {Promise<Object>}
+ */
 export const registrarAsistencias = async (asistenciasList) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))

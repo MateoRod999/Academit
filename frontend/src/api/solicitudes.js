@@ -1,6 +1,12 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
 
+/**
+ * Obtiene el listado de solicitudes y trámites institucionales con filtros opcionales.
+ * REST: GET /api/solicitudes
+ * @param {Object} [filtros={}] - Filtros por idAlumno, tipo o estado
+ * @returns {Promise<Array<Object>>}
+ */
 export const getSolicitudes = async (filtros = {}) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))
@@ -20,6 +26,12 @@ export const getSolicitudes = async (filtros = {}) => {
   return response.data
 }
 
+/**
+ * Genera una nueva solicitud o trámite del estudiante (constancias, DDJJ, pasantías, título, académicas).
+ * REST: POST /api/solicitudes
+ * @param {Object} data - Datos de la solicitud (idAlumno, tipo, motivo, observaciones)
+ * @returns {Promise<Object>}
+ */
 export const createSolicitud = async (data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))
@@ -46,6 +58,13 @@ export const createSolicitud = async (data) => {
   return response.data
 }
 
+/**
+ * Resuelve una solicitud en la bandeja administrativa (APROBADA o RECHAZADA).
+ * REST: PUT /api/solicitudes/{id}/resolver
+ * @param {number|string} idSolicitud - Identificador de la solicitud
+ * @param {Object} resolucion - Datos de resolución ({ estado, respuesta })
+ * @returns {Promise<Object>}
+ */
 export const resolverSolicitud = async (idSolicitud, { estado, respuesta = '' }) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))

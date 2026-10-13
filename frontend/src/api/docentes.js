@@ -1,6 +1,11 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
 
+/**
+ * Obtiene el padrón completo de docentes institucionales.
+ * REST: GET /api/docentes
+ * @returns {Promise<Array<Object>>}
+ */
 export const getDocentes = async () => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))
@@ -10,6 +15,12 @@ export const getDocentes = async () => {
   return response.data
 }
 
+/**
+ * Registra un nuevo docente en el cuerpo académico.
+ * REST: POST /api/docentes
+ * @param {Object} data - Datos personales y especialidad del docente
+ * @returns {Promise<Object>}
+ */
 export const createDocente = async (data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))
@@ -32,6 +43,13 @@ export const createDocente = async (data) => {
   return response.data
 }
 
+/**
+ * Actualiza los datos de legajo o contacto de un docente.
+ * REST: PUT /api/docentes/{id}
+ * @param {number|string} idDocente - Identificador del docente
+ * @param {Object} data - Campos a modificar
+ * @returns {Promise<Object>}
+ */
 export const updateDocente = async (idDocente, data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))
@@ -44,6 +62,12 @@ export const updateDocente = async (idDocente, data) => {
   return response.data
 }
 
+/**
+ * Realiza la baja lógica de un docente.
+ * REST: DELETE /api/docentes/{id}
+ * @param {number|string} idDocente - Identificador del docente
+ * @returns {Promise<Object>}
+ */
 export const deleteDocente = async (idDocente) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))

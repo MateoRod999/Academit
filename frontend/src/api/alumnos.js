@@ -3,8 +3,8 @@ import { mockDb } from './mocks/data'
 
 /**
  * Obtiene el listado completo de alumnos.
- * En modo mock retorna mockDb.alumnos.
- * En modo real llama a GET /alumnos.
+ * REST: GET /api/alumnos
+ * @returns {Promise<Array<Object>>}
  */
 export const getAlumnos = async () => {
   if (isMock) {
@@ -18,6 +18,9 @@ export const getAlumnos = async () => {
 
 /**
  * Obtiene un alumno por su ID.
+ * REST: GET /api/alumnos/{id}
+ * @param {number|string} idAlumno - Identificador del alumno
+ * @returns {Promise<Object>}
  */
 export const getAlumnoById = async (idAlumno) => {
   if (isMock) {
@@ -32,7 +35,10 @@ export const getAlumnoById = async (idAlumno) => {
 }
 
 /**
- * Crea un nuevo alumno.
+ * Crea un nuevo alumno en el sistema.
+ * REST: POST /api/alumnos
+ * @param {Object} alumnoData - Datos del nuevo alumno
+ * @returns {Promise<Object>}
  */
 export const createAlumno = async (alumnoData) => {
   if (isMock) {
@@ -50,6 +56,8 @@ export const createAlumno = async (alumnoData) => {
       direccion: alumnoData.direccion || 'No especificada',
       carrera: alumnoData.carrera || 'Tecnicatura Superior en Desarrollo de Software',
       idCarrera: alumnoData.idCarrera || 1,
+      idPlan: alumnoData.idPlan || 1,
+      planNombre: alumnoData.planNombre || 'Plan de Estudios 2024',
       idCurso: alumnoData.idCurso || 1,
       cursoNombre: alumnoData.cursoNombre || '1° Año - Turno Mañana',
       idMatricula: nuevoId,
@@ -67,6 +75,10 @@ export const createAlumno = async (alumnoData) => {
 
 /**
  * Actualiza los datos de un alumno existente.
+ * REST: PUT /api/alumnos/{id}
+ * @param {number|string} idAlumno - Identificador del alumno
+ * @param {Object} alumnoData - Campos actualizados
+ * @returns {Promise<Object>}
  */
 export const updateAlumno = async (idAlumno, alumnoData) => {
   if (isMock) {
@@ -87,6 +99,9 @@ export const updateAlumno = async (idAlumno, alumnoData) => {
 
 /**
  * Realiza la baja lógica de un alumno.
+ * REST: DELETE /api/alumnos/{id}
+ * @param {number|string} idAlumno - Identificador del alumno
+ * @returns {Promise<Object>}
  */
 export const deleteAlumno = async (idAlumno) => {
   if (isMock) {
@@ -99,5 +114,59 @@ export const deleteAlumno = async (idAlumno) => {
   }
 
   const response = await apiClient.delete(`/alumnos/${idAlumno}`)
+  return response.data
+}
+
+/**
+ * Obtiene la situación académica consolidada del alumno (materias cursadas, regularizadas y notas finales).
+ * REST: GET /api/alumnos/{id}/situacion-academica
+ * @param {number|string} idAlumno
+ * @returns {Promise<Object>}
+ */
+export const getSituacionAcademica = async (idAlumno) => {
+  if (isMock) {
+    await new Promise((resolve) => setTimeout(resolve, 150))
+    const alumno = mockDb.alumnos.find((a) => a.idAlumno === Number(idAlumno))
+    const calificaciones = mockDb.calificaciones.filter((c) => c.idAlumno === Number(idAlumno))
+    return {
+      alumno,
+      calificaciones,
+      materiasAprobadas: calificaciones.filter((c) => c.nota >= 4).length,
+    }
+  }
+
+  const response = await apiClient.get(`/alumnos/${idAlumno}/situacion-academica`)
+  return response.data
+}
+
+/**
+ * Obtiene la situación arancelaria y administrativa del alumno (matrícula, cuotas, deudas y pagos).
+ * REST: GET /api/alumnos/{id}/situacion-administrativa
+ * @param {number|string} idAlumno
+ * @returns {Promise<Object>}
+ */
+export const getSituacionAdministrativa = async (idAlumno) => {
+  if (isMock) {
+    await new Promise((resolve) => setTimeout(resolve, 150))
+    const alumno = mockDb.alumnos.find((a) => a.idAlumno === Number(idAlumno))
+    const cuotas = mockDb.cuotas.filter((c) => c.idAlumno === Number(idAlumno))
+    const pagos = mockDb.pagos.filter((p) => p.idAlumno === Number(idAlumno))
+    const matricula = mockDb.matriculas.find((m) => m.idAlumno === Number(idAlumno))
+    const deuda = cuotas
+      .filter((c) => c.estado === 'PENDIENTE' || c.estado === 'VENCIDA')
+      .reduce((acc, c) => acc + c.monto, 0)
+    const totalAbonado = pagos.reduce((acc, p) => acc + p.monto, 0)
+
+    return {
+      alumno,
+      matricula,
+      cuotas,
+      pagos,
+      deudaTotal: deuda,
+      totalAbonado,
+    }
+  }
+
+  const response = await apiClient.get(`/alumnos/${idAlumno}/situacion-administrativa`)
   return response.data
 }

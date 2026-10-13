@@ -1,6 +1,11 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
 
+/**
+ * Obtiene el registro de inscripciones de alumnos a comisiones y cursos.
+ * REST: GET /api/inscripciones
+ * @returns {Promise<Array<Object>>}
+ */
 export const getInscripciones = async () => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))
@@ -10,6 +15,12 @@ export const getInscripciones = async () => {
   return response.data
 }
 
+/**
+ * Realiza la inscripción de un alumno a una comisión/curso con control de cupos disponibles.
+ * REST: POST /api/inscripciones
+ * @param {Object} data - Datos de la inscripción (idAlumno, idCurso, cicloLectivo)
+ * @returns {Promise<Object>}
+ */
 export const createInscripcion = async (data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))
@@ -47,6 +58,12 @@ export const createInscripcion = async (data) => {
   return response.data
 }
 
+/**
+ * Cancela una inscripción de un alumno y libera el cupo correspondiente en la comisión.
+ * REST: DELETE /api/inscripciones/{id}
+ * @param {number|string} idInscripcion - Identificador de la inscripción
+ * @returns {Promise<Object>}
+ */
 export const cancelarInscripcion = async (idInscripcion) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))

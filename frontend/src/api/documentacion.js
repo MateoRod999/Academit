@@ -1,6 +1,12 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
 
+/**
+ * Obtiene el estado de presentación de la documentación requerida para el legajo.
+ * REST: GET /api/documentacion
+ * @param {number|string|null} [idAlumno=null] - Filtro opcional por ID de alumno
+ * @returns {Promise<Array<Object>>}
+ */
 export const getDocumentacion = async (idAlumno = null) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))
@@ -13,6 +19,13 @@ export const getDocumentacion = async (idAlumno = null) => {
   return response.data
 }
 
+/**
+ * Actualiza el estado de entrega o verificación de un requisito documental.
+ * REST: PUT /api/documentacion/{id}
+ * @param {number|string} idDocumento - Identificador del documento
+ * @param {Object} data - Datos actualizados (estado, observaciones, fechaEntrega)
+ * @returns {Promise<Object>}
+ */
 export const updateDocumentacion = async (idDocumento, data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))

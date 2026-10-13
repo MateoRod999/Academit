@@ -1,6 +1,11 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
 
+/**
+ * Obtiene el padrón de matrículas anuales registradas.
+ * REST: GET /api/matriculas
+ * @returns {Promise<Array<Object>>}
+ */
 export const getMatriculas = async () => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))
@@ -10,6 +15,13 @@ export const getMatriculas = async () => {
   return response.data
 }
 
+/**
+ * Actualiza el estado o información de una matrícula anual.
+ * REST: PUT /api/matriculas/{id}
+ * @param {number|string} idMatricula - Identificador de la matrícula
+ * @param {Object} data - Datos actualizados (estado: 'ACTIVA' | 'PENDIENTE' | 'CANCELADA')
+ * @returns {Promise<Object>}
+ */
 export const updateMatricula = async (idMatricula, data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))
@@ -23,8 +35,11 @@ export const updateMatricula = async (idMatricula, data) => {
 }
 
 /**
- * Cancelación de matrícula por parte del alumno o secretaría (RF27).
- * Cambia el estado de la matrícula a CANCELADA y actualiza el alumno.
+ * Registra la cancelación definitiva de matrícula de un alumno (RF27).
+ * REST: POST /api/matriculas/cancelar
+ * @param {number|string} [idAlumno=1] - Identificador del alumno
+ * @param {string} [motivo=''] - Motivo de la baja voluntaria
+ * @returns {Promise<Object>}
  */
 export const cancelarMatricula = async (idAlumno = 1, motivo = '') => {
   if (isMock) {

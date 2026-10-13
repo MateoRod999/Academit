@@ -1,6 +1,11 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
 
+/**
+ * Obtiene el catálogo de ciclos lectivos.
+ * REST: GET /api/ciclos-lectivos
+ * @returns {Promise<Array<Object>>}
+ */
 export const getCiclosLectivos = async () => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))
@@ -10,6 +15,12 @@ export const getCiclosLectivos = async () => {
   return response.data
 }
 
+/**
+ * Registra un nuevo ciclo lectivo anual.
+ * REST: POST /api/ciclos-lectivos
+ * @param {Object} data - Datos del ciclo lectivo (anio, nombre, fechaInicio, fechaFin, estado)
+ * @returns {Promise<Object>}
+ */
 export const createCicloLectivo = async (data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))
@@ -29,6 +40,13 @@ export const createCicloLectivo = async (data) => {
   return response.data
 }
 
+/**
+ * Actualiza los datos o estado de un ciclo lectivo existente.
+ * REST: PUT /api/ciclos-lectivos/{id}
+ * @param {number|string} idCiclo
+ * @param {Object} data - Campos a modificar
+ * @returns {Promise<Object>}
+ */
 export const updateCicloLectivo = async (idCiclo, data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))

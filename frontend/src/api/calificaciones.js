@@ -1,6 +1,12 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
 
+/**
+ * Obtiene el listado de calificaciones según filtros opcionales (idAlumno, tipo, idMateria).
+ * REST: GET /api/calificaciones
+ * @param {Object} [filtros={}] - Parámetros de consulta
+ * @returns {Promise<Array<Object>>}
+ */
 export const getCalificaciones = async (filtros = {}) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))
@@ -20,6 +26,12 @@ export const getCalificaciones = async (filtros = {}) => {
   return response.data
 }
 
+/**
+ * Registra o actualiza la calificación de un alumno (escala 1 a 10 con aprobación >= 4).
+ * REST: POST /api/calificaciones
+ * @param {Object} data - Datos de la calificación
+ * @returns {Promise<Object>}
+ */
 export const saveCalificacion = async (data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))

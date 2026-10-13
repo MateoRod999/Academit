@@ -3,8 +3,10 @@ import { mockDb } from './mocks/data'
 
 /**
  * Inicia sesión con usuario y contraseña.
- * En modo mock valida contra mockDb.usuarios con contraseña "1234".
- * En modo real hace POST a /auth/login.
+ * REST: POST /api/auth/login
+ * @param {string} username - Nombre de usuario
+ * @param {string} password - Contraseña
+ * @returns {Promise<Object>} Datos del usuario autenticado
  */
 export const loginApi = async (username, password) => {
   if (isMock) {
@@ -38,7 +40,9 @@ export const loginApi = async (username, password) => {
 }
 
 /**
- * Cierra la sesión activa.
+ * Cierra la sesión activa en el sistema.
+ * REST: POST /api/auth/logout
+ * @returns {Promise<Object>}
  */
 export const logoutApi = async () => {
   if (isMock) {
@@ -51,7 +55,11 @@ export const logoutApi = async () => {
 }
 
 /**
- * Modifica la contraseña del usuario.
+ * Modifica la contraseña del usuario en sesión.
+ * REST: POST /api/auth/cambiar-password
+ * @param {string} actual - Contraseña vigente
+ * @param {string} nueva - Nueva contraseña deseada
+ * @returns {Promise<Object>}
  */
 export const cambiarPasswordApi = async (actual, nueva) => {
   if (isMock) {

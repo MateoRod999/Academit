@@ -2,8 +2,10 @@ import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
 
 /**
- * Obtiene el listado de cuotas y seguros.
- * Puede filtrarse por idAlumno opcionalmente.
+ * Obtiene el listado de cuotas y seguros (12 cuotas anuales + 3 seguros cuatrimestrales).
+ * REST: GET /api/cuotas
+ * @param {number|string|null} [idAlumno=null] - Filtro opcional por ID de alumno
+ * @returns {Promise<Array<Object>>}
  */
 export const getCuotas = async (idAlumno = null) => {
   if (isMock) {
@@ -21,7 +23,11 @@ export const getCuotas = async (idAlumno = null) => {
 }
 
 /**
- * Registra el pago completo de una cuota.
+ * Registra el pago por el importe completo de una cuota o seguro arancelario.
+ * REST: POST /api/cuotas/{id}/pagar
+ * @param {number|string} idCuota - Identificador de la cuota
+ * @param {string} [medioPago='EFECTIVO'] - Medio de pago utilizado ('EFECTIVO', 'TRANSFERENCIA', 'TARJETA', 'OTRO')
+ * @returns {Promise<Object>}
  */
 export const pagarCuota = async (idCuota, medioPago = 'EFECTIVO') => {
   if (isMock) {

@@ -1,6 +1,11 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
 
+/**
+ * Obtiene el listado de mesas de examen final programadas.
+ * REST: GET /api/mesas-examen
+ * @returns {Promise<Array<Object>>}
+ */
 export const getMesasExamen = async () => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))
@@ -11,7 +16,11 @@ export const getMesasExamen = async () => {
 }
 
 /**
- * Inscribir a un alumno en una mesa de examen (RF49).
+ * Inscribe a un alumno en una mesa de examen final (RF49).
+ * REST: POST /api/mesas-examen/{id}/inscribir
+ * @param {number|string} idMesa - Identificador de la mesa
+ * @param {number|string} [idAlumno=1] - Identificador del alumno
+ * @returns {Promise<Object>}
  */
 export const inscribirseMesa = async (idMesa, idAlumno = 1) => {
   if (isMock) {
@@ -36,7 +45,11 @@ export const inscribirseMesa = async (idMesa, idAlumno = 1) => {
 }
 
 /**
- * Dar de baja la inscripción de un alumno a una mesa (RF50).
+ * Da de baja la inscripción de un alumno a una mesa de examen (RF50).
+ * REST: POST /api/mesas-examen/{id}/baja
+ * @param {number|string} idMesa - Identificador de la mesa
+ * @param {number|string} [idAlumno=1] - Identificador del alumno
+ * @returns {Promise<Object>}
  */
 export const darseDeBajaMesa = async (idMesa, idAlumno = 1) => {
   if (isMock) {
@@ -53,7 +66,10 @@ export const darseDeBajaMesa = async (idMesa, idAlumno = 1) => {
 }
 
 /**
- * Gestión de mesas (Administrador)
+ * Programa una nueva mesa de examen final en secretaría académica.
+ * REST: POST /api/mesas-examen
+ * @param {Object} data - Datos de la mesa (idMateria, fecha, hora, turno, tribunal, aula, cupoMaximo)
+ * @returns {Promise<Object>}
  */
 export const createMesa = async (data) => {
   if (isMock) {
@@ -81,6 +97,13 @@ export const createMesa = async (data) => {
   return response.data
 }
 
+/**
+ * Actualiza los datos o estado de una mesa de examen final existente.
+ * REST: PUT /api/mesas-examen/{id}
+ * @param {number|string} idMesa - Identificador de la mesa
+ * @param {Object} data - Campos actualizados
+ * @returns {Promise<Object>}
+ */
 export const updateMesa = async (idMesa, data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))

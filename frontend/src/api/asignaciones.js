@@ -1,6 +1,11 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
 
+/**
+ * Obtiene el listado de asignaciones docentes a cursos y materias.
+ * REST: GET /api/asignaciones
+ * @returns {Promise<Array<Object>>}
+ */
 export const getAsignaciones = async () => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))
@@ -10,6 +15,12 @@ export const getAsignaciones = async () => {
   return response.data
 }
 
+/**
+ * Registra una nueva asignación docente a una cátedra y curso.
+ * REST: POST /api/asignaciones
+ * @param {Object} data - Datos de la asignación (idDocente, idMateria, idCurso, rolDocente)
+ * @returns {Promise<Object>}
+ */
 export const createAsignacion = async (data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))
@@ -35,6 +46,12 @@ export const createAsignacion = async (data) => {
   return response.data
 }
 
+/**
+ * Elimina una asignación docente existente.
+ * REST: DELETE /api/asignaciones/{id}
+ * @param {number|string} idAsignacion
+ * @returns {Promise<Object>}
+ */
 export const deleteAsignacion = async (idAsignacion) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))

@@ -1,6 +1,12 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
 
+/**
+ * Obtiene el listado de evaluaciones planificadas por cátedra (parciales, trabajos prácticos).
+ * REST: GET /api/evaluaciones
+ * @param {Object} [filtros={}] - Filtros por tipo o idCurso
+ * @returns {Promise<Array<Object>>}
+ */
 export const getEvaluaciones = async (filtros = {}) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))
@@ -17,6 +23,12 @@ export const getEvaluaciones = async (filtros = {}) => {
   return response.data
 }
 
+/**
+ * Registra una nueva evaluación creada por un docente (parcial o TP integrador).
+ * REST: POST /api/evaluaciones
+ * @param {Object} data - Datos de la evaluación (idMateria, idCurso, fecha, tipo, descripcion, ponderacion)
+ * @returns {Promise<Object>}
+ */
 export const createEvaluacion = async (data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))
