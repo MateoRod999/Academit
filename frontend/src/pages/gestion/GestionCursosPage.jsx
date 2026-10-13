@@ -5,10 +5,12 @@ import DataTable from '../../components/DataTable'
 import FormModal from '../../components/FormModal'
 import { useToast } from '../../context/ToastContext'
 import { getCursos, createCurso, updateCurso } from '../../api/cursos'
+import { getCarreras } from '../../api/carreras'
 
 export const GestionCursosPage = () => {
   const { showToast } = useToast()
   const [cursos, setCursos] = useState([])
+  const [carreras, setCarreras] = useState([])
   const [loading, setLoading] = useState(false)
   const [showModal, setShowModal] = useState(false)
   const [editingCurso, setEditingCurso] = useState(null)
@@ -16,6 +18,7 @@ export const GestionCursosPage = () => {
   const [form, setForm] = useState({
     nombre: '',
     codigo: '',
+    idCarrera: 1,
     turno: 'MAÑANA',
     capacidadMaxima: 35,
     inscriptos: 0,
@@ -25,10 +28,14 @@ export const GestionCursosPage = () => {
 
   const cargar = async () => {
     try {
-      const data = await getCursos()
-      setCursos(data)
+      const [dataCursos, dataCarreras] = await Promise.all([
+        getCursos(),
+        getCarreras(),
+      ])
+      setCursos(dataCursos)
+      setCarreras(dataCarreras)
     } catch {
-      showToast('Error al cargar cursos', 'danger')
+      showToast('Error al cargar cursos o carreras', 'danger')
     }
   }
 
@@ -41,6 +48,7 @@ export const GestionCursosPage = () => {
     setForm({
       nombre: '',
       codigo: '',
+      idCarrera: carreras[0]?.idCarrera || 1,
       turno: 'MAÑANA',
       capacidadMaxima: 35,
       inscriptos: 0,
@@ -55,6 +63,7 @@ export const GestionCursosPage = () => {
     setForm({
       nombre: c.nombre,
       codigo: c.codigo,
+      idCarrera: c.idCarrera || 1,
       turno: c.turno,
       capacidadMaxima: c.capacidadMaxima,
       inscriptos: c.inscriptos,
@@ -85,8 +94,18 @@ export const GestionCursosPage = () => {
   }
 
   const columns = [
-    { key: 'codigo', label: 'Código', width: '120px' },
-    { key: 'nombre', label: 'Nombre de Comisión' },
+    { key: 'codigo', label: 'Código', width: '110px' },
+    {
+      key: 'nombre',
+      label: 'Comisión y Carrera',
+      render: (row) => (
+        <div>
+          <strong style={{ color: 'var(--m-onSurface)' }}>{row.nombre}</strong>
+          <div className="small text-muted">{row.carreraNombre || 'Tecnicatura en Software'}</div>
+        </div>
+      ),
+    },
+    { key: 'cicloLectivo', label: 'Ciclo' },
     {
       key: 'turno',
       label: 'Turno',
@@ -101,17 +120,23 @@ export const GestionCursosPage = () => {
         return (
           <div style={{ minWidth: '130px' }}>
             <div className="d-flex justify-content-between small mb-1">
-              <span>{row.inscriptos} / {row.capacidadMaxima}</span>
+              <span>
+                {row.inscriptos} / {row.capacidadMaxima}
+              </span>
               <span className="text-muted">{pct}%</span>
             </div>
-            <ProgressBar now={pct} variant={pct >= 100 ? 'danger' : pct >= 80 ? 'warning' : 'success'} style={{ height: '5px' }} />
+            <ProgressBar
+              now={pct}
+              variant={pct >= 100 ? 'danger' : pct >= 80 ? 'warning' : 'success'}
+              style={{ height: '5px' }}
+            />
           </div>
         )
       },
     },
     {
       key: 'cuposDisponibles',
-      label: 'Cupos Libres',
+      label: 'Cupos Disponibles',
       render: (row) => (
         <span className={`fw-bold ${row.cuposDisponibles === 0 ? 'text-danger' : 'text-success'}`}>
           {row.cuposDisponibles === 0 ? 'Sin cupo' : `${row.cuposDisponibles} vacantes`}
@@ -124,7 +149,7 @@ export const GestionCursosPage = () => {
       align: 'right',
       render: (row) => (
         <Button variant="outline-primary" size="sm" onClick={() => handleOpenEditar(row)}>
-          <i className="bi bi-pencil" /> Editar
+          <i className="bi bi-pencil" />
         </Button>
       ),
     },
@@ -133,8 +158,8 @@ export const GestionCursosPage = () => {
   return (
     <div>
       <PageHeader
-        title="Gestión de Cursos y Comisiones"
-        subtitle="Control de capacidad máxima de aulas, alumnos inscriptos y cupos disponibles en tiempo real"
+        title="Gestión de Cursos"
+        subtitle="Comisiones por carrera, ciclo lectivo, control de capacidad máxima y cupos disponibles"
         icon="bi-building"
         actions={
           <Button variant="primary" size="sm" onClick={handleOpenNuevo}>
@@ -148,7 +173,7 @@ export const GestionCursosPage = () => {
         data={cursos}
         keyField="idCurso"
         searchPlaceholder="Buscar por código, turno o aula..."
-        searchKeys={['codigo', 'nombre', 'turno', 'aula']}
+        searchKeys={['codigo', 'nombre', 'carreraNombre', 'turno', 'aula']}
       />
 
       <FormModal
@@ -162,7 +187,9 @@ export const GestionCursosPage = () => {
         <Row className="g-3">
           <Col md={6}>
             <Form.Group controlId="cursoNombre">
-              <Form.Label className="small fw-semibold">Nombre de la Comisión <span className="text-danger">*</span></Form.Label>
+              <Form.Label className="small fw-semibold">
+                Nombre de la Comisión <span className="text-danger">*</span>
+              </Form.Label>
               <Form.Control
                 type="text"
                 value={form.nombre}
@@ -173,6 +200,7 @@ export const GestionCursosPage = () => {
               />
             </Form.Group>
           </Col>
+
           <Col md={6}>
             <Form.Group controlId="cursoCodigo">
               <Form.Label className="small fw-semibold">Código Único</Form.Label>
@@ -185,6 +213,38 @@ export const GestionCursosPage = () => {
               />
             </Form.Group>
           </Col>
+
+          <Col md={6}>
+            <Form.Group controlId="cursoCarreraSelect">
+              <Form.Label className="small fw-semibold">Carrera Asociada</Form.Label>
+              <Form.Select
+                value={form.idCarrera}
+                onChange={(e) => setForm({ ...form, idCarrera: Number(e.target.value) })}
+                style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
+              >
+                {carreras.map((c) => (
+                  <option key={c.idCarrera} value={c.idCarrera}>
+                    {c.nombre} ({c.codigo})
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          </Col>
+
+          <Col md={6}>
+            <Form.Group controlId="cursoCicloSelect">
+              <Form.Label className="small fw-semibold">Ciclo Lectivo</Form.Label>
+              <Form.Select
+                value={form.cicloLectivo}
+                onChange={(e) => setForm({ ...form, cicloLectivo: Number(e.target.value) })}
+                style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
+              >
+                <option value={2026}>2026</option>
+                <option value={2025}>2025</option>
+              </Form.Select>
+            </Form.Group>
+          </Col>
+
           <Col md={4}>
             <Form.Group controlId="cursoTurno">
               <Form.Label className="small fw-semibold">Turno</Form.Label>
@@ -199,9 +259,12 @@ export const GestionCursosPage = () => {
               </Form.Select>
             </Form.Group>
           </Col>
+
           <Col md={4}>
             <Form.Group controlId="cursoCapacidad">
-              <Form.Label className="small fw-semibold">Capacidad Máxima <span className="text-danger">*</span></Form.Label>
+              <Form.Label className="small fw-semibold">
+                Capacidad Máxima <span className="text-danger">*</span>
+              </Form.Label>
               <Form.Control
                 type="number"
                 min="1"
@@ -212,6 +275,7 @@ export const GestionCursosPage = () => {
               />
             </Form.Group>
           </Col>
+
           <Col md={4}>
             <Form.Group controlId="cursoAula">
               <Form.Label className="small fw-semibold">Aula / Espacio Físico</Form.Label>

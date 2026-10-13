@@ -7,10 +7,13 @@ import FormModal from '../../components/FormModal'
 import ConfirmModal from '../../components/ConfirmModal'
 import { useToast } from '../../context/ToastContext'
 import { getAlumnos, createAlumno, updateAlumno, deleteAlumno } from '../../api/alumnos'
+import { getCarreras, getPlanesEstudio } from '../../api/carreras'
 
 export const GestionAlumnosPage = () => {
   const { showToast } = useToast()
   const [alumnos, setAlumnos] = useState([])
+  const [carreras, setCarreras] = useState([])
+  const [planes, setPlanes] = useState([])
   const [loading, setLoading] = useState(false)
 
   // Estado del modal de alta/edición
@@ -24,7 +27,10 @@ export const GestionAlumnosPage = () => {
     telefono: '',
     direccion: '',
     fechaNacimiento: '',
+    idCarrera: 1,
     carrera: 'Tecnicatura Superior en Desarrollo de Software',
+    idPlan: 1,
+    planNombre: 'Plan de Estudios 2024',
   })
   const [errors, setErrors] = useState({})
 
@@ -42,6 +48,8 @@ export const GestionAlumnosPage = () => {
 
   useEffect(() => {
     cargarAlumnos()
+    getCarreras().then(setCarreras).catch(() => {})
+    getPlanesEstudio().then(setPlanes).catch(() => {})
   }, [])
 
   // Validaciones del formulario
@@ -79,6 +87,8 @@ export const GestionAlumnosPage = () => {
 
   const handleOpenNuevo = () => {
     setEditingAlumno(null)
+    const primeraCarrera = carreras[0] || { idCarrera: 1, nombre: 'Tecnicatura Superior en Desarrollo de Software' }
+    const primerPlan = planes.find((p) => p.idCarrera === primeraCarrera.idCarrera) || { idPlan: 1, nombre: 'Plan de Estudios 2024' }
     setFormData({
       nombre: '',
       apellido: '',
@@ -87,7 +97,10 @@ export const GestionAlumnosPage = () => {
       telefono: '',
       direccion: '',
       fechaNacimiento: '',
-      carrera: 'Tecnicatura Superior en Desarrollo de Software',
+      idCarrera: primeraCarrera.idCarrera,
+      carrera: primeraCarrera.nombre,
+      idPlan: primerPlan.idPlan,
+      planNombre: primerPlan.nombre,
     })
     setErrors({})
     setShowModal(true)
@@ -103,7 +116,10 @@ export const GestionAlumnosPage = () => {
       telefono: alumno.telefono || '',
       direccion: alumno.direccion || '',
       fechaNacimiento: alumno.fechaNacimiento || '',
+      idCarrera: alumno.idCarrera || 1,
       carrera: alumno.carrera || 'Tecnicatura Superior en Desarrollo de Software',
+      idPlan: alumno.idPlan || 1,
+      planNombre: alumno.planNombre || 'Plan de Estudios 2024',
     })
     setErrors({})
     setShowModal(true)
@@ -161,6 +177,16 @@ export const GestionAlumnosPage = () => {
       ),
     },
     { key: 'dni', label: 'DNI' },
+    {
+      key: 'carrera',
+      label: 'Carrera y Plan',
+      render: (row) => (
+        <div>
+          <span style={{ color: 'var(--m-onSurface)' }}>{row.carrera}</span>
+          <div className="small text-muted">{row.planNombre || 'Plan 2024'}</div>
+        </div>
+      ),
+    },
     { key: 'cursoNombre', label: 'Comisión Actual' },
     {
       key: 'estadoMatricula',
@@ -328,6 +354,62 @@ export const GestionAlumnosPage = () => {
                 onChange={(e) => setFormData({ ...formData, direccion: e.target.value })}
                 style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)', borderColor: 'var(--m-outline)' }}
               />
+            </Form.Group>
+          </Col>
+
+          {/* Selectores de Carrera y Plan de Estudios */}
+          <Col md={6}>
+            <Form.Group controlId="aluCarreraSelect">
+              <Form.Label className="small fw-semibold">Carrera Académica <span className="text-danger">*</span></Form.Label>
+              <Form.Select
+                value={formData.idCarrera}
+                onChange={(e) => {
+                  const idC = Number(e.target.value)
+                  const car = carreras.find((c) => c.idCarrera === idC)
+                  const planRel = planes.find((p) => p.idCarrera === idC)
+                  setFormData({
+                    ...formData,
+                    idCarrera: idC,
+                    carrera: car ? car.nombre : formData.carrera,
+                    idPlan: planRel ? planRel.idPlan : formData.idPlan,
+                    planNombre: planRel ? planRel.nombre : formData.planNombre,
+                  })
+                }}
+                style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)', borderColor: 'var(--m-outline)' }}
+              >
+                {carreras.map((c) => (
+                  <option key={c.idCarrera} value={c.idCarrera}>
+                    {c.nombre} ({c.codigo})
+                  </option>
+                ))}
+              </Form.Select>
+            </Form.Group>
+          </Col>
+
+          <Col md={6}>
+            <Form.Group controlId="aluPlanSelect">
+              <Form.Label className="small fw-semibold">Plan de Estudios <span className="text-danger">*</span></Form.Label>
+              <Form.Select
+                value={formData.idPlan}
+                onChange={(e) => {
+                  const idP = Number(e.target.value)
+                  const pl = planes.find((p) => p.idPlan === idP)
+                  setFormData({
+                    ...formData,
+                    idPlan: idP,
+                    planNombre: pl ? pl.nombre : formData.planNombre,
+                  })
+                }}
+                style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)', borderColor: 'var(--m-outline)' }}
+              >
+                {planes
+                  .filter((p) => p.idCarrera === Number(formData.idCarrera))
+                  .map((p) => (
+                    <option key={p.idPlan} value={p.idPlan}>
+                      {p.nombre} ({p.codigo})
+                    </option>
+                  ))}
+              </Form.Select>
             </Form.Group>
           </Col>
         </Row>

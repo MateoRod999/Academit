@@ -126,19 +126,19 @@ export const InicioPage = () => {
               <Card className="h-100 border-0 shadow-sm" style={{ backgroundColor: 'var(--m-surface)' }}>
                 <Card.Body className="p-3">
                   <div className="d-flex justify-content-between align-items-start mb-2">
-                    <span className="text-muted small text-uppercase fw-semibold">Estado de Matrícula</span>
+                    <span className="text-muted small text-uppercase fw-semibold">Mi Carrera</span>
                     <span className="p-2 rounded-2" style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-primary)' }}>
-                      <i className="bi bi-card-checklist fs-5" />
+                      <i className="bi bi-mortarboard-fill fs-5" />
                     </span>
                   </div>
-                  <div className="mb-2">
-                    <StatusBadge status="ACTIVA" />
-                  </div>
+                  <h6 className="fw-bold mb-1" style={{ color: 'var(--m-onSurface)' }}>
+                    Tecnicatura Superior en Desarrollo de Software
+                  </h6>
                   <div className="small text-muted mb-2">
-                    Ciclo Lectivo 2026 - Turno Mañana
+                    Plan 2024 • Matrícula <StatusBadge status="ACTIVA" />
                   </div>
-                  <Button as={Link} to="/otros/mis-datos" variant="outline-secondary" size="sm" className="w-100 mt-2">
-                    Mis Datos Personales
+                  <Button as={Link} to="/academico/plan-estudios" variant="outline-primary" size="sm" className="w-100 mt-2">
+                    Ver Plan de Estudios
                   </Button>
                 </Card.Body>
               </Card>

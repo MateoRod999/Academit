@@ -5,6 +5,7 @@ import DataTable from '../../components/DataTable'
 import FormModal from '../../components/FormModal'
 import ConfirmModal from '../../components/ConfirmModal'
 import { useToast } from '../../context/ToastContext'
+import { useModo } from '../../hooks/useModo'
 import { getAsignaciones, createAsignacion, deleteAsignacion } from '../../api/asignaciones'
 import { getDocentes } from '../../api/docentes'
 import { getMaterias } from '../../api/materias'
@@ -12,6 +13,9 @@ import { getCursos } from '../../api/cursos'
 
 export const GestionAsignacionesPage = () => {
   const { showToast } = useToast()
+  const modo = useModo()
+  const esLectura = modo === 'lectura'
+
   const [asignaciones, setAsignaciones] = useState([])
   const [docentes, setDocentes] = useState([])
   const [materias, setMaterias] = useState([])
@@ -82,28 +86,38 @@ export const GestionAsignacionesPage = () => {
       label: 'Cargo',
       render: (row) => <Badge bg="primary">{row.rolDocente}</Badge>,
     },
-    {
-      key: 'acciones',
-      label: 'Acciones',
-      align: 'right',
-      render: (row) => (
-        <Button variant="outline-danger" size="sm" onClick={() => setAsigToDelete(row)}>
-          <i className="bi bi-trash" /> Quitar
-        </Button>
-      ),
-    },
+    ...(!esLectura
+      ? [
+          {
+            key: 'acciones',
+            label: 'Acciones',
+            align: 'right',
+            render: (row) => (
+              <Button variant="outline-danger" size="sm" onClick={() => setAsigToDelete(row)}>
+                <i className="bi bi-trash" /> Quitar
+              </Button>
+            ),
+          },
+        ]
+      : []),
   ]
 
   return (
     <div>
       <PageHeader
         title="Asignaciones Docente - Curso - Materia"
-        subtitle="Vínculo institucional entre equipo de cátedra, asignatura y comisión horaria"
+        subtitle={
+          esLectura
+            ? 'Vínculo institucional entre equipo de cátedra, asignatura y comisión horaria (Modo Lectura)'
+            : 'Vínculo institucional entre equipo de cátedra, asignatura y comisión horaria'
+        }
         icon="bi-link-45deg"
         actions={
-          <Button variant="primary" size="sm" onClick={() => setShowModal(true)}>
-            <i className="bi bi-plus-lg me-1" /> Nueva Asignación
-          </Button>
+          !esLectura && (
+            <Button variant="primary" size="sm" onClick={() => setShowModal(true)}>
+              <i className="bi bi-plus-lg me-1" /> Nueva Asignación
+            </Button>
+          )
         }
       />
 
@@ -115,93 +129,98 @@ export const GestionAsignacionesPage = () => {
         searchKeys={['docenteNombre', 'materiaNombre', 'cursoNombre']}
       />
 
-      <FormModal
-        show={showModal}
-        onHide={() => setShowModal(false)}
-        onSubmit={handleSubmit}
-        title="Crear Asignación Docente"
-        submitText="Asignar Docente"
-        loading={loading}
-      >
-        <Row className="g-3">
-          <Col md={12}>
-            <Form.Group controlId="asigDocente">
-              <Form.Label className="small fw-semibold">Docente</Form.Label>
-              <Form.Select
-                value={form.idDocente}
-                onChange={(e) => setForm({ ...form, idDocente: Number(e.target.value) })}
-                style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
-              >
-                {docentes.map((d) => (
-                  <option key={d.idDocente} value={d.idDocente}>
-                    {d.apellido}, {d.nombre} ({d.especialidad})
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-          </Col>
+      {!esLectura && (
+        <>
+          <FormModal
+            show={showModal}
+            onHide={() => setShowModal(false)}
+            onSubmit={handleSubmit}
+            title="Crear Asignación Docente"
+            submitText="Asignar Docente"
+            loading={loading}
+          >
+            <Row className="g-3">
+              <Col md={12}>
+                <Form.Group controlId="asigDocente">
+                  <Form.Label className="small fw-semibold">Docente</Form.Label>
+                  <Form.Select
+                    value={form.idDocente}
+                    onChange={(e) => setForm({ ...form, idDocente: Number(e.target.value) })}
+                    style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
+                  >
+                    {docentes.map((d) => (
+                      <option key={d.idDocente} value={d.idDocente}>
+                        {d.apellido}, {d.nombre} ({d.especialidad})
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+              </Col>
 
-          <Col md={6}>
-            <Form.Group controlId="asigMateria">
-              <Form.Label className="small fw-semibold">Materia</Form.Label>
-              <Form.Select
-                value={form.idMateria}
-                onChange={(e) => setForm({ ...form, idMateria: Number(e.target.value) })}
-                style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
-              >
-                {materias.map((m) => (
-                  <option key={m.idMateria} value={m.idMateria}>
-                    {m.nombre} ({m.codigo})
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-          </Col>
+              <Col md={6}>
+                <Form.Group controlId="asigMateria">
+                  <Form.Label className="small fw-semibold">Materia</Form.Label>
+                  <Form.Select
+                    value={form.idMateria}
+                    onChange={(e) => setForm({ ...form, idMateria: Number(e.target.value) })}
+                    style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
+                  >
+                    {materias.map((m) => (
+                      <option key={m.idMateria} value={m.idMateria}>
+                        {m.nombre} ({m.codigo})
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+              </Col>
 
-          <Col md={6}>
-            <Form.Group controlId="asigCurso">
-              <Form.Label className="small fw-semibold">Curso / Comisión</Form.Label>
-              <Form.Select
-                value={form.idCurso}
-                onChange={(e) => setForm({ ...form, idCurso: Number(e.target.value) })}
-                style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
-              >
-                {cursos.map((c) => (
-                  <option key={c.idCurso} value={c.idCurso}>
-                    {c.nombre} ({c.turno})
-                  </option>
-                ))}
-              </Form.Select>
-            </Form.Group>
-          </Col>
+              <Col md={6}>
+                <Form.Group controlId="asigCurso">
+                  <Form.Label className="small fw-semibold">Curso / Comisión</Form.Label>
+                  <Form.Select
+                    value={form.idCurso}
+                    onChange={(e) => setForm({ ...form, idCurso: Number(e.target.value) })}
+                    style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
+                  >
+                    {cursos.map((c) => (
+                      <option key={c.idCurso} value={c.idCurso}>
+                        {c.nombre} ({c.turno})
+                      </option>
+                    ))}
+                  </Form.Select>
+                </Form.Group>
+              </Col>
 
-          <Col md={12}>
-            <Form.Group controlId="asigCargo">
-              <Form.Label className="small fw-semibold">Rol / Cargo</Form.Label>
-              <Form.Select
-                value={form.rolDocente}
-                onChange={(e) => setForm({ ...form, rolDocente: e.target.value })}
-                style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
-              >
-                <option value="Titular">Profesor Titular</option>
-                <option value="Adjunto">Profesor Adjunto</option>
-                <option value="Ayudante de Primera">Ayudante de Primera</option>
-              </Form.Select>
-            </Form.Group>
-          </Col>
-        </Row>
-      </FormModal>
+              <Col md={12}>
+                <Form.Group controlId="asigRol">
+                  <Form.Label className="small fw-semibold">Cargo / Rol en la Cátedra</Form.Label>
+                  <Form.Select
+                    value={form.rolDocente}
+                    onChange={(e) => setForm({ ...form, rolDocente: e.target.value })}
+                    style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
+                  >
+                    <option value="Titular">Profesor Titular</option>
+                    <option value="Adjunto">Profesor Adjunto</option>
+                    <option value="Ayudante de Primera">Ayudante de Primera</option>
+                    <option value="Jefe de Trabajos Prácticos">Jefe de Trabajos Prácticos (JTP)</option>
+                  </Form.Select>
+                </Form.Group>
+              </Col>
+            </Row>
+          </FormModal>
 
-      <ConfirmModal
-        show={Boolean(asigToDelete)}
-        onHide={() => setAsigToDelete(null)}
-        onConfirm={handleConfirmBaja}
-        title="Quitar Asignación Docente"
-        message={`¿Desea desvincular al docente ${asigToDelete?.docenteNombre} de la materia ${asigToDelete?.materiaNombre}?`}
-        confirmText="Confirmar Desvinculación"
-        variant="danger"
-        loading={loading}
-      />
+          <ConfirmModal
+            show={Boolean(asigToDelete)}
+            onHide={() => setAsigToDelete(null)}
+            onConfirm={handleConfirmBaja}
+            title="Quitar Asignación Docente"
+            message={`¿Desea desvincular al docente ${asigToDelete?.docenteNombre} de la materia ${asigToDelete?.materiaNombre}?`}
+            confirmText="Confirmar Desvinculación"
+            variant="danger"
+            loading={loading}
+          />
+        </>
+      )}
     </div>
   )
 }

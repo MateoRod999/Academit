@@ -6,10 +6,14 @@ import StatusBadge from '../../components/StatusBadge'
 import FormModal from '../../components/FormModal'
 import ConfirmModal from '../../components/ConfirmModal'
 import { useToast } from '../../context/ToastContext'
+import { useModo } from '../../hooks/useModo'
 import { getDocentes, createDocente, updateDocente, deleteDocente } from '../../api/docentes'
 
 export const GestionDocentesPage = () => {
   const { showToast } = useToast()
+  const modo = useModo()
+  const esLectura = modo === 'lectura'
+
   const [docentes, setDocentes] = useState([])
   const [loading, setLoading] = useState(false)
   const [showModal, setShowModal] = useState(false)
@@ -128,35 +132,45 @@ export const GestionDocentesPage = () => {
       label: 'Condición',
       render: (row) => <StatusBadge status={row.estado} />,
     },
-    {
-      key: 'acciones',
-      label: 'Acciones',
-      align: 'right',
-      render: (row) => (
-        <div className="d-flex justify-content-end gap-1">
-          <Button variant="outline-primary" size="sm" onClick={() => handleOpenEditar(row)}>
-            <i className="bi bi-pencil" />
-          </Button>
-          {row.estado !== 'INACTIVO' && (
-            <Button variant="outline-danger" size="sm" onClick={() => setDocenteToDelete(row)}>
-              <i className="bi bi-person-x" />
-            </Button>
-          )}
-        </div>
-      ),
-    },
+    ...(!esLectura
+      ? [
+          {
+            key: 'acciones',
+            label: 'Acciones',
+            align: 'right',
+            render: (row) => (
+              <div className="d-flex justify-content-end gap-1">
+                <Button variant="outline-primary" size="sm" onClick={() => handleOpenEditar(row)}>
+                  <i className="bi bi-pencil" />
+                </Button>
+                {row.estado !== 'INACTIVO' && (
+                  <Button variant="outline-danger" size="sm" onClick={() => setDocenteToDelete(row)}>
+                    <i className="bi bi-person-x" />
+                  </Button>
+                )}
+              </div>
+            ),
+          },
+        ]
+      : []),
   ]
 
   return (
     <div>
       <PageHeader
         title="Gestión de Docentes"
-        subtitle="Padrón docente: alta, asignación de especialidad y legajo académico"
+        subtitle={
+          esLectura
+            ? 'Padrón docente: consulta de cuerpo docente y legajos académicos (Modo Lectura)'
+            : 'Padrón docente: alta, asignación de especialidad y legajo académico'
+        }
         icon="bi-person-video3"
         actions={
-          <Button variant="primary" size="sm" onClick={handleOpenNuevo}>
-            <i className="bi bi-plus-lg me-1" /> Nuevo Docente
-          </Button>
+          !esLectura && (
+            <Button variant="primary" size="sm" onClick={handleOpenNuevo}>
+              <i className="bi bi-plus-lg me-1" /> Nuevo Docente
+            </Button>
+          )
         }
       />
 
@@ -168,7 +182,9 @@ export const GestionDocentesPage = () => {
         searchKeys={['nombre', 'apellido', 'dni', 'especialidad', 'legajo']}
       />
 
-      <FormModal
+      {!esLectura && (
+        <>
+          <FormModal
         show={showModal}
         onHide={() => setShowModal(false)}
         onSubmit={handleSubmit}
@@ -261,6 +277,8 @@ export const GestionDocentesPage = () => {
         variant="danger"
         loading={loading}
       />
+        </>
+      )}
     </div>
   )
 }

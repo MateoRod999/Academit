@@ -43,7 +43,25 @@ export const GestionInscripcionesPage = () => {
     getCiclosLectivos().then(setCiclos).catch(() => {})
   }, [])
 
+  // Alumno seleccionado y cursos exclusivos de su carrera
+  const alumnoSeleccionado = alumnos.find((a) => a.idAlumno === Number(form.idAlumno))
+  const cursosDeLaCarrera = cursos.filter(
+    (c) => !alumnoSeleccionado || !c.idCarrera || c.idCarrera === alumnoSeleccionado.idCarrera
+  )
   const selectedCursoInfo = cursos.find((c) => c.idCurso === Number(form.idCurso))
+
+  const handleAlumnoChange = (idAlu) => {
+    const alu = alumnos.find((a) => a.idAlumno === Number(idAlu))
+    const cursosFiltrados = cursos.filter(
+      (c) => !alu || !c.idCarrera || c.idCarrera === alu.idCarrera
+    )
+    const primerCursoValido = cursosFiltrados[0]?.idCurso || (cursos[0]?.idCurso || 1)
+    setForm({
+      ...form,
+      idAlumno: Number(idAlu),
+      idCurso: primerCursoValido,
+    })
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -116,10 +134,23 @@ export const GestionInscripcionesPage = () => {
     <div>
       <PageHeader
         title="Inscripciones a Cursos"
-        subtitle="Matriculación de alumnos a comisiones con control y aviso de cupo disponible"
+        subtitle="Matriculación a comisiones: sólo se ofrecen cursos correspondientes a la carrera del alumno, con aviso de cupo"
         icon="bi-journal-plus"
         actions={
-          <Button variant="primary" size="sm" onClick={() => setShowModal(true)}>
+          <Button
+            variant="primary"
+            size="sm"
+            onClick={() => {
+              const primerAlu = alumnos[0]
+              const primerCurso = cursos.filter((c) => !primerAlu || !c.idCarrera || c.idCarrera === primerAlu.idCarrera)[0]
+              setForm({
+                idAlumno: primerAlu?.idAlumno || 1,
+                idCurso: primerCurso?.idCurso || 1,
+                cicloLectivo: 2026,
+              })
+              setShowModal(true)
+            }}
+          >
             <i className="bi bi-plus-lg me-1" /> Nueva Inscripción
           </Button>
         }
@@ -130,7 +161,7 @@ export const GestionInscripcionesPage = () => {
         data={inscripciones}
         keyField="idInscripcion"
         searchPlaceholder="Buscar por alumno o curso..."
-        searchKeys={['alumnoNombre', 'cursoNombre', 'estado']}
+        searchKeys={['alumnoNombre', 'cursoNombre']}
       />
 
       <FormModal
@@ -144,19 +175,25 @@ export const GestionInscripcionesPage = () => {
         <Row className="g-3">
           <Col md={12}>
             <Form.Group controlId="inscAlumno">
-              <Form.Label className="small fw-semibold">Alumno</Form.Label>
+              <Form.Label className="small fw-semibold">Estudiante a Inscribir <span className="text-danger">*</span></Form.Label>
               <Form.Select
                 value={form.idAlumno}
-                onChange={(e) => setForm({ ...form, idAlumno: Number(e.target.value) })}
+                onChange={(e) => handleAlumnoChange(e.target.value)}
                 style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
               >
                 {alumnos.map((a) => (
                   <option key={a.idAlumno} value={a.idAlumno}>
-                    {a.apellido}, {a.nombre} (Legajo: {a.legajo} - DNI: {a.dni})
+                    {a.apellido}, {a.nombre} (Legajo: {a.legajo} - {a.carrera})
                   </option>
                 ))}
               </Form.Select>
             </Form.Group>
+            {alumnoSeleccionado && (
+              <div className="small mt-1 text-muted d-flex align-items-center gap-2">
+                <i className="bi bi-mortarboard text-warning" />
+                <span>Carrera: <strong>{alumnoSeleccionado.carrera}</strong></span>
+              </div>
+            )}
           </Col>
 
           <Col md={6}>
@@ -178,17 +215,23 @@ export const GestionInscripcionesPage = () => {
 
           <Col md={6}>
             <Form.Group controlId="inscCurso">
-              <Form.Label className="small fw-semibold">Curso / Comisión</Form.Label>
+              <Form.Label className="small fw-semibold">
+                Comisión Habilitada (Solo de su carrera) <span className="text-danger">*</span>
+              </Form.Label>
               <Form.Select
                 value={form.idCurso}
                 onChange={(e) => setForm({ ...form, idCurso: Number(e.target.value) })}
                 style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
               >
-                {cursos.map((c) => (
-                  <option key={c.idCurso} value={c.idCurso}>
-                    {c.nombre} ({c.turno}) - {c.cuposDisponibles} cupos libres
-                  </option>
-                ))}
+                {cursosDeLaCarrera.length === 0 ? (
+                  <option disabled value="">No hay cursos para esta carrera</option>
+                ) : (
+                  cursosDeLaCarrera.map((c) => (
+                    <option key={c.idCurso} value={c.idCurso}>
+                      {c.nombre} ({c.turno}) - {c.cuposDisponibles} cupos libres
+                    </option>
+                  ))
+                )}
               </Form.Select>
             </Form.Group>
           </Col>
@@ -203,7 +246,7 @@ export const GestionInscripcionesPage = () => {
                 <i className={`bi ${selectedCursoInfo.cuposDisponibles === 0 ? 'bi-x-circle-fill' : 'bi-info-circle-fill'} fs-5`} />
                 <div>
                   <strong>Aviso de Cupo ({selectedCursoInfo.nombre}):</strong>{' '}
-                  Capacidad máxima: {selectedCursoInfo.capacidadMaxima} | Inscriptos actuales: {selectedCursoInfo.inscriptos} |{' '}
+                  Capacidad: {selectedCursoInfo.capacidadMaxima} | Inscriptos: {selectedCursoInfo.inscriptos} |{' '}
                   <span className="fw-bold">
                     {selectedCursoInfo.cuposDisponibles > 0
                       ? `${selectedCursoInfo.cuposDisponibles} vacante(s) disponible(s)`
@@ -221,9 +264,9 @@ export const GestionInscripcionesPage = () => {
         onHide={() => setInscToDelete(null)}
         onConfirm={handleConfirmBaja}
         title="Cancelar Inscripción a Curso"
-        message={`¿Está seguro de cancelar la inscripción del estudiante ${inscToDelete?.alumnoNombre} en el curso ${inscToDelete?.cursoNombre}? El cupo será liberado de forma inmediata.`}
+        message={`¿Desea cancelar la inscripción del estudiante ${inscToDelete?.alumnoNombre} en el curso "${inscToDelete?.cursoNombre}"? Se liberará el cupo en la comisión.`}
         confirmText="Confirmar Cancelación"
-        variant="danger"
+        variant="warning"
         loading={loading}
       />
     </div>
