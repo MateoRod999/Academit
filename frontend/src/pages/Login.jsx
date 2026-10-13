@@ -53,7 +53,6 @@ export const Login = () => {
             <Card.Body className="p-4 p-md-5">
               <div className="text-center mb-4">
                 <span className="nf-glyph fs-1 d-block mb-2" style={{ color: 'var(--m-primary)' }}>
-                  
                 </span>
                 <Card.Title as="h2" className="fw-bold mb-1" style={{ color: 'var(--m-primary)' }}>
                   Academit
