@@ -74,3 +74,106 @@ export const cancelarMatricula = async (idAlumno = 1, motivo = '') => {
   const response = await apiClient.post(`/matriculas/cancelar`, { idAlumno, motivo })
   return response.data
 }
+
+/**
+ * Genera el plan de 12 cuotas mensuales y 3 seguros cuatrimestrales para una matrícula individual.
+ * REST: POST /api/matriculas/{id}/cuotas
+ * @param {number|string} idMatricula - Identificador de la matrícula
+ * @returns {Promise<Array<Object>>}
+ */
+export const generarCuotas = async (idMatricula) => {
+  const idMat = Number(idMatricula)
+
+  if (isMock) {
+    await new Promise((resolve) => setTimeout(resolve, 200))
+    const matricula = mockDb.matriculas.find((m) => m.idMatricula === idMat)
+    if (!matricula) {
+      const error = new Error('Matrícula no encontrada')
+      error.status = 404
+      throw error
+    }
+
+    if (matricula.estado === 'CANCELADA') {
+      const error = new Error('No se pueden generar cuotas para una matrícula CANCELADA')
+      error.status = 409
+      throw error
+    }
+
+    // Verificar si ya tiene cuotas asociadas por idMatricula o idAlumno
+    const cuotasExistentes = mockDb.cuotas.filter(
+      (c) => c.idMatricula === idMat || (c.idAlumno === matricula.idAlumno && c.idMatricula === idMat)
+    )
+    if (cuotasExistentes.length > 0) {
+      const error = new Error(`La matrícula #${idMat} ya tiene cuotas generadas`)
+      error.status = 409
+      throw error
+    }
+
+    const meses = [
+      'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+      'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre',
+    ]
+
+    const nuevasCuotas = []
+    let nextId = Math.max(...mockDb.cuotas.map((c) => c.idCuota), 0) + 1
+    const anio = matricula.cicloLectivo || 2026
+
+    // 12 cuotas mensuales
+    for (let i = 1; i <= 12; i++) {
+      const mesStr = String(i).padStart(2, '0')
+      const cuota = {
+        idCuota: nextId++,
+        idMatricula: idMat,
+        idAlumno: matricula.idAlumno,
+        alumnoNombre: matricula.alumnoNombre,
+        concepto: `Cuota ${i} - ${meses[i - 1]} ${anio}`,
+        tipo: 'MENSUAL',
+        numero: i,
+        numeroCuota: i,
+        periodo: `${meses[i - 1]} ${anio}`,
+        fechaVencimiento: `${anio}-${mesStr}-10`,
+        importe: 28000,
+        monto: 28000,
+        estado: 'PENDIENTE',
+        fechaPago: null,
+        comprobante: null,
+      }
+      nuevasCuotas.push(cuota)
+    }
+
+    // 3 seguros cuatrimestrales
+    const segurosConfig = [
+      { num: 1, mesVto: '03', periodo: `1° Cuatrimestre ${anio}` },
+      { num: 2, mesVto: '07', periodo: `2° Cuatrimestre ${anio}` },
+      { num: 3, mesVto: '11', periodo: `3° Cuatrimestre ${anio}` },
+    ]
+
+    for (const seg of segurosConfig) {
+      const cuotaSeguro = {
+        idCuota: nextId++,
+        idMatricula: idMat,
+        idAlumno: matricula.idAlumno,
+        alumnoNombre: matricula.alumnoNombre,
+        concepto: `Seguro Cuatrimestral ${seg.num}/3`,
+        tipo: 'SEGURO_CUATRIMESTRAL',
+        numero: seg.num,
+        numeroCuota: seg.num,
+        periodo: seg.periodo,
+        fechaVencimiento: `${anio}-${seg.mesVto}-10`,
+        importe: 8000,
+        monto: 8000,
+        estado: 'PENDIENTE',
+        fechaPago: null,
+        comprobante: null,
+      }
+      nuevasCuotas.push(cuotaSeguro)
+    }
+
+    mockDb.cuotas.push(...nuevasCuotas)
+    return nuevasCuotas
+  }
+
+  const response = await apiClient.post(`/matriculas/${idMat}/cuotas`)
+  return response.data
+}
+
