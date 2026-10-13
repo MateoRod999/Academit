@@ -1,9 +1,10 @@
-import { useState } from 'react'
-import { Card, Form, Button, Row, Col } from 'react-bootstrap'
+import { useState, useEffect } from 'react'
+import { Card, Form, Button, Row, Col, Spinner } from 'react-bootstrap'
 import PageHeader from '../../components/PageHeader'
 import StatusBadge from '../../components/StatusBadge'
 import { useAuth } from '../../context/AuthContext'
 import { useToast } from '../../context/ToastContext'
+import { getMiPerfil, actualizarMiPerfil } from '../../api/usuarios'
 
 export const MisDatosPage = () => {
   const { usuario, nombre, rol } = useAuth()
@@ -11,20 +12,62 @@ export const MisDatosPage = () => {
 
   const [formData, setFormData] = useState({
     nombre: nombre || 'Lucía Benítez',
-    email: `${usuario}@instituto.edu.ar`,
+    email: `${usuario || 'alumno'}@instituto.edu.ar`,
     dni: '42.111.222',
     telefono: '11-4567-8901',
     direccion: 'Av. Corrientes 1234, CABA',
+    domicilio: 'Av. Corrientes 1234, CABA',
     fechaNacimiento: '2001-04-18',
     carrera: 'Tecnicatura Superior en Desarrollo de Software',
   })
 
   const [isEditing, setIsEditing] = useState(false)
+  const [loading, setLoading] = useState(true)
+  const [saving, setSaving] = useState(false)
 
-  const handleSubmit = (e) => {
+  useEffect(() => {
+    getMiPerfil()
+      .then((data) => {
+        setFormData((prev) => ({
+          ...prev,
+          ...data,
+          direccion: data.direccion || data.domicilio || prev.direccion,
+          domicilio: data.domicilio || data.direccion || prev.domicilio,
+        }))
+      })
+      .catch(() => {
+        showToast('Error al cargar datos de perfil', 'danger')
+      })
+      .finally(() => setLoading(false))
+  }, [])
+
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    setIsEditing(false)
-    showToast('Tus datos personales se han actualizado correctamente', 'success')
+    setSaving(true)
+    try {
+      const actualizado = await actualizarMiPerfil(formData)
+      setFormData((prev) => ({
+        ...prev,
+        ...actualizado,
+        direccion: actualizado.direccion || actualizado.domicilio || prev.direccion,
+        domicilio: actualizado.domicilio || actualizado.direccion || prev.domicilio,
+      }))
+      setIsEditing(false)
+      showToast('Tus datos personales se han actualizado correctamente', 'success')
+    } catch (err) {
+      showToast(err.message || 'Error al actualizar perfil', 'danger')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="text-center py-5">
+        <Spinner animation="border" variant="primary" />
+        <div className="mt-2 text-muted small">Cargando datos personales...</div>
+      </div>
+    )
   }
 
   return (
@@ -157,13 +200,13 @@ export const MisDatosPage = () => {
                     </Form.Group>
                   </Col>
 
-                  {isEditing && (
-                    <Col md={12} className="d-flex justify-content-end mt-4">
-                      <Button variant="primary" type="submit" size="sm" className="px-4">
-                        <i className="bi bi-save me-1" /> Guardar Modificaciones
-                      </Button>
-                    </Col>
-                  )}
+                    {isEditing && (
+                      <Col md={12} className="d-flex justify-content-end mt-4">
+                        <Button variant="primary" type="submit" size="sm" className="px-4" disabled={saving}>
+                          {saving ? <Spinner size="sm" animation="border" className="me-1" /> : <i className="bi bi-save me-1" />} Guardar Modificaciones
+                        </Button>
+                      </Col>
+                    )}
                 </Row>
               </Form>
             </Card.Body>
