@@ -1,0 +1,1968 @@
+{
+  "version": "1.0.0",
+  "descripcion": "Inventario de entidades, campos, relaciones y pantallas del sistema Academit",
+  "totalEntidades": 22,
+  "entidades": [
+    {
+      "nombre": "Alumno",
+      "descripcion": "Estudiante inscripto en el instituto educativo.",
+      "campos": [
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único del alumno (PK)."
+        },
+        {
+          "nombre": "legajo",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Código identificatorio institucional (ej. ALU-1001)."
+        },
+        {
+          "nombre": "nombre",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Nombres del estudiante."
+        },
+        {
+          "nombre": "apellido",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Apellidos del estudiante."
+        },
+        {
+          "nombre": "dni",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Documento Nacional de Identidad único."
+        },
+        {
+          "nombre": "email",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Correo electrónico de contacto."
+        },
+        {
+          "nombre": "telefono",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Teléfono de contacto."
+        },
+        {
+          "nombre": "direccion",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Domicilio residencial del estudiante."
+        },
+        {
+          "nombre": "fechaNacimiento",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de nacimiento."
+        },
+        {
+          "nombre": "idCarrera",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la Carrera en la que está inscripto."
+        },
+        {
+          "nombre": "carrera",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre desnormalizado de la carrera."
+        },
+        {
+          "nombre": "idPlan",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Plan de Estudio asignado."
+        },
+        {
+          "nombre": "planNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre desnormalizado del plan curricular."
+        },
+        {
+          "nombre": "idCurso",
+          "tipo": "number (Integer)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "FK al curso/comisión principal asignada."
+        },
+        {
+          "nombre": "cursoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del curso asignado."
+        },
+        {
+          "nombre": "cicloLectivo",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Año lectivo de ingreso o cursada activa."
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "REGULAR",
+            "ACTIVO",
+            "INACTIVO"
+          ],
+          "descripcion": "Condición académica institucional."
+        },
+        {
+          "nombre": "estadoMatricula",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ACTIVA",
+            "PENDIENTE",
+            "CANCELADA"
+          ],
+          "descripcion": "Estado de la matrícula para el ciclo lectivo actual."
+        },
+        {
+          "nombre": "idMatricula",
+          "tipo": "number (Integer)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "FK a la matrícula del ciclo actual."
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idCarrera",
+          "entidadDestino": "Carrera",
+          "campoDestino": "idCarrera",
+          "tipo": "M:1"
+        },
+        {
+          "campo": "idPlan",
+          "entidadDestino": "PlanEstudio",
+          "campoDestino": "idPlan",
+          "tipo": "M:1"
+        },
+        {
+          "campo": "idCurso",
+          "entidadDestino": "Curso",
+          "campoDestino": "idCurso",
+          "tipo": "M:1"
+        },
+        {
+          "campo": "idMatricula",
+          "entidadDestino": "Matricula",
+          "campoDestino": "idMatricula",
+          "tipo": "1:1"
+        }
+      ],
+      "pantallas": [
+        "GestionAlumnosPage.jsx",
+        "GestionInscripcionesPage.jsx",
+        "AdminMatriculasPage.jsx",
+        "AdminCuotasPage.jsx",
+        "AdminPagosPage.jsx",
+        "AdminSituacionAlumnoPage.jsx",
+        "AdminDeudasPage.jsx",
+        "AsistenciasDocentePage.jsx",
+        "CalificacionesDocentePage.jsx",
+        "InicioPage.jsx",
+        "MisDatosPage.jsx"
+      ]
+    },
+    {
+      "nombre": "Docente",
+      "descripcion": "Profesor o docente que dicta asignaturas en el instituto.",
+      "campos": [
+        {
+          "nombre": "idDocente",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único del docente (PK)."
+        },
+        {
+          "nombre": "legajo",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Código identificatorio del docente (ej. DOC-201)."
+        },
+        {
+          "nombre": "nombre",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Nombres del docente."
+        },
+        {
+          "nombre": "apellido",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Apellidos del docente."
+        },
+        {
+          "nombre": "dni",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Documento Nacional de Identidad único."
+        },
+        {
+          "nombre": "email",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Correo electrónico institucional."
+        },
+        {
+          "nombre": "telefono",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Teléfono de contacto."
+        },
+        {
+          "nombre": "especialidad",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Área de especialidad académica o titulación."
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ACTIVO",
+            "INACTIVO"
+          ],
+          "descripcion": "Estado operativo del docente."
+        }
+      ],
+      "relaciones": [],
+      "pantallas": [
+        "GestionDocentesPage.jsx",
+        "GestionAsignacionesPage.jsx"
+      ]
+    },
+    {
+      "nombre": "Carrera",
+      "descripcion": "Oferta académica o tecnicatura superior dictada por el instituto.",
+      "campos": [
+        {
+          "nombre": "idCarrera",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de la carrera (PK)."
+        },
+        {
+          "nombre": "codigo",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": [
+            "TSDS",
+            "TSCDIA"
+          ],
+          "descripcion": "Código corto o sigla oficial."
+        },
+        {
+          "nombre": "nombre",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Denominación oficial de la carrera."
+        },
+        {
+          "nombre": "tituloOtorgado",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Título expedido al egresar."
+        },
+        {
+          "nombre": "duracion",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Duración de cursada (ej. '3 años')."
+        },
+        {
+          "nombre": "resolucion",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Resolución ministerial habilitante."
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ACTIVA",
+            "INACTIVA"
+          ],
+          "descripcion": "Estado de vigencia académica."
+        },
+        {
+          "nombre": "planesCount",
+          "tipo": "number (Integer)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Cantidad desnormalizada de planes asociados."
+        },
+        {
+          "nombre": "cursosCount",
+          "tipo": "number (Integer)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Cantidad desnormalizada de comisiones activas."
+        }
+      ],
+      "relaciones": [],
+      "pantallas": [
+        "GestionCarrerasPage.jsx",
+        "GestionAlumnosPage.jsx",
+        "GestionCursosPage.jsx",
+        "GestionPlanEstudiosPage.jsx",
+        "CambioCarreraPage.jsx"
+      ]
+    },
+    {
+      "nombre": "PlanEstudio",
+      "descripcion": "Currícula de materias estructurada para una cohorte y carrera.",
+      "campos": [
+        {
+          "nombre": "idPlan",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único del plan (PK)."
+        },
+        {
+          "nombre": "codigo",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": [
+            "PLAN-2024",
+            "PLAN-2025"
+          ],
+          "descripcion": "Código identificatorio del plan."
+        },
+        {
+          "nombre": "nombre",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Nombre del plan curricular."
+        },
+        {
+          "nombre": "idCarrera",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la carrera asociada."
+        },
+        {
+          "nombre": "carreraNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la carrera desnormalizado."
+        },
+        {
+          "nombre": "anioResolucion",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Año de aprobación o entrada en vigencia."
+        },
+        {
+          "nombre": "horasTotales",
+          "tipo": "number (Integer)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Carga horaria total de la currícula."
+        },
+        {
+          "nombre": "cantidadMaterias",
+          "tipo": "number (Integer)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Total de asignaturas del plan."
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "VIGENTE",
+            "CADUCO"
+          ],
+          "descripcion": "Estado reglamentario del plan."
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idCarrera",
+          "entidadDestino": "Carrera",
+          "campoDestino": "idCarrera",
+          "tipo": "M:1"
+        }
+      ],
+      "pantallas": [
+        "GestionPlanEstudiosPage.jsx",
+        "GestionAlumnosPage.jsx",
+        "GestionCarrerasPage.jsx",
+        "PlanEstudiosAlumnoPage.jsx"
+      ]
+    },
+    {
+      "nombre": "Materia",
+      "descripcion": "Asignatura perteneciente a un plan de estudios.",
+      "campos": [
+        {
+          "nombre": "idMateria",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de la materia (PK)."
+        },
+        {
+          "nombre": "codigo",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Código identificatorio (ej. MAT-101, CD-101)."
+        },
+        {
+          "nombre": "nombre",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Nombre de la materia."
+        },
+        {
+          "nombre": "idCarrera",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la carrera a la que pertenece."
+        },
+        {
+          "nombre": "carreraNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la carrera para visualización."
+        },
+        {
+          "nombre": "idPlan",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al plan curricular."
+        },
+        {
+          "nombre": "anio",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Año de cursada en la carrera (1, 2, 3)."
+        },
+        {
+          "nombre": "regimen",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "CUATRIMESTRAL",
+            "ANUAL"
+          ],
+          "descripcion": "Régimen académico de dictado."
+        },
+        {
+          "nombre": "horasSemanales",
+          "tipo": "number (Integer)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Horas semanales de cursada."
+        },
+        {
+          "nombre": "correlativas",
+          "tipo": "array of numbers",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Lista de idMateria de asignaturas correlativas previas."
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idCarrera",
+          "entidadDestino": "Carrera",
+          "campoDestino": "idCarrera",
+          "tipo": "M:1"
+        },
+        {
+          "campo": "idPlan",
+          "entidadDestino": "PlanEstudio",
+          "campoDestino": "idPlan",
+          "tipo": "M:1"
+        }
+      ],
+      "pantallas": [
+        "GestionMateriasPage.jsx",
+        "GestionPlanEstudiosPage.jsx",
+        "GestionAsignacionesPage.jsx",
+        "GestionMesasPage.jsx",
+        "PlanEstudiosAlumnoPage.jsx",
+        "AsistenciasDocentePage.jsx",
+        "CalificacionesDocentePage.jsx",
+        "EvaluacionesDocentePage.jsx"
+      ]
+    },
+    {
+      "nombre": "Curso",
+      "descripcion": "Comisión o división de cursada para un año y turno específico.",
+      "campos": [
+        {
+          "nombre": "idCurso",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de la comisión (PK)."
+        },
+        {
+          "nombre": "codigo",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Código identificatorio (ej. 1A-INF-TM, 1A-CD-TM)."
+        },
+        {
+          "nombre": "nombre",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Nombre descriptivo de la comisión."
+        },
+        {
+          "nombre": "idCarrera",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la carrera a la que pertenece."
+        },
+        {
+          "nombre": "carreraNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la carrera para visualización."
+        },
+        {
+          "nombre": "idPlan",
+          "tipo": "number (Integer)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "FK al plan curricular."
+        },
+        {
+          "nombre": "turno",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "MAÑANA",
+            "TARDE",
+            "NOCHE"
+          ],
+          "descripcion": "Turno de cursada."
+        },
+        {
+          "nombre": "aula",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Aula física o laboratorio asignado."
+        },
+        {
+          "nombre": "capacidadMaxima",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Cupo máximo de inscriptos."
+        },
+        {
+          "nombre": "inscriptos",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Cantidad actual de alumnos inscriptos."
+        },
+        {
+          "nombre": "cuposDisponibles",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Vacantes disponibles restantes."
+        },
+        {
+          "nombre": "cicloLectivo",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Año lectivo al que corresponde la comisión."
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idCarrera",
+          "entidadDestino": "Carrera",
+          "campoDestino": "idCarrera",
+          "tipo": "M:1"
+        },
+        {
+          "campo": "idPlan",
+          "entidadDestino": "PlanEstudio",
+          "campoDestino": "idPlan",
+          "tipo": "M:1"
+        }
+      ],
+      "pantallas": [
+        "GestionCursosPage.jsx",
+        "GestionInscripcionesPage.jsx",
+        "GestionAsignacionesPage.jsx",
+        "MisCursosPage.jsx",
+        "AsistenciasDocentePage.jsx",
+        "CalificacionesDocentePage.jsx",
+        "EvaluacionesDocentePage.jsx"
+      ]
+    },
+    {
+      "nombre": "CicloLectivo",
+      "descripcion": "Período lectivo anual del instituto que agrupa cursadas, matrículas e inscripciones.",
+      "campos": [
+        {
+          "nombre": "idCiclo",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único del ciclo (PK)."
+        },
+        {
+          "nombre": "anio",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Año calendario del ciclo (ej. 2026)."
+        },
+        {
+          "nombre": "nombre",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Denominación del ciclo lectivo."
+        },
+        {
+          "nombre": "fechaInicio",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de inicio del ciclo escolar."
+        },
+        {
+          "nombre": "fechaFin",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de finalización del ciclo escolar."
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ACTIVO",
+            "CERRADO"
+          ],
+          "descripcion": "Estado operativo del ciclo."
+        }
+      ],
+      "relaciones": [],
+      "pantallas": [
+        "GestionCiclosLectivosPage.jsx",
+        "GestionInscripcionesPage.jsx"
+      ]
+    },
+    {
+      "nombre": "Asignacion",
+      "descripcion": "Vínculo tripartito entre docente, curso y materia (CursoMateria).",
+      "campos": [
+        {
+          "nombre": "idAsignacion",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de la asignación (PK)."
+        },
+        {
+          "nombre": "idDocente",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al docente asignado."
+        },
+        {
+          "nombre": "docenteNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre y apellido del docente."
+        },
+        {
+          "nombre": "idCurso",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la comisión o curso."
+        },
+        {
+          "nombre": "cursoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la comisión."
+        },
+        {
+          "nombre": "idMateria",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la materia dictada."
+        },
+        {
+          "nombre": "materiaNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la materia."
+        },
+        {
+          "nombre": "rolDocente",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "TITULAR",
+            "ADJUNTO",
+            "JTP"
+          ],
+          "descripcion": "Rol en la cátedra."
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idDocente",
+          "entidadDestino": "Docente",
+          "campoDestino": "idDocente",
+          "tipo": "M:1"
+        },
+        {
+          "campo": "idCurso",
+          "entidadDestino": "Curso",
+          "campoDestino": "idCurso",
+          "tipo": "M:1"
+        },
+        {
+          "campo": "idMateria",
+          "entidadDestino": "Materia",
+          "campoDestino": "idMateria",
+          "tipo": "M:1"
+        }
+      ],
+      "pantallas": [
+        "GestionAsignacionesPage.jsx",
+        "MisCursosPage.jsx"
+      ]
+    },
+    {
+      "nombre": "Inscripcion",
+      "descripcion": "Inscripción formal de un alumno a una comisión/curso específico.",
+      "campos": [
+        {
+          "nombre": "idInscripcion",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de inscripción (PK)."
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al alumno inscripto."
+        },
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del alumno."
+        },
+        {
+          "nombre": "idCurso",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al curso inscripto."
+        },
+        {
+          "nombre": "cursoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del curso inscripto."
+        },
+        {
+          "nombre": "cicloLectivo",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Año de la cursada."
+        },
+        {
+          "nombre": "fechaInscripcion",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de confirmación de la inscripción."
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "CONFIRMADA",
+            "CANCELADA"
+          ],
+          "descripcion": "Estado de la inscripción."
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idAlumno",
+          "entidadDestino": "Alumno",
+          "campoDestino": "idAlumno",
+          "tipo": "M:1"
+        },
+        {
+          "campo": "idCurso",
+          "entidadDestino": "Curso",
+          "campoDestino": "idCurso",
+          "tipo": "M:1"
+        }
+      ],
+      "pantallas": [
+        "GestionInscripcionesPage.jsx"
+      ]
+    },
+    {
+      "nombre": "Matricula",
+      "descripcion": "Registro anual de matrícula académica que habilita la cursada del alumno.",
+      "campos": [
+        {
+          "nombre": "idMatricula",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de la matrícula (PK)."
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al alumno matriculado."
+        },
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del alumno."
+        },
+        {
+          "nombre": "cicloLectivo",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Año del ciclo lectivo."
+        },
+        {
+          "nombre": "monto",
+          "tipo": "number (Monetario)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Arancel fijado para la matrícula."
+        },
+        {
+          "nombre": "fechaAlta",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de emisión de la matrícula."
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ACTIVA",
+            "PENDIENTE",
+            "CANCELADA"
+          ],
+          "descripcion": "Estado administrativo de la matrícula."
+        },
+        {
+          "nombre": "estadoPago",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "PAGADA",
+            "PENDIENTE",
+            "ANULADA"
+          ],
+          "descripcion": "Estado del pago del arancel."
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idAlumno",
+          "entidadDestino": "Alumno",
+          "campoDestino": "idAlumno",
+          "tipo": "M:1"
+        }
+      ],
+      "pantallas": [
+        "AdminMatriculasPage.jsx",
+        "AdminSituacionAlumnoPage.jsx",
+        "CancelarMatriculaPage.jsx",
+        "SituacionAcademicaArancelariaPage.jsx"
+      ]
+    },
+    {
+      "nombre": "Cuota",
+      "descripcion": "Obligación de pago arancelario periódica (cuota mensual o seguro).",
+      "campos": [
+        {
+          "nombre": "idCuota",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de la cuota (PK)."
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al alumno deudor."
+        },
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del alumno."
+        },
+        {
+          "nombre": "concepto",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Descripción del concepto facturado."
+        },
+        {
+          "nombre": "tipo",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "CUOTA_MENSUAL",
+            "SEGURO_CUATRIMESTRAL"
+          ],
+          "descripcion": "Tipo de obligación arancelaria."
+        },
+        {
+          "nombre": "numeroCuota",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Número ordinal de cuota (1 a 10)."
+        },
+        {
+          "nombre": "periodo",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Mes y año correspondiente (ej. 'Marzo 2026')."
+        },
+        {
+          "nombre": "monto",
+          "tipo": "number (Monetario)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Importe de la cuota."
+        },
+        {
+          "nombre": "fechaVencimiento",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha límite de pago."
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "PAGADA",
+            "PENDIENTE",
+            "VENCIDA"
+          ],
+          "descripcion": "Estado de cobranza."
+        },
+        {
+          "nombre": "fechaPago",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Fecha de cancelación de la cuota."
+        },
+        {
+          "nombre": "comprobante",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Número de recibo asociado si está paga."
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idAlumno",
+          "entidadDestino": "Alumno",
+          "campoDestino": "idAlumno",
+          "tipo": "M:1"
+        }
+      ],
+      "pantallas": [
+        "AdminCuotasPage.jsx",
+        "AdminDeudasPage.jsx",
+        "AdminPagosPage.jsx",
+        "AdminSituacionAlumnoPage.jsx",
+        "InicioPage.jsx",
+        "SituacionAcademicaArancelariaPage.jsx"
+      ]
+    },
+    {
+      "nombre": "Pago",
+      "descripcion": "Transacción financiera de cobro de una cuota o arancel.",
+      "campos": [
+        {
+          "nombre": "idPago",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único del pago (PK)."
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al alumno pagador."
+        },
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del alumno."
+        },
+        {
+          "nombre": "concepto",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Concepto cancelado."
+        },
+        {
+          "nombre": "monto",
+          "tipo": "number (Monetario)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Importe cobrado."
+        },
+        {
+          "nombre": "medioPago",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "EFECTIVO",
+            "TRANSFERENCIA",
+            "TARJETA"
+          ],
+          "descripcion": "Canal o medio de pago utilizado."
+        },
+        {
+          "nombre": "fechaPago",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha y hora del cobro."
+        },
+        {
+          "nombre": "comprobante",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Número de recibo oficial generado (ej. REC-2026-0001)."
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ACREDITADO",
+            "ANULADO"
+          ],
+          "descripcion": "Estado de la transacción."
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idAlumno",
+          "entidadDestino": "Alumno",
+          "campoDestino": "idAlumno",
+          "tipo": "M:1"
+        }
+      ],
+      "pantallas": [
+        "AdminPagosPage.jsx",
+        "AdminSituacionAlumnoPage.jsx",
+        "SituacionAcademicaArancelariaPage.jsx"
+      ]
+    },
+    {
+      "nombre": "Evaluacion",
+      "descripcion": "Instancia evaluativa (parcial o TP) programada para una materia en un curso.",
+      "campos": [
+        {
+          "nombre": "idEvaluacion",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de la evaluación (PK)."
+        },
+        {
+          "nombre": "idMateria",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la materia evaluada."
+        },
+        {
+          "nombre": "materiaNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la materia."
+        },
+        {
+          "nombre": "idCurso",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al curso/comisión evaluado."
+        },
+        {
+          "nombre": "cursoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del curso evaluado."
+        },
+        {
+          "nombre": "tipo",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "PARCIAL",
+            "TRABAJO_PRACTICO"
+          ],
+          "descripcion": "Tipo de evaluación."
+        },
+        {
+          "nombre": "descripcion",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Nombre o tema de la evaluación."
+        },
+        {
+          "nombre": "fecha",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de la prueba o entrega."
+        },
+        {
+          "nombre": "ponderacion",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Ponderación en la nota final (ej. '40%')."
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idMateria",
+          "entidadDestino": "Materia",
+          "campoDestino": "idMateria",
+          "tipo": "M:1"
+        },
+        {
+          "campo": "idCurso",
+          "entidadDestino": "Curso",
+          "campoDestino": "idCurso",
+          "tipo": "M:1"
+        }
+      ],
+      "pantallas": [
+        "EvaluacionesDocentePage.jsx"
+      ]
+    },
+    {
+      "nombre": "Calificacion",
+      "descripcion": "Nota numérica de 1 a 10 obtenida por un alumno en una evaluación.",
+      "campos": [
+        {
+          "nombre": "idCalificacion",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de la calificación (PK)."
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al alumno calificado."
+        },
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del alumno calificado."
+        },
+        {
+          "nombre": "idMateria",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la materia calificada."
+        },
+        {
+          "nombre": "materiaNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la materia."
+        },
+        {
+          "nombre": "evaluacionNombre",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Nombre de la evaluación asociada."
+        },
+        {
+          "nombre": "tipo",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "PARCIAL",
+            "TRABAJO_PRACTICO"
+          ],
+          "descripcion": "Categoría evaluativa."
+        },
+        {
+          "nombre": "nota",
+          "tipo": "number (Integer 1-10)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Calificación numérica en escala oficial de 1 a 10."
+        },
+        {
+          "nombre": "condicion",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "APROBADO",
+            "DESAPROBADO"
+          ],
+          "descripcion": "Resultado (APROBADO si nota >= 4)."
+        },
+        {
+          "nombre": "fecha",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de carga de la nota."
+        },
+        {
+          "nombre": "observacion",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Observaciones docentes sobre la calificación."
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idAlumno",
+          "entidadDestino": "Alumno",
+          "campoDestino": "idAlumno",
+          "tipo": "M:1"
+        },
+        {
+          "campo": "idMateria",
+          "entidadDestino": "Materia",
+          "campoDestino": "idMateria",
+          "tipo": "M:1"
+        }
+      ],
+      "pantallas": [
+        "CalificacionesDocentePage.jsx",
+        "ParcialesPage.jsx",
+        "TrabajosPracticosPage.jsx",
+        "SituacionAcademicaArancelariaPage.jsx",
+        "InicioPage.jsx"
+      ]
+    },
+    {
+      "nombre": "Asistencia",
+      "descripcion": "Registro diario de presentismo de un alumno a una clase.",
+      "campos": [
+        {
+          "nombre": "idAsistencia",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de asistencia (PK)."
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al estudiante."
+        },
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del estudiante."
+        },
+        {
+          "nombre": "idCurso",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al curso/comisión."
+        },
+        {
+          "nombre": "idMateria",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la materia dictada."
+        },
+        {
+          "nombre": "materiaNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la materia."
+        },
+        {
+          "nombre": "fecha",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de la clase dictada."
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "PRESENTE",
+            "AUSENTE",
+            "TARDANZA",
+            "JUSTIFICADO"
+          ],
+          "descripcion": "Estado de asistencia registrado."
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idAlumno",
+          "entidadDestino": "Alumno",
+          "campoDestino": "idAlumno",
+          "tipo": "M:1"
+        },
+        {
+          "campo": "idCurso",
+          "entidadDestino": "Curso",
+          "campoDestino": "idCurso",
+          "tipo": "M:1"
+        },
+        {
+          "campo": "idMateria",
+          "entidadDestino": "Materia",
+          "campoDestino": "idMateria",
+          "tipo": "M:1"
+        }
+      ],
+      "pantallas": [
+        "AsistenciasDocentePage.jsx",
+        "AsistenciasAlumnoPage.jsx"
+      ]
+    },
+    {
+      "nombre": "MesaExamen",
+      "descripcion": "Turno de examen final para una materia ante un tribunal evaluador.",
+      "campos": [
+        {
+          "nombre": "idMesa",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de la mesa de examen (PK)."
+        },
+        {
+          "nombre": "idMateria",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la materia evaluada."
+        },
+        {
+          "nombre": "materiaNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la materia evaluada."
+        },
+        {
+          "nombre": "fecha",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha programada del llamado."
+        },
+        {
+          "nombre": "hora",
+          "tipo": "string (HH:MM)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Horario de inicio del examen."
+        },
+        {
+          "nombre": "turno",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "MAÑANA",
+            "TARDE",
+            "NOCHE"
+          ],
+          "descripcion": "Turno del examen final."
+        },
+        {
+          "nombre": "aula",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Aula física de sustanciación."
+        },
+        {
+          "nombre": "tribunal",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Nombres de los docentes que componen el tribunal."
+        },
+        {
+          "nombre": "cupoMaximo",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Cupo máximo de inscriptos."
+        },
+        {
+          "nombre": "inscriptos",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Cantidad actual de alumnos anotados."
+        },
+        {
+          "nombre": "estadoMesa",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ABIERTA",
+            "CERRADA"
+          ],
+          "descripcion": "Estado de habilitación de inscripciones."
+        },
+        {
+          "nombre": "alumnosInscriptosIds",
+          "tipo": "array of numbers",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Lista de IDs de alumnos actualmente inscriptos."
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idMateria",
+          "entidadDestino": "Materia",
+          "campoDestino": "idMateria",
+          "tipo": "M:1"
+        }
+      ],
+      "pantallas": [
+        "GestionMesasPage.jsx",
+        "MesasExamenPage.jsx",
+        "InicioPage.jsx"
+      ]
+    },
+    {
+      "nombre": "InscripcionMesa",
+      "descripcion": "Inscripción de un alumno regular a una mesa de examen final.",
+      "campos": [
+        {
+          "nombre": "idInscripcionMesa",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de la inscripción a mesa (PK)."
+        },
+        {
+          "nombre": "idMesa",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la mesa de examen."
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al alumno inscripto."
+        },
+        {
+          "nombre": "fecha",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha en que se confirmó la inscripción."
+        },
+        {
+          "nombre": "activa",
+          "tipo": "boolean",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Indica si la inscripción está vigente o fue cancelada."
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idMesa",
+          "entidadDestino": "MesaExamen",
+          "campoDestino": "idMesa",
+          "tipo": "M:1"
+        },
+        {
+          "campo": "idAlumno",
+          "entidadDestino": "Alumno",
+          "campoDestino": "idAlumno",
+          "tipo": "M:1"
+        }
+      ],
+      "pantallas": [
+        "MesasExamenPage.jsx"
+      ]
+    },
+    {
+      "nombre": "Solicitud",
+      "descripcion": "Trámite institucional o académico gestionado por un estudiante.",
+      "campos": [
+        {
+          "nombre": "idSolicitud",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único del trámite (PK)."
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al alumno solicitante."
+        },
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del estudiante solicitante."
+        },
+        {
+          "nombre": "tipo",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "Constancia de Alumno Regular",
+            "Declaración jurada de materias a cursar",
+            "Inscripción a pasantías",
+            "Solicitud de título intermedio",
+            "Solicitudes académicas generales",
+            "CAMBIO_CARRERA",
+            "REINCORPORACION"
+          ],
+          "descripcion": "Categoría o tipo de solicitud presentada."
+        },
+        {
+          "nombre": "motivo",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fundamentación y detalle de la solicitud."
+        },
+        {
+          "nombre": "fechaSolicitud",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de ingreso del trámite."
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "PENDIENTE",
+            "EN_PROCESO",
+            "APROBADA",
+            "RECHAZADA"
+          ],
+          "descripcion": "Estado de tramitación resolutiva."
+        },
+        {
+          "nombre": "fechaResolucion",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Fecha en que se dictaminó resolución."
+        },
+        {
+          "nombre": "respuesta",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Dictamen oficial o respuesta escrita de secretaría."
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idAlumno",
+          "entidadDestino": "Alumno",
+          "campoDestino": "idAlumno",
+          "tipo": "M:1"
+        }
+      ],
+      "pantallas": [
+        "BandejaSolicitudesPage.jsx",
+        "ConstanciasPage.jsx",
+        "DeclaracionJuradaPage.jsx",
+        "PasantiasPage.jsx",
+        "SolicitudTituloPage.jsx",
+        "SolicitudesAcademicasPage.jsx",
+        "CambioCarreraPage.jsx",
+        "ReincorporacionPage.jsx",
+        "InicioPage.jsx"
+      ]
+    },
+    {
+      "nombre": "DeclaracionJurada",
+      "descripcion": "Declaración jurada de asignaturas que el estudiante cursará en el ciclo lectivo.",
+      "campos": [
+        {
+          "nombre": "idDeclaracion",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de la declaración jurada (PK)."
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al alumno firmante."
+        },
+        {
+          "nombre": "idCiclo",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al ciclo lectivo correspondiente."
+        },
+        {
+          "nombre": "fecha",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de suscripción de la DJ."
+        },
+        {
+          "nombre": "materiasDeclaradasIds",
+          "tipo": "array of numbers",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Lista de IDs de materias que se compromete a cursar."
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idAlumno",
+          "entidadDestino": "Alumno",
+          "campoDestino": "idAlumno",
+          "tipo": "M:1"
+        },
+        {
+          "campo": "idCiclo",
+          "entidadDestino": "CicloLectivo",
+          "campoDestino": "idCiclo",
+          "tipo": "M:1"
+        }
+      ],
+      "pantallas": [
+        "DeclaracionJuradaPage.jsx"
+      ]
+    },
+    {
+      "nombre": "Documentacion",
+      "descripcion": "Requisito documental o legal que el alumno debe presentar para su legajo.",
+      "campos": [
+        {
+          "nombre": "idDocumento",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único del requisito (PK)."
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al alumno titular del legajo."
+        },
+        {
+          "nombre": "tipo",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "DNI (Frente y Dorso)",
+            "Título Secundario / Certificado Analítico",
+            "Certificado de Aptitud Médica",
+            "Fotos 4x4 (2 unidades)"
+          ],
+          "descripcion": "Tipo de documento exigido por la institución."
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ENTREGADO",
+            "PENDIENTE"
+          ],
+          "descripcion": "Estado de recepción documental."
+        },
+        {
+          "nombre": "obligatorio",
+          "tipo": "boolean",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Si es condición obligatoria para la regularidad."
+        },
+        {
+          "nombre": "fechaEntrega",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Fecha en que se recepcionó el papel en secretaría."
+        },
+        {
+          "nombre": "observaciones",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Observaciones de control legal o formal."
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idAlumno",
+          "entidadDestino": "Alumno",
+          "campoDestino": "idAlumno",
+          "tipo": "M:1"
+        }
+      ],
+      "pantallas": [
+        "DocumentacionPage.jsx"
+      ]
+    },
+    {
+      "nombre": "Usuario",
+      "descripcion": "Cuenta de autenticación y acceso al sistema de gestión Academit.",
+      "campos": [
+        {
+          "nombre": "idUsuario",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de la cuenta de usuario (PK)."
+        },
+        {
+          "nombre": "username",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Nombre de usuario único para login."
+        },
+        {
+          "nombre": "nombre",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Nombre y apellido completo del usuario."
+        },
+        {
+          "nombre": "email",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Correo electrónico registrado."
+        },
+        {
+          "nombre": "rol",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ADMINISTRADOR",
+            "ADMINISTRATIVO",
+            "DOCENTE",
+            "ALUMNO"
+          ],
+          "descripcion": "Rol asignado para permisos del portal."
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ACTIVO",
+            "INACTIVO"
+          ],
+          "descripcion": "Estado de la cuenta."
+        },
+        {
+          "nombre": "ultimoAcceso",
+          "tipo": "string (Timestamp)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Fecha y hora del último acceso al sistema."
+        }
+      ],
+      "relaciones": [],
+      "pantallas": [
+        "GestionUsuariosPage.jsx",
+        "Login.jsx",
+        "MisDatosPage.jsx",
+        "CambiarPasswordPage.jsx"
+      ]
+    },
+    {
+      "nombre": "Rol",
+      "descripcion": "Perfil de seguridad que define los privilegios y menús de acceso.",
+      "campos": [
+        {
+          "nombre": "idRol",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador del rol (PK)."
+        },
+        {
+          "nombre": "nombre",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ADMINISTRADOR",
+            "ADMINISTRATIVO",
+            "DOCENTE",
+            "ALUMNO"
+          ],
+          "descripcion": "Nombre del rol de usuario."
+        }
+      ],
+      "relaciones": [],
+      "pantallas": [
+        "GestionUsuariosPage.jsx",
+        "Login.jsx",
+        "MisDatosPage.jsx"
+      ]
+    }
+  ]
+}
