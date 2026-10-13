@@ -18,7 +18,7 @@ export const getDocentes = async () => {
 /**
  * Registra un nuevo docente en el cuerpo académico.
  * REST: POST /api/docentes
- * @param {Object} data - Datos personales y especialidad del docente
+ * @param {Object} data - Datos personales y título del docente
  * @returns {Promise<Object>}
  */
 export const createDocente = async (data) => {
@@ -32,7 +32,7 @@ export const createDocente = async (data) => {
       apellido: data.apellido,
       dni: data.dni,
       email: data.email,
-      especialidad: data.especialidad || 'General',
+      titulo: data.titulo || 'General',
       telefono: data.telefono || 'Sin teléfono',
       estado: 'ACTIVO',
     }

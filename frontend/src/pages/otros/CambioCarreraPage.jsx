@@ -92,7 +92,7 @@ export const CambioCarreraPage = () => {
     <div>
       <PageHeader
         title="Cambio de Carrera"
-        subtitle="Trámite de pase entre planes de estudio o cambio de especialidad formativa"
+        subtitle="Trámite de pase entre planes de estudio o cambio de carrera formativa"
         icon="bi-arrow-left-right"
       />
 

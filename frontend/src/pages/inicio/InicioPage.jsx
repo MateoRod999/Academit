@@ -60,7 +60,7 @@ export const InicioPage = () => {
                     </span>
                   </div>
                   <h4 className="fw-bold mb-1" style={{ color: 'var(--m-onSurface)' }}>
-                    {proximaCuota ? `$${proximaCuota.monto.toLocaleString('es-AR')}` : 'Al día'}
+                    {proximaCuota ? `$${proximaCuota.importe.toLocaleString('es-AR')}` : 'Al día'}
                   </h4>
                   <div className="small mb-2">
                     {proximaCuota ? (

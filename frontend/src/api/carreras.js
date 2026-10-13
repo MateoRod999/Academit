@@ -49,7 +49,7 @@ export const createCarrera = async (data) => {
       codigo: data.codigo,
       nombre: data.nombre,
       tituloOtorgado: data.tituloOtorgado,
-      duracion: data.duracion || '3 años',
+      duracionAnios: Number(data.duracionAnios) || 3,
       resolucion: data.resolucion || 'En trámite',
       estado: 'ACTIVA',
       planesCount: 1,

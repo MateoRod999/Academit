@@ -48,9 +48,9 @@ export const AdminCuotasPage = () => {
     },
     { key: 'periodo', label: 'Período' },
     {
-      key: 'monto',
+      key: 'importe',
       label: 'Importe',
-      render: (row) => <span className="fw-semibold">${row.monto.toLocaleString('es-AR')}</span>,
+      render: (row) => <span className="fw-semibold">${row.importe.toLocaleString('es-AR')}</span>,
     },
     { key: 'fechaVencimiento', label: 'Vencimiento' },
     {

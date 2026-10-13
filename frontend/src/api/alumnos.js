@@ -53,7 +53,7 @@ export const createAlumno = async (alumnoData) => {
       email: alumnoData.email,
       telefono: alumnoData.telefono || 'Sin teléfono',
       fechaNacimiento: alumnoData.fechaNacimiento || '2000-01-01',
-      direccion: alumnoData.direccion || 'No especificada',
+      domicilio: alumnoData.domicilio || 'No especificado',
       carrera: alumnoData.carrera || 'Tecnicatura Superior en Desarrollo de Software',
       idCarrera: alumnoData.idCarrera || 1,
       idPlan: alumnoData.idPlan || 1,
@@ -154,8 +154,8 @@ export const getSituacionAdministrativa = async (idAlumno) => {
     const matricula = mockDb.matriculas.find((m) => m.idAlumno === Number(idAlumno))
     const deuda = cuotas
       .filter((c) => c.estado === 'PENDIENTE' || c.estado === 'VENCIDA')
-      .reduce((acc, c) => acc + c.monto, 0)
-    const totalAbonado = pagos.reduce((acc, p) => acc + p.monto, 0)
+      .reduce((acc, c) => acc + c.importe, 0)
+    const totalAbonado = pagos.reduce((acc, p) => acc + p.importe, 0)
 
     return {
       alumno,

@@ -30,8 +30,8 @@ export const getPagos = async (filtros = {}) => {
  * @param {string} [pagoData.medioPago='EFECTIVO'] - Medio de pago utilizado
  * @returns {Promise<Object>}
  */
-export const registrarPago = async ({ idCuota, importe, monto, medioPago = 'EFECTIVO' }) => {
-  const imp = Number(importe !== undefined ? importe : monto)
+export const registrarPago = async ({ idCuota, importe, medioPago = 'EFECTIVO' }) => {
+  const imp = Number(importe)
   const idC = Number(idCuota)
 
   if (isMock) {
@@ -49,7 +49,7 @@ export const registrarPago = async ({ idCuota, importe, monto, medioPago = 'EFEC
       throw error
     }
 
-    const valorCuota = Number(cuota.importe ?? cuota.monto)
+    const valorCuota = Number(cuota.importe)
     if (imp !== valorCuota) {
       const error = new Error(
         `El importe ingresado ($${imp}) no coincide con el valor exacto de la cuota ($${valorCuota}). No se permiten pagos parciales (RN09).`
@@ -74,7 +74,6 @@ export const registrarPago = async ({ idCuota, importe, monto, medioPago = 'EFEC
       alumnoNombre: cuota.alumnoNombre,
       concepto: cuota.concepto,
       importe: valorCuota,
-      monto: valorCuota,
       fechaPago: hoy,
       medioPago: medioPago || 'EFECTIVO',
       comprobante,

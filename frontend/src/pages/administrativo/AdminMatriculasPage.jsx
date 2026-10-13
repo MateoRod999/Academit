@@ -74,9 +74,9 @@ export const AdminMatriculasPage = () => {
     },
     { key: 'cicloLectivo', label: 'Ciclo' },
     {
-      key: 'monto',
+      key: 'importe',
       label: 'Arancel Anual',
-      render: (row) => `$${row.monto.toLocaleString('es-AR')}`,
+      render: (row) => `$${row.importe.toLocaleString('es-AR')}`,
     },
     { key: 'fechaAlta', label: 'Fecha Alta' },
     {

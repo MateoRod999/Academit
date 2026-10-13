@@ -21,7 +21,6 @@ export const AdminPagosPage = () => {
     idCuota: '',
     concepto: '',
     importe: 28000,
-    monto: 28000,
     medioPago: 'TRANSFERENCIA',
     fechaPago: new Date().toISOString().split('T')[0],
   })
@@ -42,13 +41,12 @@ export const AdminPagosPage = () => {
       setCuotas(data)
       const pendientes = data.filter((c) => c.idAlumno === 1 && (c.estado === 'PENDIENTE' || c.estado === 'VENCIDA'))
       if (pendientes[0]) {
-        const val = pendientes[0].importe ?? pendientes[0].monto
+        const val = pendientes[0].importe
         setForm((prev) => ({
           ...prev,
           idCuota: pendientes[0].idCuota,
           concepto: pendientes[0].concepto,
           importe: val,
-          monto: val,
         }))
       }
     }).catch(() => {})
@@ -63,7 +61,7 @@ export const AdminPagosPage = () => {
     const id = Number(idAlu)
     const cuotasDelAlu = cuotas.filter((c) => c.idAlumno === id && (c.estado === 'PENDIENTE' || c.estado === 'VENCIDA'))
     const primera = cuotasDelAlu[0]
-    const val = primera ? (primera.importe ?? primera.monto) : 0
+    const val = primera ? primera.importe : 0
 
     setForm({
       ...form,
@@ -71,20 +69,18 @@ export const AdminPagosPage = () => {
       idCuota: primera ? primera.idCuota : '',
       concepto: primera ? primera.concepto : '',
       importe: val,
-      monto: val,
     })
   }
 
   const handleCuotaChange = (idCuota) => {
     const cuota = cuotas.find((c) => c.idCuota === Number(idCuota))
     if (cuota) {
-      const val = cuota.importe ?? cuota.monto
+      const val = cuota.importe
       setForm({
         ...form,
         idCuota: cuota.idCuota,
         concepto: cuota.concepto,
         importe: val,
-        monto: val,
       })
     }
   }
@@ -102,8 +98,8 @@ export const AdminPagosPage = () => {
       return
     }
 
-    const valorCuota = Number(cuota.importe ?? cuota.monto)
-    const valorIngresado = Number(form.importe ?? form.monto)
+    const valorCuota = Number(cuota.importe)
+    const valorIngresado = Number(form.importe)
     if (valorIngresado !== valorCuota) {
       showToast(`El importe ingresado ($${valorIngresado}) debe ser igual al de la cuota ($${valorCuota}). No se permiten pagos parciales (RN09).`, 'danger')
       return
@@ -136,9 +132,9 @@ export const AdminPagosPage = () => {
     },
     { key: 'concepto', label: 'Concepto Abonado' },
     {
-      key: 'monto',
-      label: 'Monto Pagado',
-      render: (row) => <span className="fw-bold text-success">${row.monto.toLocaleString('es-AR')}</span>,
+      key: 'importe',
+      label: 'Importe Pagado',
+      render: (row) => <span className="fw-bold text-success">${row.importe.toLocaleString('es-AR')}</span>,
     },
     { key: 'fechaPago', label: 'Fecha de Pago' },
     {
@@ -211,7 +207,7 @@ export const AdminPagosPage = () => {
                 >
                   {cuotasPendientesAlumno.map((c) => (
                     <option key={c.idCuota} value={c.idCuota}>
-                      {c.concepto} - ${Number(c.importe ?? c.monto).toLocaleString('es-AR')} (Vto: {c.fechaVencimiento} - {c.estado})
+                      {c.concepto} - ${Number(c.importe).toLocaleString('es-AR')} (Vto: {c.fechaVencimiento} - {c.estado})
                     </option>
                   ))}
                 </Form.Select>
@@ -224,14 +220,14 @@ export const AdminPagosPage = () => {
           </Col>
 
           <Col md={6}>
-            <Form.Group controlId="pagoMonto">
+            <Form.Group controlId="pagoImporte">
               <Form.Label className="small fw-semibold">
                 Importe a Abonar <span className="text-danger">*</span> (RN09: sin pagos parciales)
               </Form.Label>
               <Form.Control
                 type="number"
                 value={form.importe}
-                onChange={(e) => setForm({ ...form, importe: Number(e.target.value), monto: Number(e.target.value) })}
+                onChange={(e) => setForm({ ...form, importe: Number(e.target.value) })}
                 className="fw-bold"
                 style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
               />

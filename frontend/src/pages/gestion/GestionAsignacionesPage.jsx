@@ -150,7 +150,7 @@ export const GestionAsignacionesPage = () => {
                   >
                     {docentes.map((d) => (
                       <option key={d.idDocente} value={d.idDocente}>
-                        {d.apellido}, {d.nombre} ({d.especialidad})
+                        {d.apellido}, {d.nombre} ({d.titulo})
                       </option>
                     ))}
                   </Form.Select>

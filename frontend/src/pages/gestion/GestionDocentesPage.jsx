@@ -25,7 +25,7 @@ export const GestionDocentesPage = () => {
     apellido: '',
     dni: '',
     email: '',
-    especialidad: '',
+    titulo: '',
     telefono: '',
   })
   const [errors, setErrors] = useState({})
@@ -45,7 +45,7 @@ export const GestionDocentesPage = () => {
 
   const handleOpenNuevo = () => {
     setEditingDocente(null)
-    setForm({ nombre: '', apellido: '', dni: '', email: '', especialidad: '', telefono: '' })
+    setForm({ nombre: '', apellido: '', dni: '', email: '', titulo: '', telefono: '' })
     setErrors({})
     setShowModal(true)
   }
@@ -57,7 +57,7 @@ export const GestionDocentesPage = () => {
       apellido: doc.apellido || '',
       dni: doc.dni || '',
       email: doc.email || '',
-      especialidad: doc.especialidad || '',
+      titulo: doc.titulo || '',
       telefono: doc.telefono || '',
     })
     setErrors({})
@@ -125,7 +125,7 @@ export const GestionDocentesPage = () => {
       ),
     },
     { key: 'dni', label: 'DNI' },
-    { key: 'especialidad', label: 'Especialidad / Área' },
+    { key: 'titulo', label: 'Título' },
     { key: 'telefono', label: 'Teléfono' },
     {
       key: 'estado',
@@ -162,7 +162,7 @@ export const GestionDocentesPage = () => {
         subtitle={
           esLectura
             ? 'Padrón docente: consulta de cuerpo docente y legajos académicos (Modo Lectura)'
-            : 'Padrón docente: alta, asignación de especialidad y legajo académico'
+            : 'Padrón docente: alta, asignación de título y legajo académico'
         }
         icon="bi-person-video3"
         actions={
@@ -178,8 +178,8 @@ export const GestionDocentesPage = () => {
         columns={columns}
         data={docentes}
         keyField="idDocente"
-        searchPlaceholder="Buscar por nombre, apellido, DNI o especialidad..."
-        searchKeys={['nombre', 'apellido', 'dni', 'especialidad', 'legajo']}
+        searchPlaceholder="Buscar por nombre, apellido, DNI o título..."
+        searchKeys={['nombre', 'apellido', 'dni', 'titulo', 'legajo']}
       />
 
       {!esLectura && (
@@ -242,13 +242,13 @@ export const GestionDocentesPage = () => {
             </Form.Group>
           </Col>
           <Col md={6}>
-            <Form.Group controlId="docEsp">
-              <Form.Label className="small fw-semibold">Especialidad</Form.Label>
+            <Form.Group controlId="docTitulo">
+              <Form.Label className="small fw-semibold">Título</Form.Label>
               <Form.Control
                 type="text"
-                value={form.especialidad}
-                onChange={(e) => setForm({ ...form, especialidad: e.target.value })}
-                placeholder="Ej. Bases de Datos"
+                value={form.titulo}
+                onChange={(e) => setForm({ ...form, titulo: e.target.value })}
+                placeholder="Ej. Lic. en Sistemas"
                 style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
               />
             </Form.Group>

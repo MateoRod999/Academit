@@ -15,7 +15,6 @@ export const MisDatosPage = () => {
     email: `${usuario || 'alumno'}@instituto.edu.ar`,
     dni: '42.111.222',
     telefono: '11-4567-8901',
-    direccion: 'Av. Corrientes 1234, CABA',
     domicilio: 'Av. Corrientes 1234, CABA',
     fechaNacimiento: '2001-04-18',
     carrera: 'Tecnicatura Superior en Desarrollo de Software',
@@ -31,8 +30,7 @@ export const MisDatosPage = () => {
         setFormData((prev) => ({
           ...prev,
           ...data,
-          direccion: data.direccion || data.domicilio || prev.direccion,
-          domicilio: data.domicilio || data.direccion || prev.domicilio,
+          domicilio: data.domicilio || prev.domicilio,
         }))
       })
       .catch(() => {
@@ -49,8 +47,7 @@ export const MisDatosPage = () => {
       setFormData((prev) => ({
         ...prev,
         ...actualizado,
-        direccion: actualizado.direccion || actualizado.domicilio || prev.direccion,
-        domicilio: actualizado.domicilio || actualizado.direccion || prev.domicilio,
+        domicilio: actualizado.domicilio || prev.domicilio,
       }))
       setIsEditing(false)
       showToast('Tus datos personales se han actualizado correctamente', 'success')
@@ -185,13 +182,13 @@ export const MisDatosPage = () => {
                   </Col>
 
                   <Col md={6}>
-                    <Form.Group controlId="perfilDireccion">
-                      <Form.Label className="small fw-semibold">Dirección de Residencia</Form.Label>
+                    <Form.Group controlId="perfilDomicilio">
+                      <Form.Label className="small fw-semibold">Domicilio</Form.Label>
                       <Form.Control
                         type="text"
-                        value={formData.direccion}
+                        value={formData.domicilio}
                         disabled={!isEditing}
-                        onChange={(e) => setFormData({ ...formData, direccion: e.target.value })}
+                        onChange={(e) => setFormData({ ...formData, domicilio: e.target.value })}
                         style={{
                           backgroundColor: isEditing ? 'var(--m-surfaceVariant)' : 'var(--m-surface)',
                           color: 'var(--m-onSurface)',
