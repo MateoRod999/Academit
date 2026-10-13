@@ -6,19 +6,23 @@ import { useToast } from '../../context/ToastContext'
 import { getAlumnos } from '../../api/alumnos'
 import { getMaterias } from '../../api/materias'
 import { getCursos } from '../../api/cursos'
-import { getCalificaciones, saveCalificacion } from '../../api/calificaciones'
+import { getEvaluaciones } from '../../api/evaluaciones'
+import { getCalificaciones, guardarCalificaciones } from '../../api/calificaciones'
 
 export const CalificacionesDocentePage = () => {
   const { showToast } = useToast()
   const [alumnos, setAlumnos] = useState([])
   const [materias, setMaterias] = useState([])
   const [cursos, setCursos] = useState([])
+  const [evaluaciones, setEvaluaciones] = useState([])
   const [selectedMateria, setSelectedMateria] = useState(1)
   const [selectedCurso, setSelectedCurso] = useState(1)
+  const [selectedEvaluacion, setSelectedEvaluacion] = useState(1)
   const [evaluacionNombre, setEvaluacionNombre] = useState('Primer Parcial')
   const [tipo, setTipo] = useState('PARCIAL')
 
   const [notas, setNotas] = useState({}) // { [idAlumno]: { nota, observacion } }
+  const [erroresPorAlumno, setErroresPorAlumno] = useState({})
   const [loading, setLoading] = useState(false)
   const [saving, setSaving] = useState(false)
 
@@ -26,16 +30,29 @@ export const CalificacionesDocentePage = () => {
     getMaterias().then(setMaterias).catch(() => {})
     getCursos().then(setCursos).catch(() => {})
     getAlumnos().then(setAlumnos).catch(() => {})
+    getEvaluaciones().then(setEvaluaciones).catch(() => {})
   }, [])
+
+  // Al cambiar materia o curso, sincronizar evaluación activa
+  useEffect(() => {
+    const disponibles = evaluaciones.filter(
+      (e) => e.idMateria === Number(selectedMateria) && e.idCurso === Number(selectedCurso)
+    )
+    if (disponibles.length > 0) {
+      setSelectedEvaluacion(disponibles[0].idEvaluacion)
+      setEvaluacionNombre(disponibles[0].descripcion)
+      setTipo(disponibles[0].tipo)
+    }
+  }, [selectedMateria, selectedCurso, evaluaciones])
 
   useEffect(() => {
     // Cargar notas preexistentes para la materia e instancia elegida
     setLoading(true)
-    getCalificaciones({ idMateria: selectedMateria, tipo })
+    getCalificaciones({ idMateria: selectedMateria, tipo, idEvaluacion: selectedEvaluacion })
       .then((cals) => {
         const mapa = {}
         cals.forEach((c) => {
-          if (c.evaluacionNombre === evaluacionNombre) {
+          if (c.evaluacionNombre === evaluacionNombre || c.idEvaluacion === Number(selectedEvaluacion)) {
             mapa[c.idAlumno] = {
               nota: c.nota,
               observacion: c.observacion || '',
@@ -45,10 +62,10 @@ export const CalificacionesDocentePage = () => {
         setNotas(mapa)
       })
       .finally(() => setLoading(false))
-  }, [selectedMateria, selectedCurso, evaluacionNombre, tipo])
+  }, [selectedMateria, selectedCurso, selectedEvaluacion, evaluacionNombre, tipo])
 
   const handleNotaChange = (idAlumno, valor) => {
-    const num = valor === '' ? '' : Number(valor)
+    const num = valor === '' ? '' : valor
     setNotas((prev) => ({
       ...prev,
       [idAlumno]: {
@@ -56,6 +73,13 @@ export const CalificacionesDocentePage = () => {
         nota: num,
       },
     }))
+    if (erroresPorAlumno[idAlumno]) {
+      setErroresPorAlumno((prev) => {
+        const copia = { ...prev }
+        delete copia[idAlumno]
+        return copia
+      })
+    }
   }
 
   const handleObsChange = (idAlumno, valor) => {
@@ -69,35 +93,30 @@ export const CalificacionesDocentePage = () => {
   }
 
   const handleGuardarTodas = async () => {
-    // Validar rango de 1 a 10
-    for (const [idAlu, item] of Object.entries(notas)) {
-      if (item.nota !== '' && item.nota !== undefined) {
-        if (item.nota < 1 || item.nota > 10) {
-          showToast(`La nota para el alumno ID ${idAlu} debe estar entre 1 y 10`, 'warning')
-          return
-        }
-      }
-    }
-
     setSaving(true)
+    setErroresPorAlumno({})
     try {
-      const promises = Object.entries(notas).map(([idAlu, item]) => {
-        if (item.nota !== '' && item.nota !== undefined) {
-          return saveCalificacion({
-            idAlumno: Number(idAlu),
-            idMateria: selectedMateria,
-            evaluacionNombre,
-            tipo,
-            nota: item.nota,
-            observacion: item.observacion,
-          })
-        }
-        return Promise.resolve()
-      })
+      const lista = Object.entries(notas)
+        .filter(([, item]) => item.nota !== '' && item.nota !== undefined && item.nota !== null)
+        .map(([idAlu, item]) => ({
+          idAlumno: Number(idAlu),
+          nota: item.nota === '' ? '' : Number(item.nota),
+          observacion: item.observacion || '',
+        }))
 
-      await Promise.all(promises)
+      if (lista.length === 0) {
+        showToast('No hay calificaciones ingresadas para guardar', 'warning')
+        setSaving(false)
+        return
+      }
+
+      await guardarCalificaciones(selectedEvaluacion, lista)
       showToast('Calificaciones guardadas y consolidadas exitosamente', 'success')
+      setErroresPorAlumno({})
     } catch (err) {
+      if (err.errores) {
+        setErroresPorAlumno(err.errores)
+      }
       showToast(err.message || 'Error al guardar calificaciones', 'danger')
     } finally {
       setSaving(false)
@@ -106,6 +125,7 @@ export const CalificacionesDocentePage = () => {
 
   // Filtrar alumnos asignados al curso seleccionado
   const alumnosDelCurso = alumnos.filter((a) => a.idCurso === Number(selectedCurso))
+
 
   return (
     <div>
@@ -168,23 +188,34 @@ export const CalificacionesDocentePage = () => {
             </Col>
 
             <Col sm={6} md={3}>
-              <Form.Group controlId="selTipo">
-                <Form.Label className="small fw-semibold">Tipo Evaluación</Form.Label>
+              <Form.Group controlId="selEvaluacion">
+                <Form.Label className="small fw-semibold">Evaluación Planificada</Form.Label>
                 <Form.Select
                   size="sm"
-                  value={tipo}
-                  onChange={(e) => setTipo(e.target.value)}
+                  value={selectedEvaluacion}
+                  onChange={(e) => {
+                    const id = Number(e.target.value)
+                    setSelectedEvaluacion(id)
+                    const ev = evaluaciones.find((item) => item.idEvaluacion === id)
+                    if (ev) {
+                      setEvaluacionNombre(ev.descripcion)
+                      setTipo(ev.tipo)
+                    }
+                  }}
                   style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
                 >
-                  <option value="PARCIAL">Parcial</option>
-                  <option value="TRABAJO_PRACTICO">Trabajo Práctico</option>
+                  {evaluaciones.map((ev) => (
+                    <option key={ev.idEvaluacion} value={ev.idEvaluacion}>
+                      #{ev.idEvaluacion} - {ev.tipo}: {ev.descripcion}
+                    </option>
+                  ))}
                 </Form.Select>
               </Form.Group>
             </Col>
 
             <Col sm={6} md={3}>
               <Form.Group controlId="selInstancia">
-                <Form.Label className="small fw-semibold">Instancia / Nombre</Form.Label>
+                <Form.Label className="small fw-semibold">Instancia / Detalle</Form.Label>
                 <Form.Control
                   size="sm"
                   value={evaluacionNombre}
@@ -207,7 +238,7 @@ export const CalificacionesDocentePage = () => {
                 <th style={{ color: 'var(--m-primary)' }}>Legajo</th>
                 <th style={{ color: 'var(--m-primary)' }}>Estudiante</th>
                 <th style={{ color: 'var(--m-primary)' }}>DNI</th>
-                <th style={{ color: 'var(--m-primary)', width: '130px' }}>Nota (1-10)</th>
+                <th style={{ color: 'var(--m-primary)', width: '150px' }}>Nota (1-10)</th>
                 <th style={{ color: 'var(--m-primary)', width: '140px' }}>Condición</th>
                 <th style={{ color: 'var(--m-primary)' }}>Devolución u Observación</th>
               </tr>
@@ -223,8 +254,8 @@ export const CalificacionesDocentePage = () => {
                 alumnosDelCurso.map((alu) => {
                   const valorNota = notas[alu.idAlumno]?.nota ?? ''
                   const valorObs = notas[alu.idAlumno]?.observacion ?? ''
-                  const esValida = valorNota === '' || (valorNota >= 1 && valorNota <= 10)
-                  const condicion = valorNota === '' ? null : valorNota >= 4 ? 'APROBADO' : 'DESAPROBADO'
+                  const tieneError = Boolean(erroresPorAlumno[alu.idAlumno])
+                  const condicion = valorNota === '' ? null : Number(valorNota) >= 4 ? 'APROBADO' : 'DESAPROBADO'
 
                   return (
                     <tr key={alu.idAlumno} style={{ borderBottom: '1px solid var(--m-outline)' }}>
@@ -243,7 +274,7 @@ export const CalificacionesDocentePage = () => {
                           step="1"
                           size="sm"
                           value={valorNota}
-                          isInvalid={!esValida}
+                          isInvalid={tieneError}
                           onChange={(e) => handleNotaChange(alu.idAlumno, e.target.value)}
                           className="fw-bold text-center"
                           style={{
@@ -252,6 +283,12 @@ export const CalificacionesDocentePage = () => {
                             maxWidth: '90px',
                           }}
                         />
+                        {tieneError && (
+                          <div className="text-danger small mt-1" style={{ fontSize: '0.75rem', maxWidth: '180px' }}>
+                            <i className="bi bi-exclamation-circle me-1" />
+                            {erroresPorAlumno[alu.idAlumno]}
+                          </div>
+                        )}
                       </td>
                       <td>
                         {condicion ? (
