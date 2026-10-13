@@ -20,6 +20,7 @@ export const AdminPagosPage = () => {
     idAlumno: 1,
     idCuota: '',
     concepto: '',
+    importe: 28000,
     monto: 28000,
     medioPago: 'TRANSFERENCIA',
     fechaPago: new Date().toISOString().split('T')[0],
@@ -37,7 +38,20 @@ export const AdminPagosPage = () => {
   useEffect(() => {
     cargar()
     getAlumnos().then(setAlumnos).catch(() => {})
-    getCuotas().then(setCuotas).catch(() => {})
+    getCuotas().then((data) => {
+      setCuotas(data)
+      const pendientes = data.filter((c) => c.idAlumno === 1 && (c.estado === 'PENDIENTE' || c.estado === 'VENCIDA'))
+      if (pendientes[0]) {
+        const val = pendientes[0].importe ?? pendientes[0].monto
+        setForm((prev) => ({
+          ...prev,
+          idCuota: pendientes[0].idCuota,
+          concepto: pendientes[0].concepto,
+          importe: val,
+          monto: val,
+        }))
+      }
+    }).catch(() => {})
   }, [])
 
   // Cuotas pendientes del alumno seleccionado
@@ -49,33 +63,59 @@ export const AdminPagosPage = () => {
     const id = Number(idAlu)
     const cuotasDelAlu = cuotas.filter((c) => c.idAlumno === id && (c.estado === 'PENDIENTE' || c.estado === 'VENCIDA'))
     const primera = cuotasDelAlu[0]
+    const val = primera ? (primera.importe ?? primera.monto) : 0
 
     setForm({
       ...form,
       idAlumno: id,
       idCuota: primera ? primera.idCuota : '',
-      concepto: primera ? primera.concepto : 'Arancel / Cuota General',
-      monto: primera ? primera.monto : 28000,
+      concepto: primera ? primera.concepto : '',
+      importe: val,
+      monto: val,
     })
   }
 
   const handleCuotaChange = (idCuota) => {
     const cuota = cuotas.find((c) => c.idCuota === Number(idCuota))
     if (cuota) {
+      const val = cuota.importe ?? cuota.monto
       setForm({
         ...form,
         idCuota: cuota.idCuota,
         concepto: cuota.concepto,
-        monto: cuota.monto, // Pago SIEMPRE por el importe completo
+        importe: val,
+        monto: val,
       })
     }
   }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    if (!form.idCuota) {
+      showToast('Debe seleccionar una cuota pendiente para registrar el pago', 'danger')
+      return
+    }
+
+    const cuota = cuotas.find((c) => c.idCuota === Number(form.idCuota))
+    if (!cuota) {
+      showToast('La cuota seleccionada no existe', 'danger')
+      return
+    }
+
+    const valorCuota = Number(cuota.importe ?? cuota.monto)
+    const valorIngresado = Number(form.importe ?? form.monto)
+    if (valorIngresado !== valorCuota) {
+      showToast(`El importe ingresado ($${valorIngresado}) debe ser igual al de la cuota ($${valorCuota}). No se permiten pagos parciales (RN09).`, 'danger')
+      return
+    }
+
     setLoading(true)
     try {
-      await registrarPago(form)
+      await registrarPago({
+        idCuota: form.idCuota,
+        importe: valorIngresado,
+        medioPago: form.medioPago,
+      })
       showToast('Pago registrado y acreditado por el importe completo de la cuota', 'success')
       setShowModal(false)
       cargar()
@@ -171,18 +211,14 @@ export const AdminPagosPage = () => {
                 >
                   {cuotasPendientesAlumno.map((c) => (
                     <option key={c.idCuota} value={c.idCuota}>
-                      {c.concepto} - ${c.monto.toLocaleString('es-AR')} (Vto: {c.fechaVencimiento} - {c.estado})
+                      {c.concepto} - ${Number(c.importe ?? c.monto).toLocaleString('es-AR')} (Vto: {c.fechaVencimiento} - {c.estado})
                     </option>
                   ))}
                 </Form.Select>
               ) : (
-                <Form.Control
-                  type="text"
-                  value={form.concepto}
-                  onChange={(e) => setForm({ ...form, concepto: e.target.value })}
-                  placeholder="Concepto de pago general"
-                  style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
-                />
+                <div className="p-2 border rounded text-warning small" style={{ backgroundColor: 'var(--m-surfaceVariant)' }}>
+                  Este estudiante no posee cuotas o seguros pendientes de cobro.
+                </div>
               )}
             </Form.Group>
           </Col>
@@ -190,15 +226,18 @@ export const AdminPagosPage = () => {
           <Col md={6}>
             <Form.Group controlId="pagoMonto">
               <Form.Label className="small fw-semibold">
-                Importe Total Obligatorio (Sin pagos parciales)
+                Importe a Abonar <span className="text-danger">*</span> (RN09: sin pagos parciales)
               </Form.Label>
               <Form.Control
-                type="text"
-                value={`$${form.monto.toLocaleString('es-AR')}`}
-                readOnly
+                type="number"
+                value={form.importe}
+                onChange={(e) => setForm({ ...form, importe: Number(e.target.value), monto: Number(e.target.value) })}
                 className="fw-bold"
-                style={{ backgroundColor: 'var(--m-surface)', color: 'var(--m-primary)' }}
+                style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
               />
+              <Form.Text className="text-muted small">
+                Debe coincidir exactamente con el importe de la cuota seleccionada.
+              </Form.Text>
             </Form.Group>
           </Col>
 
