@@ -497,6 +497,34 @@ export const mockDb = {
     { idSolicitud: 6, idAlumno: 2, alumnoNombre: 'Martín Rodríguez', tipo: 'REINCORPORACION', fechaSolicitud: '2026-04-10', motivo: 'Reincorporación tras licencia laboral', estado: 'PENDIENTE', fechaResolucion: null, respuesta: null },
   ],
 
+  // 15b. Declaraciones Juradas de Materias (RF51)
+  declaracionesJuradas: [
+    {
+      idDeclaracion: 1,
+      idAlumno: 1,
+      alumnoNombre: 'Lucía Benítez',
+      idCiclo: 1,
+      cicloNombre: 'Ciclo Lectivo 2026',
+      fecha: '2026-03-05',
+      materiasDeclaradasIds: [1, 2],
+      materiasNombres: ['Programación I', 'Bases de Datos I'],
+      estado: 'VALIDADA',
+      observaciones: 'Cumple con el régimen de correlatividades vigentes.',
+    },
+    {
+      idDeclaracion: 2,
+      idAlumno: 2,
+      alumnoNombre: 'Martín Rodríguez',
+      idCiclo: 1,
+      cicloNombre: 'Ciclo Lectivo 2026',
+      fecha: '2026-03-06',
+      materiasDeclaradasIds: [1, 2],
+      materiasNombres: ['Programación I', 'Bases de Datos I'],
+      estado: 'VALIDADA',
+      observaciones: 'Presentación en término reglamentario.',
+    },
+  ],
+
   // 16. Documentación legal/académica del Alumno
   documentacion: [
     { idDocumento: 1, idAlumno: 1, tipo: 'DNI', obligatorio: true, estado: 'ENTREGADO', fechaEntrega: '2026-02-10', observaciones: 'Copia certificada' },
