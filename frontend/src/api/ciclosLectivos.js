@@ -1,5 +1,6 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
+import { createApiError } from './errors'
 
 /**
  * Obtiene el catálogo de ciclos lectivos.
@@ -51,7 +52,11 @@ export const updateCicloLectivo = async (idCiclo, data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))
     const index = mockDb.ciclosLectivos.findIndex((c) => c.idCiclo === Number(idCiclo))
-    if (index === -1) throw new Error('Ciclo lectivo no encontrado')
+    if (index === -1) {
+      throw createApiError(404, 'Ciclo lectivo no encontrado', [
+        { campo: 'idCiclo', mensaje: 'Ciclo lectivo no encontrado' },
+      ])
+    }
     mockDb.ciclosLectivos[index] = { ...mockDb.ciclosLectivos[index], ...data }
     return { ...mockDb.ciclosLectivos[index] }
   }

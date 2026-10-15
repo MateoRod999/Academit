@@ -1,5 +1,6 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
+import { createApiError } from './errors'
 
 /**
  * Obtiene el padrón completo de docentes institucionales.
@@ -54,7 +55,11 @@ export const updateDocente = async (idDocente, data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))
     const index = mockDb.docentes.findIndex((d) => d.idDocente === Number(idDocente))
-    if (index === -1) throw new Error('Docente no encontrado')
+    if (index === -1) {
+      throw createApiError(404, 'Docente no encontrado', [
+        { campo: 'idDocente', mensaje: 'Docente no encontrado' },
+      ])
+    }
     mockDb.docentes[index] = { ...mockDb.docentes[index], ...data }
     return { ...mockDb.docentes[index] }
   }
@@ -72,7 +77,11 @@ export const deleteDocente = async (idDocente) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))
     const index = mockDb.docentes.findIndex((d) => d.idDocente === Number(idDocente))
-    if (index === -1) throw new Error('Docente no encontrado')
+    if (index === -1) {
+      throw createApiError(404, 'Docente no encontrado', [
+        { campo: 'idDocente', mensaje: 'Docente no encontrado' },
+      ])
+    }
     mockDb.docentes[index].estado = 'INACTIVO'
     return { success: true }
   }

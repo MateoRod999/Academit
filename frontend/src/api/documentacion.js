@@ -1,5 +1,6 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
+import { createApiError } from './errors'
 
 /**
  * Obtiene el estado de presentación de la documentación requerida para el legajo.
@@ -30,7 +31,11 @@ export const updateDocumentacion = async (idDocumento, data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))
     const index = mockDb.documentacion.findIndex((d) => d.idDocumento === Number(idDocumento))
-    if (index === -1) throw new Error('Documento no encontrado')
+    if (index === -1) {
+      throw createApiError(404, 'Documento no encontrado', [
+        { campo: 'idDocumento', mensaje: 'Documento no encontrado' },
+      ])
+    }
     mockDb.documentacion[index] = { ...mockDb.documentacion[index], ...data }
     return { ...mockDb.documentacion[index] }
   }

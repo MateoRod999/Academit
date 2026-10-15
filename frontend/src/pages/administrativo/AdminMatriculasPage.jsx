@@ -43,7 +43,7 @@ export const AdminMatriculasPage = () => {
       showToast(`Se generaron ${creadas.length} cuotas y seguros para la matrícula #${matricula.idMatricula}`, 'success')
       cargar()
     } catch (err) {
-      showToast(err.message || 'Error al generar cuotas', 'danger')
+      showToast(err, 'danger')
     } finally {
       setLoading(false)
     }
@@ -59,7 +59,7 @@ export const AdminMatriculasPage = () => {
       setEditingMat(null)
       cargar()
     } catch (err) {
-      showToast(err.message || 'Error al actualizar matrícula', 'danger')
+      showToast(err, 'danger')
     } finally {
       setLoading(false)
     }

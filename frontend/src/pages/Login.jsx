@@ -8,6 +8,7 @@ export const Login = () => {
   const [password, setPassword] = useState('')
   const [validated, setValidated] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
+  const [errorErrors, setErrorErrors] = useState([])
   const [loading, setLoading] = useState(false)
 
   const { login } = useAuth()
@@ -33,6 +34,7 @@ export const Login = () => {
       navigate(from, { replace: true })
     } catch (err) {
       setErrorMsg(err.message || 'Error al iniciar sesión')
+      setErrorErrors(err.errors || [])
     } finally {
       setLoading(false)
     }
@@ -43,6 +45,7 @@ export const Login = () => {
     setUsername(user)
     setPassword('1234')
     setErrorMsg('')
+    setErrorErrors([])
   }
 
   return (
@@ -63,8 +66,20 @@ export const Login = () => {
 
               {errorMsg && (
                 <Alert variant="danger" className="py-2 small">
-                  <span className="nf-glyph me-1"></span>
-                  {errorMsg}
+                  <div className="d-flex align-items-center gap-1">
+                    <span className="nf-glyph"></span>
+                    <strong>{errorMsg}</strong>
+                  </div>
+                  {errorErrors.length > 0 && (
+                    <ul className="mb-0 ps-3 mt-1">
+                      {errorErrors.map((e, idx) => (
+                        <li key={idx}>
+                          {e.campo && e.campo !== 'general' && <strong>{e.campo}: </strong>}
+                          {e.mensaje}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </Alert>
               )}
 

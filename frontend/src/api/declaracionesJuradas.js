@@ -1,5 +1,6 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
+import { createApiError } from './errors'
 
 /**
  * Obtiene el listado de declaraciones juradas de materias a cursar.
@@ -32,6 +33,14 @@ export const getDeclaracionesJuradas = async (filtros = {}) => {
 export const createDeclaracionJurada = async (data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))
+    if (!Array.isArray(data.materiasDeclaradasIds) || data.materiasDeclaradasIds.length === 0) {
+      throw createApiError(400, 'Validación fallida', [
+        {
+          campo: 'materiasDeclaradasIds',
+          mensaje: 'Debe seleccionar al menos una materia para la declaración jurada',
+        },
+      ])
+    }
     const list = mockDb.declaracionesJuradas || []
     const nuevoId = Math.max(...list.map((d) => d.idDeclaracion), 0) + 1
     const idAlumno = data.idAlumno ? Number(data.idAlumno) : 1

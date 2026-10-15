@@ -1,5 +1,6 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
+import { createApiError } from './errors'
 
 /**
  * Obtiene el listado completo de alumnos.
@@ -26,7 +27,11 @@ export const getAlumnoById = async (idAlumno) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 100))
     const found = mockDb.alumnos.find((a) => a.idAlumno === Number(idAlumno))
-    if (!found) throw new Error('Alumno no encontrado')
+    if (!found) {
+      throw createApiError(404, 'Alumno no encontrado', [
+        { campo: 'idAlumno', mensaje: 'Alumno no encontrado' },
+      ])
+    }
     return { ...found }
   }
 
@@ -84,7 +89,11 @@ export const updateAlumno = async (idAlumno, alumnoData) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))
     const index = mockDb.alumnos.findIndex((a) => a.idAlumno === Number(idAlumno))
-    if (index === -1) throw new Error('Alumno no encontrado')
+    if (index === -1) {
+      throw createApiError(404, 'Alumno no encontrado', [
+        { campo: 'idAlumno', mensaje: 'Alumno no encontrado' },
+      ])
+    }
 
     mockDb.alumnos[index] = {
       ...mockDb.alumnos[index],
@@ -107,7 +116,11 @@ export const deleteAlumno = async (idAlumno) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))
     const index = mockDb.alumnos.findIndex((a) => a.idAlumno === Number(idAlumno))
-    if (index === -1) throw new Error('Alumno no encontrado')
+    if (index === -1) {
+      throw createApiError(404, 'Alumno no encontrado', [
+        { campo: 'idAlumno', mensaje: 'Alumno no encontrado' },
+      ])
+    }
 
     mockDb.alumnos[index].estado = 'INACTIVO'
     return { success: true }

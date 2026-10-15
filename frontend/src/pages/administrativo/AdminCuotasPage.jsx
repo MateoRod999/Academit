@@ -38,7 +38,7 @@ export const AdminCuotasPage = () => {
       setCuotaAAnular(null)
       cargar()
     } catch (err) {
-      showToast(err.message || 'Error al anular la cuota', 'danger')
+      showToast(err, 'danger')
     } finally {
       setLoadingAnulacion(false)
     }

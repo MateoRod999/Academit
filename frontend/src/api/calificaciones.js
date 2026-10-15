@@ -1,5 +1,6 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
+import { createApiError } from './errors'
 
 /**
  * Obtiene el listado de calificaciones según filtros opcionales (idAlumno, tipo, idMateria).
@@ -147,7 +148,9 @@ export const saveCalificacion = async (data) => {
     await new Promise((resolve) => setTimeout(resolve, 200))
     const notaNum = Number(data.nota)
     if (isNaN(notaNum) || !Number.isInteger(notaNum) || notaNum < 1 || notaNum > 10) {
-      throw new Error('La calificación debe ser un valor entero entre 1 y 10')
+      throw createApiError(400, 'Calificación inválida', [
+        { campo: 'nota', mensaje: 'La calificación debe ser un valor entero entre 1 y 10' },
+      ])
     }
 
     const index = mockDb.calificaciones.findIndex(

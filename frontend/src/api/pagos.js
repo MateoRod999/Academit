@@ -1,5 +1,6 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
+import { createApiError } from './errors'
 
 /**
  * Obtiene el historial de pagos registrados con filtros opcionales.
@@ -38,24 +39,29 @@ export const registrarPago = async ({ idCuota, importe, medioPago = 'EFECTIVO' }
     await new Promise((resolve) => setTimeout(resolve, 200))
     const cuota = mockDb.cuotas.find((c) => c.idCuota === idC)
     if (!cuota) {
-      const error = new Error('Cuota no encontrada')
-      error.status = 404
-      throw error
+      throw createApiError(404, 'Cuota no encontrada', [
+        { campo: 'idCuota', mensaje: 'Cuota no encontrada' },
+      ])
     }
 
     if (cuota.estado === 'PAGADA' || cuota.estado === 'ANULADA') {
-      const error = new Error(`No se puede pagar una cuota en estado ${cuota.estado}`)
-      error.status = 409
-      throw error
+      throw createApiError(409, `No se puede pagar una cuota en estado ${cuota.estado}`, [
+        { campo: 'estado', mensaje: `No se puede pagar una cuota en estado ${cuota.estado}` },
+      ])
     }
 
     const valorCuota = Number(cuota.importe)
     if (imp !== valorCuota) {
-      const error = new Error(
-        `El importe ingresado ($${imp}) no coincide con el valor exacto de la cuota ($${valorCuota}). No se permiten pagos parciales (RN09).`
+      throw createApiError(
+        400,
+        `El importe ingresado ($${imp}) no coincide con el valor exacto de la cuota ($${valorCuota}). No se permiten pagos parciales (RN09).`,
+        [
+          {
+            campo: 'importe',
+            mensaje: `El importe ($${imp}) debe ser igual al valor de la cuota ($${valorCuota}). No se permiten pagos parciales.`,
+          },
+        ]
       )
-      error.status = 400
-      throw error
     }
 
     const hoy = new Date().toISOString().split('T')[0]

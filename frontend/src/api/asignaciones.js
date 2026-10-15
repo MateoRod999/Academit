@@ -1,5 +1,6 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
+import { createApiError } from './errors'
 
 /**
  * Obtiene el listado de asignaciones docentes a cursos y materias.
@@ -56,7 +57,11 @@ export const deleteAsignacion = async (idAsignacion) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))
     const index = mockDb.asignaciones.findIndex((a) => a.idAsignacion === Number(idAsignacion))
-    if (index === -1) throw new Error('Asignación no encontrada')
+    if (index === -1) {
+      throw createApiError(404, 'Asignación no encontrada', [
+        { campo: 'idAsignacion', mensaje: 'Asignación no encontrada' },
+      ])
+    }
     mockDb.asignaciones.splice(index, 1)
     return { success: true }
   }

@@ -1,5 +1,6 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
+import { createApiError } from './errors'
 
 /**
  * Obtiene el listado de cuentas de usuario y roles del sistema.
@@ -52,7 +53,11 @@ export const updateUsuario = async (idUsuario, data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))
     const index = mockDb.usuarios.findIndex((u) => u.idUsuario === Number(idUsuario))
-    if (index === -1) throw new Error('Usuario no encontrado')
+    if (index === -1) {
+      throw createApiError(404, 'Usuario no encontrado', [
+        { campo: 'idUsuario', mensaje: 'Usuario no encontrado' },
+      ])
+    }
     mockDb.usuarios[index] = { ...mockDb.usuarios[index], ...data }
     return { ...mockDb.usuarios[index] }
   }
@@ -70,7 +75,11 @@ export const deleteUsuario = async (idUsuario) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))
     const index = mockDb.usuarios.findIndex((u) => u.idUsuario === Number(idUsuario))
-    if (index === -1) throw new Error('Usuario no encontrado')
+    if (index === -1) {
+      throw createApiError(404, 'Usuario no encontrado', [
+        { campo: 'idUsuario', mensaje: 'Usuario no encontrado' },
+      ])
+    }
     mockDb.usuarios[index].estado = 'INACTIVO'
     return { success: true }
   }

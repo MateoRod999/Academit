@@ -1,5 +1,6 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
+import { createApiError } from './errors'
 
 /**
  * Obtiene el padrón de matrículas anuales registradas.
@@ -26,7 +27,11 @@ export const updateMatricula = async (idMatricula, data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))
     const index = mockDb.matriculas.findIndex((m) => m.idMatricula === Number(idMatricula))
-    if (index === -1) throw new Error('Matrícula no encontrada')
+    if (index === -1) {
+      throw createApiError(404, 'Matrícula no encontrada', [
+        { campo: 'idMatricula', mensaje: 'Matrícula no encontrada' },
+      ])
+    }
     mockDb.matriculas[index] = { ...mockDb.matriculas[index], ...data }
     return { ...mockDb.matriculas[index] }
   }
@@ -93,15 +98,15 @@ export const generarCuotas = async (idMatricula) => {
     await new Promise((resolve) => setTimeout(resolve, 200))
     const matricula = mockDb.matriculas.find((m) => m.idMatricula === idMat)
     if (!matricula) {
-      const error = new Error('Matrícula no encontrada')
-      error.status = 404
-      throw error
+      throw createApiError(404, 'Matrícula no encontrada', [
+        { campo: 'idMatricula', mensaje: 'Matrícula no encontrada' },
+      ])
     }
 
     if (matricula.estado === 'CANCELADA') {
-      const error = new Error('No se pueden generar cuotas para una matrícula CANCELADA')
-      error.status = 409
-      throw error
+      throw createApiError(409, 'No se pueden generar cuotas para una matrícula CANCELADA', [
+        { campo: 'estado', mensaje: 'No se pueden generar cuotas para una matrícula CANCELADA' },
+      ])
     }
 
     // Verificar si ya tiene cuotas asociadas por idMatricula o idAlumno
@@ -109,9 +114,9 @@ export const generarCuotas = async (idMatricula) => {
       (c) => c.idMatricula === idMat || (c.idAlumno === matricula.idAlumno && c.idMatricula === idMat)
     )
     if (cuotasExistentes.length > 0) {
-      const error = new Error(`La matrícula #${idMat} ya tiene cuotas generadas`)
-      error.status = 409
-      throw error
+      throw createApiError(409, `La matrícula #${idMat} ya tiene cuotas generadas`, [
+        { campo: 'idMatricula', mensaje: `La matrícula #${idMat} ya tiene cuotas generadas` },
+      ])
     }
 
     const meses = [

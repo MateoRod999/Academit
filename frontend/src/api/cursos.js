@@ -1,5 +1,6 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
+import { createApiError } from './errors'
 
 /**
  * Obtiene el listado de comisiones y cursos habilitados.
@@ -61,7 +62,11 @@ export const updateCurso = async (idCurso, data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))
     const index = mockDb.cursos.findIndex((c) => c.idCurso === Number(idCurso))
-    if (index === -1) throw new Error('Curso no encontrado')
+    if (index === -1) {
+      throw createApiError(404, 'Curso no encontrado', [
+        { campo: 'idCurso', mensaje: 'Curso no encontrado' },
+      ])
+    }
     const capMax = data.capacidadMaxima !== undefined ? Number(data.capacidadMaxima) : mockDb.cursos[index].capacidadMaxima
     const inscriptos = data.inscriptos !== undefined ? Number(data.inscriptos) : mockDb.cursos[index].inscriptos
 

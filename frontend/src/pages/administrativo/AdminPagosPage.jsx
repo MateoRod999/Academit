@@ -117,7 +117,7 @@ export const AdminPagosPage = () => {
       cargar()
       getCuotas().then(setCuotas)
     } catch (err) {
-      showToast(err.message || 'Error al registrar pago', 'danger')
+      showToast(err, 'danger')
     } finally {
       setLoading(false)
     }

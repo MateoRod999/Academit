@@ -58,7 +58,7 @@ export const DeclaracionJuradaPage = () => {
       setObservaciones('')
       cargar()
     } catch (err) {
-      showToast(err.message || 'Error al presentar declaración jurada', 'danger')
+      showToast(err, 'danger')
     } finally {
       setLoading(false)
     }

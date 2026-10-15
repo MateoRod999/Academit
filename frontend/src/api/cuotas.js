@@ -1,5 +1,6 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
+import { createApiError } from './errors'
 
 /**
  * Enriquecer cuota con campos calculados derivados de la matrícula (idAlumno, alumnoNombre)
@@ -50,17 +51,15 @@ export const anularCuota = async (idCuota) => {
     await new Promise((resolve) => setTimeout(resolve, 200))
     const cuota = mockDb.cuotas.find((c) => c.idCuota === id)
     if (!cuota) {
-      const error = new Error('Cuota no encontrada')
-      error.status = 404
-      error.errors = [{ campo: 'idCuota', mensaje: 'Cuota no encontrada' }]
-      throw error
+      throw createApiError(404, 'Cuota no encontrada', [
+        { campo: 'idCuota', mensaje: 'Cuota no encontrada' },
+      ])
     }
 
     if (cuota.estado === 'PAGADA') {
-      const error = new Error('No se puede anular una cuota que ya se encuentra pagada')
-      error.status = 409
-      error.errors = [{ campo: 'estado', mensaje: 'No se puede anular una cuota pagada' }]
-      throw error
+      throw createApiError(409, 'No se puede anular una cuota pagada', [
+        { campo: 'estado', mensaje: 'No se puede anular una cuota que ya se encuentra pagada' },
+      ])
     }
 
     cuota.estado = 'ANULADA'

@@ -1,5 +1,6 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
+import { createApiError } from './errors'
 
 /**
  * Inicia sesión con usuario y contraseña.
@@ -13,7 +14,9 @@ export const loginApi = async (username, password) => {
     await new Promise((resolve) => setTimeout(resolve, 200))
 
     if (password !== '1234') {
-      throw new Error('Contraseña incorrecta. (La contraseña de prueba es 1234)')
+      throw createApiError(401, 'Credenciales inválidas', [
+        { campo: 'password', mensaje: 'Contraseña incorrecta. (La contraseña de prueba es 1234)' },
+      ])
     }
 
     const encontrado = mockDb.usuarios.find(
@@ -21,9 +24,12 @@ export const loginApi = async (username, password) => {
     )
 
     if (!encontrado) {
-      throw new Error(
-        'Usuario no encontrado. Usuarios válidos: admin, administrativo, docente, alumno'
-      )
+      throw createApiError(404, 'Usuario no encontrado', [
+        {
+          campo: 'username',
+          mensaje: 'Usuario no encontrado. Usuarios válidos: admin, administrativo, docente, alumno',
+        },
+      ])
     }
 
     return {
@@ -65,7 +71,9 @@ export const cambiarPasswordApi = async (actual, nueva) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))
     if (actual !== '1234') {
-      throw new Error('La contraseña actual es incorrecta')
+      throw createApiError(400, 'Error al cambiar contraseña', [
+        { campo: 'actual', mensaje: 'La contraseña actual es incorrecta' },
+      ])
     }
     return { success: true, message: 'Contraseña actualizada con éxito' }
   }

@@ -1,5 +1,6 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
+import { createApiError } from './errors'
 
 /**
  * Obtiene el catálogo de materias curriculares, con filtros opcionales (idCarrera, idPlan).
@@ -65,7 +66,11 @@ export const updateMateria = async (idMateria, data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))
     const index = mockDb.materias.findIndex((m) => m.idMateria === Number(idMateria))
-    if (index === -1) throw new Error('Materia no encontrada')
+    if (index === -1) {
+      throw createApiError(404, 'Materia no encontrada', [
+        { campo: 'idMateria', mensaje: 'Materia no encontrada' },
+      ])
+    }
     mockDb.materias[index] = { ...mockDb.materias[index], ...data }
     return { ...mockDb.materias[index] }
   }
