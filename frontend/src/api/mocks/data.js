@@ -472,7 +472,8 @@ export const mockDb = {
     { idCuota: 14, idMatricula: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Seguro Cuatrimestral 2/3', tipo: 'SEGURO_CUATRIMESTRAL', periodo: '2° Cuatrimestre 2026', numero: 2, importe: 8000, fechaVencimiento: '2026-07-10', estado: 'PENDIENTE', fechaPago: null, comprobante: null },
     { idCuota: 15, idMatricula: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Seguro Cuatrimestral 3/3', tipo: 'SEGURO_CUATRIMESTRAL', periodo: '3° Cuatrimestre 2026', numero: 3, importe: 8000, fechaVencimiento: '2026-11-10', estado: 'PENDIENTE', fechaPago: null, comprobante: null },
     // Cuotas de otros alumnos
-    { idCuota: 16, idMatricula: 2, idAlumno: 2, alumnoNombre: 'Martín Rodríguez', concepto: 'Cuota 4 - Abril 2026', tipo: 'MENSUAL', periodo: 'Abril 2026', numero: 4, importe: 28000, fechaVencimiento: '2026-04-10', estado: 'PAGADA', fechaPago: '2026-04-02', comprobante: 'REC-2026-0410' },
+    { idCuota: 16, idMatricula: 2, concepto: 'Cuota 4 - Abril 2026', tipo: 'MENSUAL', periodo: 'Abril 2026', numero: 4, importe: 28000, fechaVencimiento: '2026-04-10', estado: 'PAGADA', fechaPago: '2026-04-02', comprobante: 'REC-2026-0410' },
+    { idCuota: 17, idMatricula: 2, concepto: 'Cuota 3 - Marzo 2026', tipo: 'MENSUAL', periodo: 'Marzo 2026', numero: 3, importe: 28000, fechaVencimiento: '2026-03-10', estado: 'ANULADA', fechaPago: null, comprobante: null },
   ],
 
   // 14. Registro de Pagos
