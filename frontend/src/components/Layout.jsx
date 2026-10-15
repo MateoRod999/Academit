@@ -182,8 +182,7 @@ export const Layout = ({ children }) => {
             variant="warning"
             dismissible
             onClose={() => setShowMockAlert(false)}
-            className="m-3 mb-0 py-2 px-3 small border-0 shadow-sm d-flex align-items-center gap-2"
-            style={{ backgroundColor: 'rgba(232, 224, 182, 0.15)', color: 'var(--m-primary)' }}
+            className="m-3 mb-0 py-2 px-3 small shadow-sm d-flex align-items-center gap-2"
           >
             <i className="bi bi-info-circle-fill fs-6" />
             <div className="flex-grow-1">

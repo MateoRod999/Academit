@@ -82,7 +82,7 @@ export const CancelarMatriculaPage = () => {
           </div>
           <div className="mb-4">
             <span className="text-muted small">Estado Actual: </span>
-            <strong style={{ color: matricula?.estado === 'CANCELADA' ? '#B57171' : '#737658' }}>
+            <strong style={{ color: matricula?.estado === 'CANCELADA' ? 'var(--m-error)' : 'var(--m-secondary)' }}>
               {matricula?.estado || 'ACTIVA'}
             </strong>
           </div>

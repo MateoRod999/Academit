@@ -58,7 +58,7 @@ export const AsistenciasAlumnoPage = () => {
             <Card.Body className="p-3">
               <span className="text-muted small text-uppercase fw-semibold">Porcentaje de Asistencia</span>
               <div className="d-flex align-items-baseline gap-2 mt-1 mb-2">
-                <h3 className="fw-bold mb-0" style={{ color: porcentaje >= 75 ? 'var(--m-primary)' : '#B57171' }}>
+                <h3 className="fw-bold mb-0" style={{ color: porcentaje >= 75 ? 'var(--m-secondary)' : 'var(--m-error)' }}>
                   {porcentaje}%
                 </h3>
                 <small className="text-muted">(Mínimo requerido: 75%)</small>
