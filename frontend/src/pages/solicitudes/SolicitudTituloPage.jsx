@@ -5,6 +5,7 @@ import DataTable from '../../components/DataTable'
 import StatusBadge from '../../components/StatusBadge'
 import { useToast } from '../../context/ToastContext'
 import { getSolicitudes, createSolicitud } from '../../api/solicitudes'
+import { ETIQUETAS_TIPO_SOLICITUD } from '../../config/etiquetas'
 
 export const SolicitudTituloPage = () => {
   const { showToast } = useToast()
@@ -14,7 +15,7 @@ export const SolicitudTituloPage = () => {
 
   const cargar = async () => {
     try {
-      const data = await getSolicitudes({ idAlumno: alumnoId, tipo: 'título' })
+      const data = await getSolicitudes({ idAlumno: alumnoId, tipo: 'TITULO_INTERMEDIO' })
       setSolicitudes(data)
     } catch {
       showToast('Error al cargar trámites de título', 'danger')
@@ -30,7 +31,7 @@ export const SolicitudTituloPage = () => {
     try {
       await createSolicitud({
         idAlumno: alumnoId,
-        tipo: formData.tipo,
+        tipo: 'TITULO_INTERMEDIO',
         motivo: formData.motivo,
         observaciones: formData.observaciones,
       })
@@ -44,7 +45,11 @@ export const SolicitudTituloPage = () => {
   }
 
   const columns = [
-    { key: 'tipo', label: 'Tipo de Título' },
+    {
+      key: 'tipo',
+      label: 'Tipo de Trámite',
+      render: (row) => ETIQUETAS_TIPO_SOLICITUD[row.tipo] || row.tipo,
+    },
     { key: 'fechaSolicitud', label: 'Fecha de Inicio' },
     { key: 'motivo', label: 'Detalle del Trámite' },
     {
@@ -68,10 +73,7 @@ export const SolicitudTituloPage = () => {
       />
 
       <SolicitudForm
-        tiposDisponibles={[
-          'Solicitud de título intermedio: Analista Programador',
-          'Solicitud de título final: Técnico Superior en Desarrollo de Software',
-        ]}
+        tipoPredefinido="TITULO_INTERMEDIO"
         onSubmit={handleSubmit}
         loading={loading}
       />

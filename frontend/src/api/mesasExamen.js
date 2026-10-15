@@ -91,7 +91,7 @@ export const createMesa = async (data) => {
       materiaNombre: materia ? materia.nombre : data.materiaNombre || 'Materia',
       fecha: data.fecha,
       hora: data.hora || '09:00 hs',
-      turno: data.turno || 'MAÑANA',
+      turno: data.turno || 'MANANA',
       tribunal: data.tribunal || 'Por asignar',
       aula: data.aula || 'Aula 101',
       cupoMaximo: Number(data.cupoMaximo) || 30,

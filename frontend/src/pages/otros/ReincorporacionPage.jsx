@@ -5,6 +5,7 @@ import DataTable from '../../components/DataTable'
 import StatusBadge from '../../components/StatusBadge'
 import { useToast } from '../../context/ToastContext'
 import { getSolicitudes, createSolicitud } from '../../api/solicitudes'
+import { ETIQUETAS_TIPO_SOLICITUD } from '../../config/etiquetas'
 
 export const ReincorporacionPage = () => {
   const { showToast } = useToast()
@@ -14,7 +15,7 @@ export const ReincorporacionPage = () => {
 
   const cargar = async () => {
     try {
-      const data = await getSolicitudes({ idAlumno: alumnoId, tipo: 'reincorporación' })
+      const data = await getSolicitudes({ idAlumno: alumnoId, tipo: 'REINCORPORACION' })
       setSolicitudes(data)
     } catch {
       showToast('Error al cargar trámites de reincorporación', 'danger')
@@ -30,7 +31,7 @@ export const ReincorporacionPage = () => {
     try {
       await createSolicitud({
         idAlumno: alumnoId,
-        tipo: 'Solicitud formal de reincorporación a la cursada',
+        tipo: 'REINCORPORACION',
         motivo: formData.motivo,
         observaciones: formData.observaciones,
       })
@@ -44,7 +45,11 @@ export const ReincorporacionPage = () => {
   }
 
   const columns = [
-    { key: 'tipo', label: 'Trámite' },
+    {
+      key: 'tipo',
+      label: 'Trámite',
+      render: (row) => ETIQUETAS_TIPO_SOLICITUD[row.tipo] || row.tipo,
+    },
     { key: 'fechaSolicitud', label: 'Fecha Solicitud' },
     { key: 'motivo', label: 'Motivo de Pérdida de Condición / Justificación' },
     {
@@ -63,12 +68,12 @@ export const ReincorporacionPage = () => {
     <div>
       <PageHeader
         title="Solicitud de Reincorporación"
-        subtitle="Trámite de recuperación de condición regular por excedencia de faltas o suspensión transitoria"
-        icon="bi-arrow-repeat"
+        subtitle="Pedido de reingreso al padrón activo por vencimiento de regularidad o baja temporal"
+        icon="bi-person-plus"
       />
 
       <SolicitudForm
-        tipoPredefinido="Solicitud formal de reincorporación a la cursada"
+        tipoPredefinido="REINCORPORACION"
         onSubmit={handleSubmit}
         loading={loading}
       />
@@ -81,7 +86,7 @@ export const ReincorporacionPage = () => {
         columns={columns}
         data={solicitudes}
         keyField="idSolicitud"
-        searchPlaceholder="Buscar en trámites..."
+        searchPlaceholder="Buscar en mis solicitudes de reincorporación..."
         searchKeys={['tipo', 'motivo', 'estado']}
       />
     </div>

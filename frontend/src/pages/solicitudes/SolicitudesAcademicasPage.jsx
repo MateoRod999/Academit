@@ -5,6 +5,7 @@ import DataTable from '../../components/DataTable'
 import StatusBadge from '../../components/StatusBadge'
 import { useToast } from '../../context/ToastContext'
 import { getSolicitudes, createSolicitud } from '../../api/solicitudes'
+import { ETIQUETAS_TIPO_SOLICITUD } from '../../config/etiquetas'
 
 export const SolicitudesAcademicasPage = () => {
   const { showToast } = useToast()
@@ -14,7 +15,7 @@ export const SolicitudesAcademicasPage = () => {
 
   const cargar = async () => {
     try {
-      const data = await getSolicitudes({ idAlumno: alumnoId, tipo: 'académica' })
+      const data = await getSolicitudes({ idAlumno: alumnoId, tipo: 'ACADEMICA' })
       setSolicitudes(data)
     } catch {
       showToast('Error al cargar solicitudes académicas', 'danger')
@@ -30,7 +31,7 @@ export const SolicitudesAcademicasPage = () => {
     try {
       await createSolicitud({
         idAlumno: alumnoId,
-        tipo: formData.tipo,
+        tipo: 'ACADEMICA',
         motivo: formData.motivo,
         observaciones: formData.observaciones,
       })
@@ -44,7 +45,11 @@ export const SolicitudesAcademicasPage = () => {
   }
 
   const columns = [
-    { key: 'tipo', label: 'Tipo de Pedido' },
+    {
+      key: 'tipo',
+      label: 'Tipo de Pedido',
+      render: (row) => ETIQUETAS_TIPO_SOLICITUD[row.tipo] || row.tipo,
+    },
     { key: 'fechaSolicitud', label: 'Fecha Presentación' },
     { key: 'motivo', label: 'Motivo / Argumentación' },
     {
@@ -68,13 +73,7 @@ export const SolicitudesAcademicasPage = () => {
       />
 
       <SolicitudForm
-        tiposDisponibles={[
-          'Excepción de correlatividad para cursar',
-          'Revisión o rectificación de nota de examen',
-          'Prórroga de regularidad de materia',
-          'Justificación extraordinaria de inasistencia',
-          'Equivalencias y reconocimiento de materias',
-        ]}
+        tipoPredefinido="ACADEMICA"
         onSubmit={handleSubmit}
         loading={loading}
       />

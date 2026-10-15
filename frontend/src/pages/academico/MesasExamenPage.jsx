@@ -7,6 +7,7 @@ import ConfirmModal from '../../components/ConfirmModal'
 import { useAuth } from '../../context/AuthContext'
 import { useToast } from '../../context/ToastContext'
 import { getMesasExamen, inscribirseMesa, darseDeBajaMesa } from '../../api/mesasExamen'
+import { ETIQUETAS_TURNO } from '../../config/etiquetas'
 
 export const MesasExamenPage = () => {
   const { rol } = useAuth()
@@ -61,7 +62,7 @@ export const MesasExamenPage = () => {
     { key: 'materiaNombre', label: 'Materia' },
     { key: 'fecha', label: 'Fecha' },
     { key: 'hora', label: 'Horario' },
-    { key: 'turno', label: 'Turno', render: (row) => <Badge bg="secondary">{row.turno}</Badge> },
+    { key: 'turno', label: 'Turno', render: (row) => <Badge bg="secondary">{ETIQUETAS_TURNO[row.turno] || row.turno}</Badge> },
     { key: 'aula', label: 'Aula' },
     { key: 'tribunal', label: 'Tribunal Evaluador' },
     {

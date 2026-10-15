@@ -15,6 +15,7 @@ import {
   getCarreraPlanes,
   getCarreraCursos,
 } from '../../api/carreras'
+import { ETIQUETAS_TURNO } from '../../config/etiquetas'
 
 export const GestionCarrerasPage = () => {
   const { showToast } = useToast()
@@ -472,7 +473,7 @@ export const GestionCarrerasPage = () => {
                             <div className="d-flex justify-content-between align-items-start mb-1">
                               <div>
                                 <strong>{curso.nombre}</strong>
-                                <div className="small text-muted">{curso.codigo} • Turno {curso.turno}</div>
+                                <div className="small text-muted">{curso.codigo} • Turno {ETIQUETAS_TURNO[curso.turno] || curso.turno}</div>
                               </div>
                               <Badge bg={curso.cuposDisponibles > 0 ? 'success' : 'danger'}>
                                 {curso.cuposDisponibles} cupos libres

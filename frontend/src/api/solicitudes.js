@@ -15,7 +15,7 @@ export const getSolicitudes = async (filtros = {}) => {
       lista = lista.filter((s) => s.idAlumno === Number(filtros.idAlumno))
     }
     if (filtros.tipo) {
-      lista = lista.filter((s) => s.tipo.toLowerCase().includes(filtros.tipo.toLowerCase()))
+      lista = lista.filter((s) => s.tipo === filtros.tipo)
     }
     if (filtros.estado) {
       lista = lista.filter((s) => s.estado === filtros.estado)

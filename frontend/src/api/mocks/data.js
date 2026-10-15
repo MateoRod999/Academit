@@ -241,7 +241,7 @@ export const mockDb = {
       idPlan: 1,
       codigo: '1A-INF-TM',
       nombre: '1° Año - Turno Mañana',
-      turno: 'MAÑANA',
+      turno: 'MANANA',
       capacidadMaxima: 35,
       inscriptos: 29,
       cuposDisponibles: 6,
@@ -283,7 +283,7 @@ export const mockDb = {
       idPlan: 2,
       codigo: '1A-CD-TM',
       nombre: '1° Año CD - Turno Mañana',
-      turno: 'MAÑANA',
+      turno: 'MANANA',
       capacidadMaxima: 30,
       inscriptos: 15,
       cuposDisponibles: 15,
@@ -356,7 +356,7 @@ export const mockDb = {
       materiaNombre: 'Programación I',
       fecha: '2026-05-15',
       hora: '09:00 hs',
-      turno: 'MAÑANA',
+      turno: 'MANANA',
       tribunal: 'Prof. Carlos Gómez / Prof. Mariana Peralta',
       aula: 'Aula Magna 1',
       cupoMaximo: 30,
@@ -384,7 +384,7 @@ export const mockDb = {
       materiaNombre: 'Sistemas de Computación',
       fecha: '2026-05-29',
       hora: '09:00 hs',
-      turno: 'MAÑANA',
+      turno: 'MANANA',
       tribunal: 'Prof. Elena Fabbri / Prof. Carlos Gómez',
       aula: 'Aula 104',
       cupoMaximo: 25,
@@ -489,19 +489,20 @@ export const mockDb = {
 
   // 15. Solicitudes de Alumnos
   solicitudes: [
-    { idSolicitud: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', tipo: 'Constancia de Alumno Regular', fechaSolicitud: '2026-03-10', motivo: 'Presentación laboral en empresa tecnológica', estado: 'APROBADA', fechaResolucion: '2026-03-12', respuesta: 'Constancia emitida y firmada digitalmente.' },
-    { idSolicitud: 2, idAlumno: 1, alumnoNombre: 'Lucía Benítez', tipo: 'Declaración jurada de materias a cursar', fechaSolicitud: '2026-03-15', motivo: 'Inscripción condicional a cursada de 2° año', estado: 'APROBADA', fechaResolucion: '2026-03-18', respuesta: 'Aprobada según plan de correlatividades.' },
-    { idSolicitud: 3, idAlumno: 1, alumnoNombre: 'Lucía Benítez', tipo: 'Inscripción a pasantías', fechaSolicitud: '2026-04-02', motivo: 'Postulación a Pasantía en Software Dev S.A.', estado: 'EN_PROCESO', fechaResolucion: null, respuesta: 'En revisión por el coordinador de pasantías.' },
-    { idSolicitud: 4, idAlumno: 1, alumnoNombre: 'Lucía Benítez', tipo: 'Solicitud de título intermedio', fechaSolicitud: '2026-04-12', motivo: 'Cumplimiento del 70% de la carga horaria', estado: 'PENDIENTE', fechaResolucion: null, respuesta: null },
-    { idSolicitud: 5, idAlumno: 2, alumnoNombre: 'Martín Rodríguez', tipo: 'Solicitudes académicas generales', fechaSolicitud: '2026-04-05', motivo: 'Revisión de asistencia en Bases de Datos', estado: 'RECHAZADA', fechaResolucion: '2026-04-08', respuesta: 'El límite de justificación venció el 01/04.' },
+    { idSolicitud: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', tipo: 'CONSTANCIA', fechaSolicitud: '2026-03-10', motivo: 'Presentación laboral en empresa tecnológica', estado: 'APROBADA', fechaResolucion: '2026-03-12', respuesta: 'Constancia emitida y firmada digitalmente.' },
+    { idSolicitud: 2, idAlumno: 1, alumnoNombre: 'Lucía Benítez', tipo: 'CAMBIO_CARRERA', fechaSolicitud: '2026-03-15', motivo: 'Pase a Ciencia de Datos e IA', estado: 'APROBADA', fechaResolucion: '2026-03-18', respuesta: 'Aprobada según plan de correlatividades.' },
+    { idSolicitud: 3, idAlumno: 1, alumnoNombre: 'Lucía Benítez', tipo: 'PASANTIA', fechaSolicitud: '2026-04-02', motivo: 'Postulación a Pasantía en Software Dev S.A.', estado: 'EN_PROCESO', fechaResolucion: null, respuesta: 'En revisión por el coordinador de pasantías.' },
+    { idSolicitud: 4, idAlumno: 1, alumnoNombre: 'Lucía Benítez', tipo: 'TITULO_INTERMEDIO', fechaSolicitud: '2026-04-12', motivo: 'Cumplimiento del 70% de la carga horaria', estado: 'PENDIENTE', fechaResolucion: null, respuesta: null },
+    { idSolicitud: 5, idAlumno: 2, alumnoNombre: 'Martín Rodríguez', tipo: 'ACADEMICA', fechaSolicitud: '2026-04-05', motivo: 'Revisión de asistencia en Bases de Datos', estado: 'RECHAZADA', fechaResolucion: '2026-04-08', respuesta: 'El límite de justificación venció el 01/04.' },
+    { idSolicitud: 6, idAlumno: 2, alumnoNombre: 'Martín Rodríguez', tipo: 'REINCORPORACION', fechaSolicitud: '2026-04-10', motivo: 'Reincorporación tras licencia laboral', estado: 'PENDIENTE', fechaResolucion: null, respuesta: null },
   ],
 
   // 16. Documentación legal/académica del Alumno
   documentacion: [
-    { idDocumento: 1, idAlumno: 1, tipo: 'DNI (Frente y Dorso)', obligatorio: true, estado: 'ENTREGADO', fechaEntrega: '2026-02-10', observaciones: 'Copia certificada' },
-    { idDocumento: 2, idAlumno: 1, tipo: 'Título Secundario / Certificado Analítico', obligatorio: true, estado: 'ENTREGADO', fechaEntrega: '2026-02-10', observaciones: 'Legalizado por Ministerio' },
-    { idDocumento: 3, idAlumno: 1, tipo: 'Certificado de Aptitud Médica', obligatorio: true, estado: 'PENDIENTE', fechaEntrega: null, observaciones: 'Vencimiento próximo: 30/05/2026' },
-    { idDocumento: 4, idAlumno: 1, tipo: 'Fotos 4x4 (2 unidades)', obligatorio: true, estado: 'ENTREGADO', fechaEntrega: '2026-02-10', observaciones: 'Entregadas en secretaría' },
+    { idDocumento: 1, idAlumno: 1, tipo: 'DNI', obligatorio: true, estado: 'ENTREGADO', fechaEntrega: '2026-02-10', observaciones: 'Copia certificada' },
+    { idDocumento: 2, idAlumno: 1, tipo: 'TITULO_SECUNDARIO', obligatorio: true, estado: 'ENTREGADO', fechaEntrega: '2026-02-10', observaciones: 'Legalizado por Ministerio' },
+    { idDocumento: 3, idAlumno: 1, tipo: 'APTO_MEDICO', obligatorio: true, estado: 'PENDIENTE', fechaEntrega: null, observaciones: 'Vencimiento próximo: 30/05/2026' },
+    { idDocumento: 4, idAlumno: 1, tipo: 'FOTOS', obligatorio: true, estado: 'ENTREGADO', fechaEntrega: '2026-02-10', observaciones: 'Entregadas en secretaría' },
   ],
 
   // 17. Usuarios del Sistema y Roles

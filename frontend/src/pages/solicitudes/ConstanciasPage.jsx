@@ -5,6 +5,7 @@ import DataTable from '../../components/DataTable'
 import StatusBadge from '../../components/StatusBadge'
 import { useToast } from '../../context/ToastContext'
 import { getSolicitudes, createSolicitud } from '../../api/solicitudes'
+import { ETIQUETAS_TIPO_SOLICITUD } from '../../config/etiquetas'
 
 export const ConstanciasPage = () => {
   const { showToast } = useToast()
@@ -14,7 +15,7 @@ export const ConstanciasPage = () => {
 
   const cargar = async () => {
     try {
-      const data = await getSolicitudes({ idAlumno: alumnoId, tipo: 'Constancia' })
+      const data = await getSolicitudes({ idAlumno: alumnoId, tipo: 'CONSTANCIA' })
       setSolicitudes(data)
     } catch {
       showToast('Error al cargar solicitudes', 'danger')
@@ -30,7 +31,7 @@ export const ConstanciasPage = () => {
     try {
       await createSolicitud({
         idAlumno: alumnoId,
-        tipo: formData.tipo,
+        tipo: 'CONSTANCIA',
         motivo: formData.motivo,
         observaciones: formData.observaciones,
       })
@@ -44,7 +45,11 @@ export const ConstanciasPage = () => {
   }
 
   const columns = [
-    { key: 'tipo', label: 'Tipo de Constancia' },
+    {
+      key: 'tipo',
+      label: 'Tipo de Solicitud',
+      render: (row) => ETIQUETAS_TIPO_SOLICITUD[row.tipo] || row.tipo,
+    },
     { key: 'fechaSolicitud', label: 'Fecha Solicitud' },
     { key: 'motivo', label: 'Motivo' },
     {
@@ -75,12 +80,7 @@ export const ConstanciasPage = () => {
       />
 
       <SolicitudForm
-        tiposDisponibles={[
-          'Constancia de Alumno Regular',
-          'Constancia de Examen Final Rendido',
-          'Constancia de Porcentaje de Materias Aprobadas',
-          'Constancia de Promedio General',
-        ]}
+        tipoPredefinido="CONSTANCIA"
         onSubmit={handleSubmit}
         loading={loading}
       />

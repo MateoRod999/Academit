@@ -6,6 +6,7 @@ import StatusBadge from '../../components/StatusBadge'
 import FormModal from '../../components/FormModal'
 import { useToast } from '../../context/ToastContext'
 import { getSolicitudes, resolverSolicitud } from '../../api/solicitudes'
+import { ETIQUETAS_TIPO_SOLICITUD } from '../../config/etiquetas'
 
 export const BandejaSolicitudesPage = () => {
   const { showToast } = useToast()
@@ -68,7 +69,11 @@ export const BandejaSolicitudesPage = () => {
   const columns = [
     { key: 'idSolicitud', label: '# ID', width: '70px' },
     { key: 'alumnoNombre', label: 'Alumno' },
-    { key: 'tipo', label: 'Tipo de Solicitud' },
+    {
+      key: 'tipo',
+      label: 'Tipo de Solicitud',
+      render: (row) => ETIQUETAS_TIPO_SOLICITUD[row.tipo] || row.tipo,
+    },
     { key: 'fechaSolicitud', label: 'Fecha' },
     { key: 'motivo', label: 'Motivo / Detalle' },
     {

@@ -36,7 +36,7 @@ export const createCurso = async (data) => {
       idPlan: data.idPlan ? Number(data.idPlan) : 1,
       codigo: data.codigo || `${nuevoId}A-INF`,
       nombre: data.nombre,
-      turno: data.turno || 'MAÑANA',
+      turno: data.turno || 'MANANA',
       capacidadMaxima: capMax,
       inscriptos: inscriptos,
       cuposDisponibles: Math.max(capMax - inscriptos, 0),

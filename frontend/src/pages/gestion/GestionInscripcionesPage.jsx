@@ -10,6 +10,7 @@ import { getInscripciones, createInscripcion, cancelarInscripcion } from '../../
 import { getAlumnos } from '../../api/alumnos'
 import { getCursos } from '../../api/cursos'
 import { getCiclosLectivos } from '../../api/ciclosLectivos'
+import { ETIQUETAS_TURNO } from '../../config/etiquetas'
 
 export const GestionInscripcionesPage = () => {
   const { showToast } = useToast()
@@ -228,7 +229,7 @@ export const GestionInscripcionesPage = () => {
                 ) : (
                   cursosDeLaCarrera.map((c) => (
                     <option key={c.idCurso} value={c.idCurso}>
-                      {c.nombre} ({c.turno}) - {c.cuposDisponibles} cupos libres
+                      {c.nombre} ({ETIQUETAS_TURNO[c.turno] || c.turno}) - {c.cuposDisponibles} cupos libres
                     </option>
                   ))
                 )}
