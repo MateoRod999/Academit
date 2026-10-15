@@ -52,14 +52,13 @@ export const Login = () => {
           <Card className="shadow-sm border-0">
             <Card.Body className="p-4 p-md-5">
               <div className="text-center mb-4">
-                <span className="nf-glyph fs-1 d-block mb-2" style={{ color: 'var(--m-primary)' }}>
-                </span>
-                <Card.Title as="h2" className="fw-bold mb-1" style={{ color: 'var(--m-primary)' }}>
-                  Academit
-                </Card.Title>
-                <Card.Subtitle className="text-muted small">
-                  Sistema Web de Gestión Académica
-                </Card.Subtitle>
+                <img
+                  src="/avatar-graduado.svg"
+                  alt="Academit Logo"
+                  width="76"
+                  height="76"
+                  className="d-inline-block"
+                />
               </div>
 
               {errorMsg && (
@@ -152,6 +151,11 @@ export const Login = () => {
               </div>
             </Card.Body>
           </Card>
+          <div className="text-center mt-4">
+            <small className="text-muted" style={{ fontSize: '0.78rem' }}>
+              Este programa fue hecho como proyecto para Taller Integrador III y licenciado con BSD3.
+            </small>
+          </div>
         </Col>
       </Row>
     </Container>
