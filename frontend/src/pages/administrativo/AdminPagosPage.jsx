@@ -125,6 +125,7 @@ export const AdminPagosPage = () => {
 
   const columns = [
     { key: 'comprobante', label: 'Comprobante', width: '130px', render: (row) => <span className="font-monospace fw-bold">{row.comprobante}</span> },
+    { key: 'idCuota', label: '# Cuota', width: '85px', render: (row) => (row.idCuota ? `#${row.idCuota}` : <span className="text-muted">—</span>) },
     {
       key: 'alumnoNombre',
       label: 'Estudiante',

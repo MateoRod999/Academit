@@ -478,12 +478,13 @@ export const mockDb = {
 
   // 14. Registro de Pagos
   pagos: [
-    { idPago: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Matrícula Anual 2026', importe: 35000, fechaPago: '2026-02-15', medioPago: 'TRANSFERENCIA', comprobante: 'REC-2026-0001', estado: 'ACREDITADO' },
-    { idPago: 2, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 1 - Enero 2026', importe: 28000, fechaPago: '2026-01-08', medioPago: 'TRANSFERENCIA', comprobante: 'REC-2026-0112', estado: 'ACREDITADO' },
-    { idPago: 3, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 2 - Febrero 2026', importe: 28000, fechaPago: '2026-02-09', medioPago: 'TARJETA', comprobante: 'REC-2026-0225', estado: 'ACREDITADO' },
-    { idPago: 4, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 3 - Marzo 2026', importe: 28000, fechaPago: '2026-03-05', medioPago: 'EFECTIVO', comprobante: 'REC-2026-0341', estado: 'ACREDITADO' },
-    { idPago: 5, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Seguro Cuatrimestral 1/3', importe: 8000, fechaPago: '2026-03-05', medioPago: 'EFECTIVO', comprobante: 'REC-2026-0342', estado: 'ACREDITADO' },
-    { idPago: 6, idAlumno: 2, alumnoNombre: 'Martín Rodríguez', concepto: 'Cuota 4 - Abril 2026', importe: 28000, fechaPago: '2026-04-02', medioPago: 'TRANSFERENCIA', comprobante: 'REC-2026-0410', estado: 'ACREDITADO' },
+    { idPago: 1, idCuota: null, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Matrícula Anual 2026', importe: 35000, fechaPago: '2026-02-15', medioPago: 'TRANSFERENCIA', comprobante: 'REC-2026-0001', estado: 'ACREDITADO' },
+    { idPago: 2, idCuota: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 1 - Enero 2026', importe: 28000, fechaPago: '2026-01-08', medioPago: 'TRANSFERENCIA', comprobante: 'REC-2026-0112', estado: 'ACREDITADO' },
+    { idPago: 3, idCuota: 2, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 2 - Febrero 2026', importe: 28000, fechaPago: '2026-02-09', medioPago: 'TARJETA', comprobante: 'REC-2026-0225', estado: 'ACREDITADO' },
+    { idPago: 4, idCuota: 3, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 3 - Marzo 2026', importe: 28000, fechaPago: '2026-03-05', medioPago: 'EFECTIVO', comprobante: 'REC-2026-0341', estado: 'ACREDITADO' },
+    { idPago: 5, idCuota: 13, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Seguro Cuatrimestral 1/3', importe: 8000, fechaPago: '2026-03-05', medioPago: 'EFECTIVO', comprobante: 'REC-2026-0342', estado: 'ACREDITADO' },
+    { idPago: 6, idCuota: 16, idAlumno: 2, alumnoNombre: 'Martín Rodríguez', concepto: 'Cuota 4 - Abril 2026', importe: 28000, fechaPago: '2026-04-02', medioPago: 'TRANSFERENCIA', comprobante: 'REC-2026-0410', estado: 'ACREDITADO' },
+    { idPago: 7, idCuota: null, idAlumno: 2, alumnoNombre: 'Martín Rodríguez', concepto: 'Matrícula Anual 2026', importe: 35000, fechaPago: '2026-03-01', medioPago: 'OTRO', comprobante: 'REC-2026-0002', estado: 'ACREDITADO' },
   ],
 
   // 15. Solicitudes de Alumnos
