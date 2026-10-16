@@ -7,6 +7,7 @@ import FormModal from '../../components/FormModal'
 import { useToast } from '../../context/ToastContext'
 import { getMesasExamen, createMesa, updateMesa } from '../../api/mesasExamen'
 import { getMaterias } from '../../api/materias'
+import { ETIQUETAS_TURNO } from '../../config/etiquetas'
 
 export const GestionMesasPage = () => {
   const { showToast } = useToast()
@@ -20,7 +21,7 @@ export const GestionMesasPage = () => {
     idMateria: 1,
     fecha: '2026-06-15',
     hora: '09:00 hs',
-    turno: 'MAÑANA',
+    turno: 'MANANA',
     tribunal: '',
     aula: 'Aula 101',
     cupoMaximo: 30,
@@ -47,7 +48,7 @@ export const GestionMesasPage = () => {
       idMateria: 1,
       fecha: '2026-06-15',
       hora: '09:00 hs',
-      turno: 'MAÑANA',
+      turno: 'MANANA',
       tribunal: '',
       aula: 'Aula 101',
       cupoMaximo: 30,
@@ -98,7 +99,7 @@ export const GestionMesasPage = () => {
     {
       key: 'turno',
       label: 'Turno',
-      render: (row) => <Badge bg="secondary">{row.turno}</Badge>,
+      render: (row) => <Badge bg="secondary">{ETIQUETAS_TURNO[row.turno] || row.turno}</Badge>,
     },
     { key: 'aula', label: 'Aula' },
     { key: 'tribunal', label: 'Tribunal Evaluador' },
@@ -205,7 +206,7 @@ export const GestionMesasPage = () => {
                 onChange={(e) => setForm({ ...form, turno: e.target.value })}
                 style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
               >
-                <option value="MAÑANA">Mañana</option>
+                <option value="MANANA">Mañana</option>
                 <option value="TARDE">Tarde</option>
                 <option value="NOCHE">Noche</option>
               </Form.Select>

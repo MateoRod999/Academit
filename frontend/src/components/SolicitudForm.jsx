@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Form, Button, Card, Row, Col, Spinner } from 'react-bootstrap'
+import { ETIQUETAS_TIPO_SOLICITUD } from '../config/etiquetas'
 
 export const SolicitudForm = ({
   tipoPredefinido = '',
@@ -74,18 +75,21 @@ export const SolicitudForm = ({
                       borderColor: 'var(--m-outline)',
                     }}
                   >
-                    {tiposDisponibles.map((t, idx) => (
-                      <option key={idx} value={t}>
-                        {t}
-                      </option>
-                    ))}
+                    {tiposDisponibles.map((t, idx) => {
+                      const val = typeof t === 'object' ? t.value : t
+                      const lbl = typeof t === 'object' ? t.label : (ETIQUETAS_TIPO_SOLICITUD[t] || t)
+                      return (
+                        <option key={idx} value={val}>
+                          {lbl}
+                        </option>
+                      )
+                    })}
                   </Form.Select>
                 ) : (
                   <Form.Control
                     type="text"
-                    value={tipo}
-                    onChange={(e) => setTipo(e.target.value)}
-                    readOnly={Boolean(tipoPredefinido)}
+                    value={ETIQUETAS_TIPO_SOLICITUD[tipo] || tipo}
+                    readOnly
                     isInvalid={Boolean(errors.tipo)}
                     style={{
                       backgroundColor: 'var(--m-surfaceVariant)',

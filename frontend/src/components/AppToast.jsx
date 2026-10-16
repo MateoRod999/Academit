@@ -1,6 +1,13 @@
 import { Toast, ToastContainer } from 'react-bootstrap'
 
-export const AppToast = ({ show, onClose, message, variant = 'success', title = 'Acción simulada' }) => {
+export const AppToast = ({
+  show,
+  onClose,
+  message,
+  errors = [],
+  variant = 'success',
+  title = 'Acción simulada',
+}) => {
   const getIcon = () => {
     switch (variant) {
       case 'success':
@@ -19,7 +26,7 @@ export const AppToast = ({ show, onClose, message, variant = 'success', title = 
       <Toast
         show={show}
         onClose={onClose}
-        delay={4000}
+        delay={4500}
         autohide
         className="shadow-lg border-0"
         style={{
@@ -43,7 +50,20 @@ export const AppToast = ({ show, onClose, message, variant = 'success', title = 
           <small className="text-muted">Ahora</small>
         </Toast.Header>
         <Toast.Body className="py-3 fs-6">
-          {message}
+          <div>{message}</div>
+          {errors && errors.length > 0 && (
+            <div className="mt-2 pt-2 border-top border-secondary border-opacity-25 small">
+              {errors.map((e, idx) => (
+                <div key={idx} className="d-flex align-items-baseline gap-1 text-danger">
+                  <i className="bi bi-arrow-right-short" />
+                  {e.campo && e.campo !== 'general' && (
+                    <strong className="text-capitalize">{e.campo}: </strong>
+                  )}
+                  <span>{e.mensaje}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </Toast.Body>
       </Toast>
     </ToastContainer>

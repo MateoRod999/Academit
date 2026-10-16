@@ -1,5 +1,6 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
+import { createApiError } from './errors'
 
 /**
  * Obtiene el registro de inscripciones de alumnos a comisiones y cursos.
@@ -27,7 +28,12 @@ export const createInscripcion = async (data) => {
 
     const curso = mockDb.cursos.find((c) => c.idCurso === Number(data.idCurso))
     if (curso && curso.cuposDisponibles <= 0) {
-      throw new Error(`El curso "${curso.nombre}" no cuenta con cupos disponibles (capacidad: ${curso.capacidadMaxima})`)
+      throw createApiError(409, 'Sin cupos disponibles', [
+        {
+          campo: 'idCurso',
+          mensaje: `El curso "${curso.nombre}" no cuenta con cupos disponibles (capacidad: ${curso.capacidadMaxima})`,
+        },
+      ])
     }
 
     const alumno = mockDb.alumnos.find((a) => a.idAlumno === Number(data.idAlumno))
@@ -68,7 +74,11 @@ export const cancelarInscripcion = async (idInscripcion) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))
     const index = mockDb.inscripciones.findIndex((i) => i.idInscripcion === Number(idInscripcion))
-    if (index === -1) throw new Error('Inscripción no encontrada')
+    if (index === -1) {
+      throw createApiError(404, 'Inscripción no encontrada', [
+        { campo: 'idInscripcion', mensaje: 'Inscripción no encontrada' },
+      ])
+    }
 
     const insc = mockDb.inscripciones[index]
     insc.estado = 'CANCELADA'

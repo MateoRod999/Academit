@@ -15,6 +15,7 @@ import {
   getCarreraPlanes,
   getCarreraCursos,
 } from '../../api/carreras'
+import { ETIQUETAS_TURNO } from '../../config/etiquetas'
 
 export const GestionCarrerasPage = () => {
   const { showToast } = useToast()
@@ -31,7 +32,7 @@ export const GestionCarrerasPage = () => {
     codigo: '',
     nombre: '',
     tituloOtorgado: '',
-    duracion: '3 años',
+    duracionAnios: 3,
     resolucion: '',
   })
   const [errors, setErrors] = useState({})
@@ -82,7 +83,7 @@ export const GestionCarrerasPage = () => {
       codigo: '',
       nombre: '',
       tituloOtorgado: '',
-      duracion: '3 años',
+      duracionAnios: 3,
       resolucion: '',
     })
     setErrors({})
@@ -95,7 +96,7 @@ export const GestionCarrerasPage = () => {
       codigo: c.codigo || '',
       nombre: c.nombre || '',
       tituloOtorgado: c.tituloOtorgado || '',
-      duracion: c.duracion || '3 años',
+      duracionAnios: c.duracionAnios || 3,
       resolucion: c.resolucion || '',
     })
     setErrors({})
@@ -169,7 +170,11 @@ export const GestionCarrerasPage = () => {
         </div>
       ),
     },
-    { key: 'duracion', label: 'Duración' },
+    {
+      key: 'duracionAnios',
+      label: 'Duración',
+      render: (row) => `${row.duracionAnios} años`,
+    },
     {
       key: 'resolucion',
       label: 'Resolución Ministerial',
@@ -338,12 +343,13 @@ export const GestionCarrerasPage = () => {
 
             <Col md={4}>
               <Form.Group controlId="carrDuracion">
-                <Form.Label className="small fw-semibold">Duración Estimada</Form.Label>
+                <Form.Label className="small fw-semibold">Duración (años)</Form.Label>
                 <Form.Control
-                  type="text"
-                  placeholder="3 años"
-                  value={form.duracion}
-                  onChange={(e) => setForm({ ...form, duracion: e.target.value })}
+                  type="number"
+                  min="1"
+                  max="10"
+                  value={form.duracionAnios}
+                  onChange={(e) => setForm({ ...form, duracionAnios: Number(e.target.value) })}
                   style={{
                     backgroundColor: 'var(--m-surfaceVariant)',
                     color: 'var(--m-onSurface)',
@@ -467,7 +473,7 @@ export const GestionCarrerasPage = () => {
                             <div className="d-flex justify-content-between align-items-start mb-1">
                               <div>
                                 <strong>{curso.nombre}</strong>
-                                <div className="small text-muted">{curso.codigo} • Turno {curso.turno}</div>
+                                <div className="small text-muted">{curso.codigo} • Turno {ETIQUETAS_TURNO[curso.turno] || curso.turno}</div>
                               </div>
                               <Badge bg={curso.cuposDisponibles > 0 ? 'success' : 'danger'}>
                                 {curso.cuposDisponibles} cupos libres

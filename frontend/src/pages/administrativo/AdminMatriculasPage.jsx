@@ -5,14 +5,18 @@ import DataTable from '../../components/DataTable'
 import StatusBadge from '../../components/StatusBadge'
 import FormModal from '../../components/FormModal'
 import { useToast } from '../../context/ToastContext'
-import { getMatriculas, updateMatricula } from '../../api/matriculas'
+import { useAuth } from '../../context/AuthContext'
+import { getMatriculas, updateMatricula, generarCuotas } from '../../api/matriculas'
 
 export const AdminMatriculasPage = () => {
   const { showToast } = useToast()
+  const { rol } = useAuth()
   const [matriculas, setMatriculas] = useState([])
   const [editingMat, setEditingMat] = useState(null)
   const [nuevoEstado, setNuevoEstado] = useState('ACTIVA')
   const [loading, setLoading] = useState(false)
+
+  const puedeGenerarCuotas = rol === 'ADMINISTRATIVO' || rol === 'ADMINISTRADOR'
 
   const cargar = async () => {
     try {
@@ -32,6 +36,19 @@ export const AdminMatriculasPage = () => {
     setNuevoEstado(m.estado)
   }
 
+  const handleGenerarCuotas = async (matricula) => {
+    setLoading(true)
+    try {
+      const creadas = await generarCuotas(matricula.idMatricula)
+      showToast(`Se generaron ${creadas.length} cuotas y seguros para la matrícula #${matricula.idMatricula}`, 'success')
+      cargar()
+    } catch (err) {
+      showToast(err, 'danger')
+    } finally {
+      setLoading(false)
+    }
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     if (!editingMat) return
@@ -42,7 +59,7 @@ export const AdminMatriculasPage = () => {
       setEditingMat(null)
       cargar()
     } catch (err) {
-      showToast(err.message || 'Error al actualizar matrícula', 'danger')
+      showToast(err, 'danger')
     } finally {
       setLoading(false)
     }
@@ -57,9 +74,9 @@ export const AdminMatriculasPage = () => {
     },
     { key: 'cicloLectivo', label: 'Ciclo' },
     {
-      key: 'monto',
+      key: 'importe',
       label: 'Arancel Anual',
-      render: (row) => `$${row.monto.toLocaleString('es-AR')}`,
+      render: (row) => `$${row.importe.toLocaleString('es-AR')}`,
     },
     { key: 'fechaAlta', label: 'Fecha Alta' },
     {
@@ -81,9 +98,22 @@ export const AdminMatriculasPage = () => {
       label: 'Acciones',
       align: 'right',
       render: (row) => (
-        <Button variant="outline-primary" size="sm" onClick={() => handleOpenCambiar(row)}>
-          <i className="bi bi-arrow-left-right" /> Cambiar Estado
-        </Button>
+        <div className="d-flex justify-content-end gap-2">
+          {puedeGenerarCuotas && (
+            <Button
+              variant="outline-success"
+              size="sm"
+              disabled={loading || row.estado === 'CANCELADA'}
+              onClick={() => handleGenerarCuotas(row)}
+              title={row.estado === 'CANCELADA' ? 'No se pueden generar cuotas para matrícula cancelada' : 'Generar 12 cuotas y 3 seguros'}
+            >
+              <i className="bi bi-calendar-plus me-1" /> Generar cuotas
+            </Button>
+          )}
+          <Button variant="outline-primary" size="sm" onClick={() => handleOpenCambiar(row)}>
+            <i className="bi bi-arrow-left-right me-1" /> Cambiar Estado
+          </Button>
+        </div>
       ),
     },
   ]

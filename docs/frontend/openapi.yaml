@@ -1,0 +1,4509 @@
+openapi: 3.0.3
+info:
+  title: Academit API
+  version: 1.0.0
+  description: Contrato formal de API REST entre frontend y backend del sistema Academit.
+  license:
+    name: BSD-3-Clause
+    url: https://opensource.org/licenses/BSD-3-Clause
+servers:
+  - url: /api
+    description: Servidor de desarrollo y producción API REST
+security:
+  - bearerAuth: []
+paths:
+  /api/alumnos:
+    get:
+      tags:
+        - Alumnos
+      summary: "Obtiene el listado completo de alumnos."
+      operationId: getAlumnos
+      x-roles:
+        - ADMINISTRADOR
+        - ADMINISTRATIVO
+      parameters:
+        - name: search
+          in: query
+          required: false
+          description: "Búsqueda por nombre, apellido o DNI"
+          schema:
+            type: string
+        - name: idCarrera
+          in: query
+          required: false
+          description: "Filtro por ID de carrera"
+          schema:
+            type: integer
+        - name: estado
+          in: query
+          required: false
+          description: "Filtro por condición académica (REGULAR, ACTIVO, INACTIVO)"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AlumnoDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+        - Alumnos
+      summary: "Crea un nuevo alumno en el sistema."
+      operationId: createAlumno
+      x-roles:
+        - ADMINISTRADOR
+        - ADMINISTRATIVO
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlumnoCreateDTO'
+      responses:
+        '201':
+          description: Recurso creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlumnoDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: "Conflicto con el estado actual o regla de negocio violada"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/alumnos/{id}:
+    get:
+      tags:
+        - Alumnos
+      summary: "Obtiene un alumno por su ID."
+      operationId: getAlumnoById
+      x-roles:
+        - ADMINISTRADOR
+        - ADMINISTRATIVO
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador único del alumno"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlumnoDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    put:
+      tags:
+        - Alumnos
+      summary: "Actualiza los datos de un alumno existente."
+      operationId: updateAlumno
+      x-roles:
+        - ADMINISTRADOR
+        - ADMINISTRATIVO
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador único del alumno"
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlumnoUpdateDTO'
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AlumnoDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    delete:
+      tags:
+        - Alumnos
+      summary: "Realiza la baja lógica de un alumno."
+      operationId: deleteAlumno
+      x-roles:
+        - ADMINISTRADOR
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador único del alumno"
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Operación completada sin contenido
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/alumnos/{id}/situacion-academica:
+    get:
+      tags:
+        - Alumnos
+      summary: "Obtiene la situación académica consolidada del alumno (materias cursadas, regularizadas y notas finales)."
+      operationId: getSituacionAcademica
+      x-roles:
+        - ALUMNO
+        - ADMINISTRADOR
+        - ADMINISTRATIVO
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador único del alumno"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SituacionAcademicaDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/alumnos/{id}/situacion-administrativa:
+    get:
+      tags:
+        - Alumnos
+      summary: "Obtiene la situación arancelaria y administrativa del alumno (matrícula, cuotas, deudas y pagos)."
+      operationId: getSituacionAdministrativa
+      x-roles:
+        - ADMINISTRATIVO
+        - ADMINISTRADOR
+        - ALUMNO
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador único del alumno"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SituacionAdministrativaDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/docentes:
+    get:
+      tags:
+        - Docentes
+      summary: "Obtiene el padrón completo de docentes institucionales."
+      operationId: getDocentes
+      x-roles:
+        - ADMINISTRADOR
+        - ADMINISTRATIVO
+      parameters:
+        - name: estado
+          in: query
+          required: false
+          description: "Filtro por estado de actividad docente"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DocenteDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+        - Docentes
+      summary: "Registra un nuevo docente en el cuerpo académico."
+      operationId: createDocente
+      x-roles:
+        - ADMINISTRADOR
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocenteCreateDTO'
+      responses:
+        '201':
+          description: Recurso creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocenteDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: "Conflicto con el estado actual o regla de negocio violada"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/docentes/{id}:
+    put:
+      tags:
+        - Docentes
+      summary: "Actualiza los datos de legajo o contacto de un docente."
+      operationId: updateDocente
+      x-roles:
+        - ADMINISTRADOR
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador único del docente"
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocenteUpdateDTO'
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocenteDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    delete:
+      tags:
+        - Docentes
+      summary: "Realiza la baja lógica de un docente."
+      operationId: deleteDocente
+      x-roles:
+        - ADMINISTRADOR
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador único del docente"
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Operación completada sin contenido
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/carreras:
+    get:
+      tags:
+        - Carreras
+      summary: "Obtiene el listado de carreras institucionales."
+      operationId: getCarreras
+      x-roles:
+        - ADMINISTRADOR
+        - ADMINISTRATIVO
+      parameters:
+        - name: estado
+          in: query
+          required: false
+          description: "Filtro por estado de carrera (ACTIVA, INACTIVA)"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CarreraDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+        - Carreras
+      summary: "Registra una nueva carrera en la oferta académica."
+      operationId: createCarrera
+      x-roles:
+        - ADMINISTRADOR
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarreraCreateDTO'
+      responses:
+        '201':
+          description: Recurso creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarreraDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: "Conflicto con el estado actual o regla de negocio violada"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/carreras/{id}:
+    get:
+      tags:
+        - Carreras
+      summary: "Obtiene los detalles de una carrera específica por su identificador."
+      operationId: getCarreraById
+      x-roles:
+        - ADMINISTRADOR
+        - ADMINISTRATIVO
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador de la carrera"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarreraDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    put:
+      tags:
+        - Carreras
+      summary: "Actualiza la información de una carrera existente."
+      operationId: updateCarrera
+      x-roles:
+        - ADMINISTRADOR
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador de la carrera"
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CarreraUpdateDTO'
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarreraDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    delete:
+      tags:
+        - Carreras
+      summary: "Realiza la baja lógica de una carrera académica."
+      operationId: deleteCarrera
+      x-roles:
+        - ADMINISTRADOR
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador de la carrera"
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Operación completada sin contenido
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/carreras/{id}/planes:
+    get:
+      tags:
+        - Carreras
+      summary: "Obtiene los planes de estudio correspondientes a una carrera."
+      operationId: getCarreraPlanes
+      x-roles:
+        - ADMINISTRADOR
+        - ADMINISTRATIVO
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador de la carrera"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanEstudioDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/carreras/{id}/cursos:
+    get:
+      tags:
+        - Carreras
+      summary: "Obtiene los cursos o comisiones vinculados a una carrera."
+      operationId: getCarreraCursos
+      x-roles:
+        - ADMINISTRADOR
+        - ADMINISTRATIVO
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador de la carrera"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CursoDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/planes-estudio:
+    get:
+      tags:
+        - Planes
+      summary: "Obtiene todos los planes de estudio del instituto."
+      operationId: getPlanesEstudio
+      x-roles:
+        - ADMINISTRADOR
+        - ADMINISTRATIVO
+      parameters:
+        - name: idCarrera
+          in: query
+          required: false
+          description: "Filtro por ID de carrera"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PlanEstudioDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/planes-estudio/{id}/materias:
+    get:
+      tags:
+        - Planes
+      summary: "Obtiene las materias de un plan de estudio estructuradas con año y correlativas."
+      operationId: getMateriasDePlan
+      x-roles:
+        - ALUMNO
+        - DOCENTE
+        - ADMINISTRATIVO
+        - ADMINISTRADOR
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador del plan de estudio"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MateriaDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/materias:
+    get:
+      tags:
+        - Materias
+      summary: "Obtiene el catálogo de materias curriculares, con filtros opcionales (idCarrera, idPlan)."
+      operationId: getMaterias
+      x-roles:
+        - ADMINISTRADOR
+        - DOCENTE
+        - ALUMNO
+      parameters:
+        - name: idCarrera
+          in: query
+          required: false
+          description: "Filtro por ID de carrera"
+          schema:
+            type: integer
+        - name: idPlan
+          in: query
+          required: false
+          description: "Filtro por ID de plan"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MateriaDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+        - Materias
+      summary: "Registra una nueva materia en el plan de estudios."
+      operationId: createMateria
+      x-roles:
+        - ADMINISTRADOR
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MateriaCreateDTO'
+      responses:
+        '201':
+          description: Recurso creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MateriaDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: "Conflicto con el estado actual o regla de negocio violada"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/materias/{id}:
+    put:
+      tags:
+        - Materias
+      summary: "Actualiza los datos o régimen de correlatividades de una materia."
+      operationId: updateMateria
+      x-roles:
+        - ADMINISTRADOR
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador de la materia"
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MateriaUpdateDTO'
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MateriaDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/cursos:
+    get:
+      tags:
+        - Cursos
+      summary: "Obtiene el listado de comisiones y cursos habilitados."
+      operationId: getCursos
+      x-roles:
+        - ADMINISTRADOR
+        - DOCENTE
+        - ADMINISTRATIVO
+      parameters:
+        - name: idCarrera
+          in: query
+          required: false
+          description: "Filtro por ID de carrera"
+          schema:
+            type: integer
+        - name: turno
+          in: query
+          required: false
+          description: "Filtro por turno (MANANA, TARDE, NOCHE)"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CursoDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+        - Cursos
+      summary: "Registra una nueva comisión / curso con control de cupos y carrera asociada."
+      operationId: createCurso
+      x-roles:
+        - ADMINISTRADOR
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CursoCreateDTO'
+      responses:
+        '201':
+          description: Recurso creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CursoDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: "Conflicto con el estado actual o regla de negocio violada"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/cursos/{id}:
+    put:
+      tags:
+        - Cursos
+      summary: "Actualiza los datos de un curso o comisión."
+      operationId: updateCurso
+      x-roles:
+        - ADMINISTRADOR
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador del curso"
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CursoUpdateDTO'
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CursoDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/ciclos-lectivos:
+    get:
+      tags:
+        - Ciclos
+      summary: "Obtiene el catálogo de ciclos lectivos."
+      operationId: getCiclosLectivos
+      x-roles:
+        - ADMINISTRADOR
+        - ADMINISTRATIVO
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CicloLectivoDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+        - Ciclos
+      summary: "Registra un nuevo ciclo lectivo anual."
+      operationId: createCicloLectivo
+      x-roles:
+        - ADMINISTRADOR
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CicloLectivoCreateDTO'
+      responses:
+        '201':
+          description: Recurso creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CicloLectivoDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: "Conflicto con el estado actual o regla de negocio violada"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/ciclos-lectivos/{id}:
+    put:
+      tags:
+        - Ciclos
+      summary: "Actualiza los datos o estado de un ciclo lectivo existente."
+      operationId: updateCicloLectivo
+      x-roles:
+        - ADMINISTRADOR
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador del ciclo"
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CicloLectivoUpdateDTO'
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CicloLectivoDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/asignaciones:
+    get:
+      tags:
+        - Asignaciones
+      summary: "Obtiene el listado de asignaciones docentes a cursos y materias."
+      operationId: getAsignaciones
+      x-roles:
+        - ADMINISTRADOR
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AsignacionDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+        - Asignaciones
+      summary: "Registra una nueva asignación docente a una cátedra y curso."
+      operationId: createAsignacion
+      x-roles:
+        - ADMINISTRADOR
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AsignacionCreateDTO'
+      responses:
+        '201':
+          description: Recurso creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AsignacionDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: "Conflicto con el estado actual o regla de negocio violada"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/asignaciones/{id}:
+    delete:
+      tags:
+        - Asignaciones
+      summary: "Elimina una asignación docente existente."
+      operationId: deleteAsignacion
+      x-roles:
+        - ADMINISTRADOR
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador de la asignación"
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Operación completada sin contenido
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/inscripciones:
+    get:
+      tags:
+        - Inscripciones
+      summary: "Obtiene el registro de inscripciones de alumnos a comisiones y cursos."
+      operationId: getInscripciones
+      x-roles:
+        - ADMINISTRADOR
+        - ADMINISTRATIVO
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/InscripcionDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+        - Inscripciones
+      summary: "Realiza la inscripción de un alumno a una comisión/curso con control de cupos disponibles."
+      operationId: createInscripcion
+      x-roles:
+        - ADMINISTRADOR
+        - ADMINISTRATIVO
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InscripcionCreateDTO'
+      responses:
+        '201':
+          description: Recurso creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InscripcionDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: "Conflicto con el estado actual o regla de negocio violada"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/inscripciones/{id}:
+    delete:
+      tags:
+        - Inscripciones
+      summary: "Cancela una inscripción de un alumno y libera el cupo correspondiente en la comisión."
+      operationId: cancelarInscripcion
+      x-roles:
+        - ADMINISTRADOR
+        - ADMINISTRATIVO
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador de la inscripción"
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Operación completada sin contenido
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/matriculas:
+    get:
+      tags:
+        - Matriculas
+      summary: "Obtiene el padrón de matrículas anuales registradas."
+      operationId: getMatriculas
+      x-roles:
+        - ADMINISTRADOR
+        - ADMINISTRATIVO
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MatriculaDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/matriculas/{id}:
+    put:
+      tags:
+        - Matriculas
+      summary: "Actualiza el estado o información de una matrícula anual."
+      operationId: updateMatricula
+      x-roles:
+        - ADMINISTRATIVO
+        - ADMINISTRADOR
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador de la matrícula"
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatriculaUpdateDTO'
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MatriculaDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    patch:
+      tags:
+        - Matriculas
+      summary: "Registra la cancelación definitiva de matrícula de un alumno (RF27)."
+      operationId: cancelarMatricula
+      x-roles:
+        - ALUMNO
+        - ADMINISTRATIVO
+        - ADMINISTRADOR
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador de la matrícula"
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MatriculaCancelDTO'
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/matriculas/{id}/cuotas:
+    post:
+      tags:
+        - Matriculas
+      summary: "Genera el plan de 12 cuotas mensuales y 3 seguros cuatrimestrales para una matrícula individual."
+      operationId: generarCuotas
+      x-roles:
+        - ADMINISTRATIVO
+        - ADMINISTRADOR
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador de la matrícula"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CuotaDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: "Conflicto con el estado actual o regla de negocio violada"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/cuotas:
+    get:
+      tags:
+        - Cuotas
+      summary: "Enriquecer cuota con campos calculados derivados de la matrícula (idAlumno, alumnoNombre)"
+      operationId: getCuotas
+      x-roles:
+        - ADMINISTRATIVO
+        - ADMINISTRADOR
+        - ALUMNO
+      parameters:
+        - name: idAlumno
+          in: query
+          required: false
+          description: "Filtro por ID de alumno"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CuotaDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/cuotas/{id}/anular:
+    patch:
+      tags:
+        - Cuotas
+      summary: "Anula una cuota administrativa (solo para administradores)."
+      operationId: anularCuota
+      x-roles:
+        - ADMINISTRADOR
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador de la cuota"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CuotaDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: "Conflicto con el estado actual o regla de negocio violada"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/pagos:
+    get:
+      tags:
+        - Pagos
+      summary: "Obtiene el historial de pagos registrados con filtros opcionales."
+      operationId: getPagos
+      x-roles:
+        - ADMINISTRATIVO
+        - ADMINISTRADOR
+        - ALUMNO
+      parameters:
+        - name: idAlumno
+          in: query
+          required: false
+          description: "Filtro por ID de alumno"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/PagoDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+        - Pagos
+      summary: "Registra un nuevo pago arancelario por el importe total de la cuota (RN09)."
+      operationId: registrarPago
+      x-roles:
+        - ADMINISTRATIVO
+        - ADMINISTRADOR
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PagoCreateDTO'
+      responses:
+        '201':
+          description: Recurso creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PagoDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: "Conflicto con el estado actual o regla de negocio violada"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/evaluaciones:
+    get:
+      tags:
+        - Evaluaciones
+      summary: "Obtiene el listado de evaluaciones planificadas por cátedra (parciales, trabajos prácticos)."
+      operationId: getEvaluaciones
+      x-roles:
+        - DOCENTE
+        - ADMINISTRADOR
+      parameters:
+        - name: tipo
+          in: query
+          required: false
+          description: "Filtro por tipo de evaluación (PARCIAL, TRABAJO_PRACTICO)"
+          schema:
+            type: string
+        - name: idCurso
+          in: query
+          required: false
+          description: "Filtro por ID de curso"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EvaluacionDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+        - Evaluaciones
+      summary: "Registra una nueva evaluación creada por un docente (parcial o TP integrador)."
+      operationId: createEvaluacion
+      x-roles:
+        - DOCENTE
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EvaluacionCreateDTO'
+      responses:
+        '201':
+          description: Recurso creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EvaluacionDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: "Conflicto con el estado actual o regla de negocio violada"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/evaluaciones/{idEvaluacion}/calificaciones:
+    post:
+      tags:
+        - Calificaciones
+      summary: "Guarda las calificaciones de una evaluación en lote (atómico, todo o nada)."
+      operationId: guardarCalificaciones
+      x-roles:
+        - DOCENTE
+      parameters:
+        - name: idEvaluacion
+          in: path
+          required: true
+          description: "Identificador de la evaluación"
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalificacionesLoteDTO'
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/calificaciones:
+    get:
+      tags:
+        - Calificaciones
+      summary: "Obtiene el listado de calificaciones según filtros opcionales (idAlumno, tipo, idMateria)."
+      operationId: getCalificaciones
+      x-roles:
+        - ALUMNO
+        - DOCENTE
+        - ADMINISTRADOR
+      parameters:
+        - name: idAlumno
+          in: query
+          required: false
+          description: "Filtro por ID de alumno"
+          schema:
+            type: integer
+        - name: idMateria
+          in: query
+          required: false
+          description: "Filtro por ID de materia"
+          schema:
+            type: integer
+        - name: tipo
+          in: query
+          required: false
+          description: "Filtro por tipo de evaluación"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CalificacionDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+        - Calificaciones
+      summary: "Registra o actualiza la calificación individual de un alumno."
+      operationId: saveCalificacion
+      x-roles:
+        - DOCENTE
+        - ADMINISTRADOR
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CalificacionSaveDTO'
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CalificacionDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/asistencias:
+    get:
+      tags:
+        - Asistencias
+      summary: "Obtiene el registro de asistencias con filtros opcionales (idAlumno, idCurso, fecha)."
+      operationId: getAsistencias
+      x-roles:
+        - DOCENTE
+        - ALUMNO
+        - ADMINISTRADOR
+      parameters:
+        - name: idAlumno
+          in: query
+          required: false
+          description: "Filtro por ID de alumno"
+          schema:
+            type: integer
+        - name: idCurso
+          in: query
+          required: false
+          description: "Filtro por ID de curso"
+          schema:
+            type: integer
+        - name: fecha
+          in: query
+          required: false
+          description: "Filtro por fecha (YYYY-MM-DD)"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AsistenciaDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/asistencias/lote:
+    post:
+      tags:
+        - Asistencias
+      summary: "Registra o actualiza la asistencia de una lista de alumnos en lote."
+      operationId: registrarAsistencias
+      x-roles:
+        - DOCENTE
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AsistenciasLoteDTO'
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/mesas-examen:
+    get:
+      tags:
+        - Mesas
+      summary: "Obtiene el listado de mesas de examen final programadas."
+      operationId: getMesasExamen
+      x-roles:
+        - ALUMNO
+        - DOCENTE
+        - ADMINISTRATIVO
+        - ADMINISTRADOR
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MesaExamenDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+        - Mesas
+      summary: "Programa una nueva mesa de examen final en secretaría académica."
+      operationId: createMesa
+      x-roles:
+        - ADMINISTRADOR
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MesaExamenCreateDTO'
+      responses:
+        '201':
+          description: Recurso creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MesaExamenDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: "Conflicto con el estado actual o regla de negocio violada"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/mesas-examen/{id}/inscripciones:
+    post:
+      tags:
+        - Mesas
+      summary: "Inscribe a un alumno en una mesa de examen final (RF49)."
+      operationId: inscribirseMesa
+      x-roles:
+        - ALUMNO
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador de la mesa de examen"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MesaExamenDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: "Conflicto con el estado actual o regla de negocio violada"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/mesas-examen/{id}/inscripciones/{idInscripcion}:
+    delete:
+      tags:
+        - Mesas
+      summary: "Da de baja la inscripción a una mesa de examen final (RF50)."
+      operationId: darseDeBajaMesa
+      x-roles:
+        - ALUMNO
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador de la mesa de examen"
+          schema:
+            type: integer
+        - name: idInscripcion
+          in: path
+          required: true
+          description: "Identificador de la inscripción del alumno"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MesaExamenDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/mesas-examen/{id}:
+    put:
+      tags:
+        - Mesas
+      summary: "Actualiza los datos o estado de una mesa de examen final existente."
+      operationId: updateMesa
+      x-roles:
+        - ADMINISTRADOR
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador de la mesa de examen"
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MesaExamenUpdateDTO'
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MesaExamenDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/solicitudes:
+    get:
+      tags:
+        - Solicitudes
+      summary: "Obtiene el listado de solicitudes y trámites institucionales con filtros opcionales."
+      operationId: getSolicitudes
+      x-roles:
+        - ADMINISTRATIVO
+        - ADMINISTRADOR
+        - ALUMNO
+      parameters:
+        - name: idAlumno
+          in: query
+          required: false
+          description: "Filtro por ID de alumno"
+          schema:
+            type: integer
+        - name: tipo
+          in: query
+          required: false
+          description: "Filtro por tipo de solicitud (CONSTANCIA, PASANTIA, etc.)"
+          schema:
+            type: string
+        - name: estado
+          in: query
+          required: false
+          description: "Filtro por estado de solicitud (PENDIENTE, APROBADA, etc.)"
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/SolicitudDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+        - Solicitudes
+      summary: "Genera una nueva solicitud o trámite del estudiante (constancias, DDJJ, pasantías, título, académicas)."
+      operationId: createSolicitud
+      x-roles:
+        - ALUMNO
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SolicitudCreateDTO'
+      responses:
+        '201':
+          description: Recurso creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SolicitudDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/solicitudes/{id}:
+    patch:
+      tags:
+        - Solicitudes
+      summary: "Resuelve una solicitud en la bandeja administrativa (APROBADA o RECHAZADA)."
+      operationId: resolverSolicitud
+      x-roles:
+        - ADMINISTRATIVO
+        - ADMINISTRADOR
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador de la solicitud"
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SolicitudResolverDTO'
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SolicitudDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/declaraciones-juradas:
+    get:
+      tags:
+        - DeclaracionesJuradas
+      summary: "Obtiene el listado de declaraciones juradas de materias a cursar."
+      operationId: getDeclaracionesJuradas
+      x-roles:
+        - ALUMNO
+        - ADMINISTRADOR
+        - ADMINISTRATIVO
+      parameters:
+        - name: idAlumno
+          in: query
+          required: false
+          description: "Filtro por ID de alumno"
+          schema:
+            type: integer
+        - name: idCiclo
+          in: query
+          required: false
+          description: "Filtro por ID de ciclo lectivo"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DeclaracionJuradaDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+        - DeclaracionesJuradas
+      summary: "Presenta una nueva declaración jurada de materias (RF51)."
+      operationId: createDeclaracionJurada
+      x-roles:
+        - ALUMNO
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeclaracionJuradaCreateDTO'
+      responses:
+        '201':
+          description: Recurso creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeclaracionJuradaDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/documentacion:
+    get:
+      tags:
+        - Documentacion
+      summary: "Obtiene el estado de presentación de la documentación requerida para el legajo."
+      operationId: getDocumentacion
+      x-roles:
+        - ALUMNO
+        - ADMINISTRATIVO
+        - ADMINISTRADOR
+      parameters:
+        - name: idAlumno
+          in: query
+          required: false
+          description: "Filtro por ID de alumno"
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DocumentacionDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/documentacion/{id}:
+    put:
+      tags:
+        - Documentacion
+      summary: "Actualiza el estado de entrega o verificación de un requisito documental."
+      operationId: updateDocumentacion
+      x-roles:
+        - ADMINISTRATIVO
+        - ADMINISTRADOR
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador del documento"
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DocumentacionUpdateDTO'
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DocumentacionDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/auth/login:
+    post:
+      tags:
+        - Auth
+      summary: "Inicia sesión con usuario y contraseña."
+      operationId: loginApi
+      x-roles:
+        - ALUMNO
+        - DOCENTE
+        - ADMINISTRATIVO
+        - ADMINISTRADOR
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequestDTO'
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponseDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/auth/logout:
+    post:
+      tags:
+        - Auth
+      summary: "Cierra la sesión activa en el sistema."
+      operationId: logoutApi
+      x-roles:
+        - ALUMNO
+        - DOCENTE
+        - ADMINISTRATIVO
+        - ADMINISTRADOR
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/auth/cambiar-password:
+    post:
+      tags:
+        - Auth
+      summary: "Modifica la contraseña del usuario en sesión."
+      operationId: cambiarPasswordApi
+      x-roles:
+        - ALUMNO
+        - DOCENTE
+        - ADMINISTRATIVO
+        - ADMINISTRADOR
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CambiarPasswordRequestDTO'
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessResponseDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/usuarios:
+    get:
+      tags:
+        - Usuarios
+      summary: "Obtiene el listado de cuentas de usuario y roles del sistema."
+      operationId: getUsuarios
+      x-roles:
+        - ADMINISTRADOR
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/UsuarioDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    post:
+      tags:
+        - Usuarios
+      summary: "Registra un nuevo usuario con credenciales y asignación de rol."
+      operationId: createUsuario
+      x-roles:
+        - ADMINISTRADOR
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioCreateDTO'
+      responses:
+        '201':
+          description: Recurso creado exitosamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsuarioDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '409':
+          description: "Conflicto con el estado actual o regla de negocio violada"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/usuarios/{id}:
+    put:
+      tags:
+        - Usuarios
+      summary: "Actualiza los datos de perfil o rol de un usuario existente."
+      operationId: updateUsuario
+      x-roles:
+        - ADMINISTRADOR
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador del usuario"
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UsuarioUpdateDTO'
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UsuarioDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    delete:
+      tags:
+        - Usuarios
+      summary: "Realiza la baja lógica de un usuario del sistema."
+      operationId: deleteUsuario
+      x-roles:
+        - ADMINISTRADOR
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: "Identificador del usuario"
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Operación completada sin contenido
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '403':
+          description: "Acceso denegado para el rol actual"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '404':
+          description: "Recurso solicitado no encontrado"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+  /api/usuarios/me:
+    get:
+      tags:
+        - Usuarios
+      summary: "Obtiene los datos del perfil del usuario en sesión."
+      operationId: getMiPerfil
+      x-roles:
+        - ALUMNO
+        - DOCENTE
+        - ADMINISTRATIVO
+        - ADMINISTRADOR
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerfilUsuarioDTO'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+    put:
+      tags:
+        - Usuarios
+      summary: "Actualiza los datos de contacto y filiación del perfil en sesión."
+      operationId: actualizarMiPerfil
+      x-roles:
+        - ALUMNO
+        - DOCENTE
+        - ADMINISTRATIVO
+        - ADMINISTRADOR
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PerfilUsuarioDTO'
+      responses:
+        '200':
+          description: Consulta o actualización exitosa
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PerfilUsuarioDTO'
+        '400':
+          description: "Solicitud inválida o error en parámetros"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+        '401':
+          description: "Credenciales no provistas o inválidas"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiError'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    ApiError:
+      type: object
+      required:
+        - status
+        - message
+        - errors
+      properties:
+        status:
+          type: integer
+        message:
+          type: string
+        errors:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldError'
+    FieldError:
+      type: object
+      required:
+        - campo
+        - mensaje
+      properties:
+        campo:
+          type: string
+        mensaje:
+          type: string
+    SuccessResponseDTO:
+      type: object
+      required:
+        - success
+      properties:
+        success:
+          type: boolean
+        message:
+          type: string
+    TurnoEnum:
+      type: string
+      enum:
+        - MANANA
+        - TARDE
+        - NOCHE
+    TipoSolicitudEnum:
+      type: string
+      enum:
+        - CONSTANCIA
+        - PASANTIA
+        - TITULO_INTERMEDIO
+        - ACADEMICA
+        - CAMBIO_CARRERA
+        - REINCORPORACION
+    TipoDocumentacionEnum:
+      type: string
+      enum:
+        - DNI
+        - TITULO_SECUNDARIO
+        - APTO_MEDICO
+        - FOTOS
+    EstadoCuotaEnum:
+      type: string
+      enum:
+        - PENDIENTE
+        - PAGADA
+        - VENCIDA
+        - ANULADA
+    MedioPagoEnum:
+      type: string
+      enum:
+        - EFECTIVO
+        - TRANSFERENCIA
+        - TARJETA_CREDITO
+        - TARJETA_DEBITO
+        - OTRO
+    AlumnoDTO:
+      type: object
+      required:
+        - idAlumno
+        - legajo
+        - nombre
+        - apellido
+        - dni
+        - email
+        - idCarrera
+        - idPlan
+        - cicloLectivo
+        - estado
+        - estadoMatricula
+      properties:
+        idAlumno:
+          type: integer
+        legajo:
+          type: string
+        nombre:
+          type: string
+        apellido:
+          type: string
+        dni:
+          type: string
+        email:
+          type: string
+        telefono:
+          type: string
+        domicilio:
+          type: string
+        fechaNacimiento:
+          type: string
+          format: date
+        idCarrera:
+          type: integer
+        carrera:
+          type: string
+        idPlan:
+          type: integer
+        planNombre:
+          type: string
+        idCurso:
+          type: integer
+        cursoNombre:
+          type: string
+        cicloLectivo:
+          type: integer
+        estado:
+          type: string
+          enum:
+            - REGULAR
+            - ACTIVO
+            - INACTIVO
+        estadoMatricula:
+          type: string
+          enum:
+            - ACTIVA
+            - PENDIENTE
+            - CANCELADA
+        idMatricula:
+          type: integer
+    AlumnoCreateDTO:
+      type: object
+      required:
+        - nombre
+        - apellido
+        - dni
+        - email
+        - fechaNacimiento
+        - idCarrera
+        - idPlan
+      properties:
+        nombre:
+          type: string
+        apellido:
+          type: string
+        dni:
+          type: string
+        email:
+          type: string
+        telefono:
+          type: string
+        domicilio:
+          type: string
+        fechaNacimiento:
+          type: string
+          format: date
+        idCarrera:
+          type: integer
+        idPlan:
+          type: integer
+    AlumnoUpdateDTO:
+      type: object
+      properties:
+        nombre:
+          type: string
+        apellido:
+          type: string
+        email:
+          type: string
+        telefono:
+          type: string
+        domicilio:
+          type: string
+        estado:
+          type: string
+          enum:
+            - REGULAR
+            - ACTIVO
+            - INACTIVO
+        idPlan:
+          type: integer
+    SituacionAcademicaDTO:
+      type: object
+      required:
+        - materiasAprobadas
+        - promedio
+      properties:
+        materiasAprobadas:
+          type: integer
+        promedio:
+          type: number
+        regularidades:
+          type: array
+          items:
+            type: string
+    SituacionAdministrativaDTO:
+      type: object
+      required:
+        - totalDeuda
+      properties:
+        cuotasPagas:
+          type: integer
+        cuotasPendientes:
+          type: integer
+        totalDeuda:
+          type: number
+        matricula:
+          type: string
+    DocenteDTO:
+      type: object
+      required:
+        - idDocente
+        - legajo
+        - nombre
+        - apellido
+        - dni
+        - email
+        - titulo
+        - estado
+      properties:
+        idDocente:
+          type: integer
+        legajo:
+          type: string
+        nombre:
+          type: string
+        apellido:
+          type: string
+        dni:
+          type: string
+        email:
+          type: string
+        telefono:
+          type: string
+        titulo:
+          type: string
+        estado:
+          type: string
+          enum:
+            - ACTIVO
+            - INACTIVO
+    DocenteCreateDTO:
+      type: object
+      required:
+        - legajo
+        - nombre
+        - apellido
+        - dni
+        - email
+        - titulo
+      properties:
+        legajo:
+          type: string
+        nombre:
+          type: string
+        apellido:
+          type: string
+        dni:
+          type: string
+        email:
+          type: string
+        telefono:
+          type: string
+        titulo:
+          type: string
+    DocenteUpdateDTO:
+      type: object
+      properties:
+        nombre:
+          type: string
+        apellido:
+          type: string
+        email:
+          type: string
+        telefono:
+          type: string
+        titulo:
+          type: string
+        estado:
+          type: string
+          enum:
+            - ACTIVO
+            - INACTIVO
+    CarreraDTO:
+      type: object
+      required:
+        - idCarrera
+        - codigo
+        - nombre
+        - tituloOtorgado
+        - duracionAnios
+        - estado
+      properties:
+        idCarrera:
+          type: integer
+        codigo:
+          type: string
+        nombre:
+          type: string
+        tituloOtorgado:
+          type: string
+        duracionAnios:
+          type: integer
+        resolucion:
+          type: string
+        estado:
+          type: string
+          enum:
+            - ACTIVA
+            - INACTIVA
+    CarreraCreateDTO:
+      type: object
+      required:
+        - codigo
+        - nombre
+        - tituloOtorgado
+        - duracionAnios
+      properties:
+        codigo:
+          type: string
+        nombre:
+          type: string
+        tituloOtorgado:
+          type: string
+        duracionAnios:
+          type: integer
+        resolucion:
+          type: string
+    CarreraUpdateDTO:
+      type: object
+      properties:
+        codigo:
+          type: string
+        nombre:
+          type: string
+        tituloOtorgado:
+          type: string
+        duracionAnios:
+          type: integer
+        resolucion:
+          type: string
+        estado:
+          type: string
+          enum:
+            - ACTIVA
+            - INACTIVA
+    PlanEstudioDTO:
+      type: object
+      required:
+        - idPlan
+        - idCarrera
+        - codigo
+        - nombre
+        - anioAprobacion
+        - cantidadMaterias
+        - estado
+      properties:
+        idPlan:
+          type: integer
+        idCarrera:
+          type: integer
+        carreraNombre:
+          type: string
+        codigo:
+          type: string
+        nombre:
+          type: string
+        anioAprobacion:
+          type: integer
+        cantidadMaterias:
+          type: integer
+        estado:
+          type: string
+          enum:
+            - VIGENTE
+            - CERRADO
+    MateriaDTO:
+      type: object
+      required:
+        - idMateria
+        - codigo
+        - nombre
+        - idCarrera
+        - idPlan
+        - anio
+        - regimen
+        - horasSemanales
+      properties:
+        idMateria:
+          type: integer
+        codigo:
+          type: string
+        nombre:
+          type: string
+        idCarrera:
+          type: integer
+        carreraNombre:
+          type: string
+        idPlan:
+          type: integer
+        planNombre:
+          type: string
+        anio:
+          type: integer
+        regimen:
+          type: string
+          enum:
+            - ANUAL
+            - CUATRIMESTRAL
+        horasSemanales:
+          type: integer
+        correlativas:
+          type: array
+          items:
+            type: integer
+    MateriaCreateDTO:
+      type: object
+      required:
+        - codigo
+        - nombre
+        - idCarrera
+        - idPlan
+        - anio
+        - regimen
+        - horasSemanales
+      properties:
+        codigo:
+          type: string
+        nombre:
+          type: string
+        idCarrera:
+          type: integer
+        idPlan:
+          type: integer
+        anio:
+          type: integer
+        regimen:
+          type: string
+          enum:
+            - ANUAL
+            - CUATRIMESTRAL
+        horasSemanales:
+          type: integer
+        correlativas:
+          type: array
+          items:
+            type: integer
+    MateriaUpdateDTO:
+      type: object
+      properties:
+        nombre:
+          type: string
+        anio:
+          type: integer
+        regimen:
+          type: string
+          enum:
+            - ANUAL
+            - CUATRIMESTRAL
+        horasSemanales:
+          type: integer
+        correlativas:
+          type: array
+          items:
+            type: integer
+    CursoDTO:
+      type: object
+      required:
+        - idCurso
+        - codigo
+        - nombre
+        - idCarrera
+        - idPlan
+        - turno
+        - capacidadMaxima
+        - inscriptos
+        - cuposDisponibles
+        - cicloLectivo
+      properties:
+        idCurso:
+          type: integer
+        codigo:
+          type: string
+        nombre:
+          type: string
+        idCarrera:
+          type: integer
+        carreraNombre:
+          type: string
+        idPlan:
+          type: integer
+        planNombre:
+          type: string
+        turno:
+          $ref: '#/components/schemas/TurnoEnum'
+        capacidadMaxima:
+          type: integer
+        inscriptos:
+          type: integer
+        cuposDisponibles:
+          type: integer
+        cicloLectivo:
+          type: integer
+        aula:
+          type: string
+    CursoCreateDTO:
+      type: object
+      required:
+        - codigo
+        - nombre
+        - idCarrera
+        - idPlan
+        - turno
+        - capacidadMaxima
+        - cicloLectivo
+      properties:
+        codigo:
+          type: string
+        nombre:
+          type: string
+        idCarrera:
+          type: integer
+        idPlan:
+          type: integer
+        turno:
+          $ref: '#/components/schemas/TurnoEnum'
+        aula:
+          type: string
+        capacidadMaxima:
+          type: integer
+        cicloLectivo:
+          type: integer
+    CursoUpdateDTO:
+      type: object
+      properties:
+        nombre:
+          type: string
+        turno:
+          $ref: '#/components/schemas/TurnoEnum'
+        aula:
+          type: string
+        capacidadMaxima:
+          type: integer
+    CicloLectivoDTO:
+      type: object
+      required:
+        - idCiclo
+        - anio
+        - nombre
+        - fechaInicio
+        - fechaFin
+        - estado
+      properties:
+        idCiclo:
+          type: integer
+        anio:
+          type: integer
+        nombre:
+          type: string
+        fechaInicio:
+          type: string
+          format: date
+        fechaFin:
+          type: string
+          format: date
+        estado:
+          type: string
+          enum:
+            - ACTIVO
+            - CERRADO
+            - PLANIFICADO
+    CicloLectivoCreateDTO:
+      type: object
+      required:
+        - anio
+        - nombre
+        - fechaInicio
+        - fechaFin
+      properties:
+        anio:
+          type: integer
+        nombre:
+          type: string
+        fechaInicio:
+          type: string
+          format: date
+        fechaFin:
+          type: string
+          format: date
+        estado:
+          type: string
+          enum:
+            - ACTIVO
+            - CERRADO
+            - PLANIFICADO
+    CicloLectivoUpdateDTO:
+      type: object
+      properties:
+        nombre:
+          type: string
+        fechaInicio:
+          type: string
+          format: date
+        fechaFin:
+          type: string
+          format: date
+        estado:
+          type: string
+          enum:
+            - ACTIVO
+            - CERRADO
+            - PLANIFICADO
+    AsignacionDTO:
+      type: object
+      required:
+        - idAsignacion
+        - idDocente
+        - idMateria
+        - idCurso
+        - rolDocente
+      properties:
+        idAsignacion:
+          type: integer
+        idDocente:
+          type: integer
+        docenteNombre:
+          type: string
+        idMateria:
+          type: integer
+        materiaNombre:
+          type: string
+        idCurso:
+          type: integer
+        cursoNombre:
+          type: string
+        rolDocente:
+          type: string
+          enum:
+            - Titular
+            - Adjunto
+            - JTP
+            - Ayudante
+    AsignacionCreateDTO:
+      type: object
+      required:
+        - idDocente
+        - idMateria
+        - idCurso
+      properties:
+        idDocente:
+          type: integer
+        idMateria:
+          type: integer
+        idCurso:
+          type: integer
+        rolDocente:
+          type: string
+          enum:
+            - Titular
+            - Adjunto
+            - JTP
+            - Ayudante
+    InscripcionDTO:
+      type: object
+      required:
+        - idInscripcion
+        - idAlumno
+        - idCurso
+        - cicloLectivo
+        - fechaInscripcion
+        - estado
+      properties:
+        idInscripcion:
+          type: integer
+        idAlumno:
+          type: integer
+        alumnoNombre:
+          type: string
+        idCurso:
+          type: integer
+        cursoNombre:
+          type: string
+        cicloLectivo:
+          type: integer
+        fechaInscripcion:
+          type: string
+          format: date
+        estado:
+          type: string
+          enum:
+            - CONFIRMADA
+            - CANCELADA
+    InscripcionCreateDTO:
+      type: object
+      required:
+        - idAlumno
+        - idCurso
+      properties:
+        idAlumno:
+          type: integer
+        idCurso:
+          type: integer
+        cicloLectivo:
+          type: integer
+    MatriculaDTO:
+      type: object
+      required:
+        - idMatricula
+        - idAlumno
+        - idCarrera
+        - idCiclo
+        - cicloLectivo
+        - fecha
+        - estado
+        - estadoPago
+      properties:
+        idMatricula:
+          type: integer
+        idAlumno:
+          type: integer
+        alumnoNombre:
+          type: string
+        idCarrera:
+          type: integer
+        carreraNombre:
+          type: string
+        idCiclo:
+          type: integer
+        cicloLectivoNombre:
+          type: string
+        cicloLectivo:
+          type: integer
+        fecha:
+          type: string
+          format: date
+        estado:
+          type: string
+          enum:
+            - ACTIVA
+            - PENDIENTE
+            - CANCELADA
+        estadoPago:
+          type: string
+          description: "Pendiente de definir por backend: ningún flujo lo actualiza"
+          enum:
+            - AL_DIA
+            - CON_DEUDA
+            - EXENTO
+    MatriculaUpdateDTO:
+      type: object
+      required:
+        - estado
+      properties:
+        estado:
+          type: string
+          enum:
+            - ACTIVA
+            - PENDIENTE
+            - CANCELADA
+    MatriculaCancelDTO:
+      type: object
+      properties:
+        motivo:
+          type: string
+    CuotaDTO:
+      type: object
+      required:
+        - idCuota
+        - idMatricula
+        - concepto
+        - mes
+        - anio
+        - fechaVencimiento
+        - importe
+        - tipo
+        - estado
+      properties:
+        idCuota:
+          type: integer
+        idMatricula:
+          type: integer
+        idAlumno:
+          type: integer
+          description: "Campo calculado derivado de la matricula"
+        alumnoNombre:
+          type: string
+          description: "Campo calculado"
+        concepto:
+          type: string
+        mes:
+          type: integer
+        anio:
+          type: integer
+        fechaVencimiento:
+          type: string
+          format: date
+        importe:
+          type: number
+        tipo:
+          type: string
+          enum:
+            - MENSUAL
+            - SEGURO_CUATRIMESTRAL
+        estado:
+          $ref: '#/components/schemas/EstadoCuotaEnum'
+        fechaPago:
+          type: string
+          format: date
+    PagoDTO:
+      type: object
+      required:
+        - idPago
+        - idAlumno
+        - concepto
+        - importe
+        - fechaPago
+        - medioPago
+        - comprobante
+        - estado
+      properties:
+        idPago:
+          type: integer
+        idCuota:
+          type: integer
+        idAlumno:
+          type: integer
+        alumnoNombre:
+          type: string
+        concepto:
+          type: string
+        importe:
+          type: number
+        fechaPago:
+          type: string
+          format: date
+        medioPago:
+          $ref: '#/components/schemas/MedioPagoEnum'
+        comprobante:
+          type: string
+        estado:
+          type: string
+          enum:
+            - ACREDITADO
+            - PENDIENTE
+            - RECHAZADO
+    PagoCreateDTO:
+      type: object
+      required:
+        - idCuota
+        - importe
+      properties:
+        idCuota:
+          type: integer
+        importe:
+          type: number
+        medioPago:
+          $ref: '#/components/schemas/MedioPagoEnum'
+    EvaluacionDTO:
+      type: object
+      required:
+        - idEvaluacion
+        - idMateria
+        - idCurso
+        - fecha
+        - tipo
+        - descripcion
+      properties:
+        idEvaluacion:
+          type: integer
+        idMateria:
+          type: integer
+        materiaNombre:
+          type: string
+        idCurso:
+          type: integer
+        cursoNombre:
+          type: string
+        fecha:
+          type: string
+          format: date
+        tipo:
+          type: string
+          enum:
+            - PARCIAL
+            - TRABAJO_PRACTICO
+        descripcion:
+          type: string
+        ponderacion:
+          type: string
+    EvaluacionCreateDTO:
+      type: object
+      required:
+        - idMateria
+        - idCurso
+        - fecha
+        - tipo
+        - descripcion
+      properties:
+        idMateria:
+          type: integer
+        idCurso:
+          type: integer
+        fecha:
+          type: string
+          format: date
+        tipo:
+          type: string
+          enum:
+            - PARCIAL
+            - TRABAJO_PRACTICO
+        descripcion:
+          type: string
+        ponderacion:
+          type: string
+    CalificacionDTO:
+      type: object
+      required:
+        - idCalificacion
+        - idAlumno
+        - idMateria
+        - evaluacionNombre
+        - tipo
+        - nota
+        - fecha
+        - condicion
+      properties:
+        idCalificacion:
+          type: integer
+        idAlumno:
+          type: integer
+        alumnoNombre:
+          type: string
+        idMateria:
+          type: integer
+        materiaNombre:
+          type: string
+        evaluacionNombre:
+          type: string
+        tipo:
+          type: string
+          enum:
+            - PARCIAL
+            - TRABAJO_PRACTICO
+        nota:
+          type: integer
+        fecha:
+          type: string
+          format: date
+        condicion:
+          type: string
+          enum:
+            - APROBADO
+            - DESAPROBADO
+        observacion:
+          type: string
+    CalificacionSaveDTO:
+      type: object
+      required:
+        - idAlumno
+        - idMateria
+        - evaluacionNombre
+        - nota
+      properties:
+        idAlumno:
+          type: integer
+        idMateria:
+          type: integer
+        evaluacionNombre:
+          type: string
+        tipo:
+          type: string
+          enum:
+            - PARCIAL
+            - TRABAJO_PRACTICO
+        nota:
+          type: integer
+        fecha:
+          type: string
+          format: date
+        observacion:
+          type: string
+    CalificacionesLoteDTO:
+      type: object
+      required:
+        - calificaciones
+      properties:
+        calificaciones:
+          type: array
+          items:
+            type: object
+            properties:
+              idAlumno:
+                type: integer
+              nota:
+                type: integer
+              observacion:
+                type: string
+    AsistenciaDTO:
+      type: object
+      required:
+        - idAsistencia
+        - idAlumno
+        - idMateria
+        - idCurso
+        - fecha
+        - estado
+      properties:
+        idAsistencia:
+          type: integer
+        idAlumno:
+          type: integer
+        alumnoNombre:
+          type: string
+        idMateria:
+          type: integer
+        materiaNombre:
+          type: string
+        idCurso:
+          type: integer
+        fecha:
+          type: string
+          format: date
+        estado:
+          type: string
+          enum:
+            - PRESENTE
+            - AUSENTE
+            - TARDANZA
+            - JUSTIFICADO
+    AsistenciasLoteDTO:
+      type: object
+      required:
+        - asistencias
+      properties:
+        asistencias:
+          type: array
+          items:
+            type: object
+            properties:
+              idAlumno:
+                type: integer
+              idMateria:
+                type: integer
+              idCurso:
+                type: integer
+              fecha:
+                type: string
+              estado:
+                type: string
+                enum:
+                  - PRESENTE
+                  - AUSENTE
+                  - TARDANZA
+                  - JUSTIFICADO
+    MesaExamenDTO:
+      type: object
+      required:
+        - idMesa
+        - idMateria
+        - idCarrera
+        - fecha
+        - hora
+        - turno
+        - tribunal
+        - aula
+        - cupoMaximo
+        - inscriptos
+        - cuposDisponibles
+        - estado
+      properties:
+        idMesa:
+          type: integer
+        idMateria:
+          type: integer
+        materiaNombre:
+          type: string
+        idCarrera:
+          type: integer
+        carreraNombre:
+          type: string
+        fecha:
+          type: string
+          format: date
+        hora:
+          type: string
+        turno:
+          $ref: '#/components/schemas/TurnoEnum'
+        tribunal:
+          type: string
+        aula:
+          type: string
+        cupoMaximo:
+          type: integer
+        inscriptos:
+          type: integer
+        cuposDisponibles:
+          type: integer
+        alumnosInscriptosIds:
+          type: array
+          items:
+            type: integer
+        estado:
+          type: string
+          enum:
+            - ABIERTA
+            - CERRADA
+            - FINALIZADA
+    MesaExamenCreateDTO:
+      type: object
+      required:
+        - idMateria
+        - idCarrera
+        - fecha
+        - hora
+        - turno
+        - tribunal
+        - aula
+        - cupoMaximo
+      properties:
+        idMateria:
+          type: integer
+        idCarrera:
+          type: integer
+        fecha:
+          type: string
+          format: date
+        hora:
+          type: string
+        turno:
+          $ref: '#/components/schemas/TurnoEnum'
+        tribunal:
+          type: string
+        aula:
+          type: string
+        cupoMaximo:
+          type: integer
+    MesaExamenUpdateDTO:
+      type: object
+      properties:
+        fecha:
+          type: string
+          format: date
+        hora:
+          type: string
+        turno:
+          $ref: '#/components/schemas/TurnoEnum'
+        tribunal:
+          type: string
+        aula:
+          type: string
+        cupoMaximo:
+          type: integer
+        estado:
+          type: string
+          enum:
+            - ABIERTA
+            - CERRADA
+            - FINALIZADA
+    SolicitudDTO:
+      type: object
+      required:
+        - idSolicitud
+        - idAlumno
+        - tipo
+        - fechaSolicitud
+        - motivo
+        - estado
+      properties:
+        idSolicitud:
+          type: integer
+        idAlumno:
+          type: integer
+        alumnoNombre:
+          type: string
+        tipo:
+          $ref: '#/components/schemas/TipoSolicitudEnum'
+        fechaSolicitud:
+          type: string
+          format: date
+        motivo:
+          type: string
+        observaciones:
+          type: string
+        estado:
+          type: string
+          enum:
+            - PENDIENTE
+            - EN_PROCESO
+            - APROBADA
+            - RECHAZADA
+        fechaResolucion:
+          type: string
+          format: date
+        respuesta:
+          type: string
+    SolicitudCreateDTO:
+      type: object
+      required:
+        - idAlumno
+        - tipo
+        - motivo
+      properties:
+        idAlumno:
+          type: integer
+        tipo:
+          $ref: '#/components/schemas/TipoSolicitudEnum'
+        motivo:
+          type: string
+        observaciones:
+          type: string
+    SolicitudResolverDTO:
+      type: object
+      required:
+        - estado
+      properties:
+        estado:
+          type: string
+          enum:
+            - APROBADA
+            - RECHAZADA
+            - EN_PROCESO
+        observacion:
+          type: string
+    DeclaracionJuradaDTO:
+      type: object
+      required:
+        - idDeclaracion
+        - idAlumno
+        - idCiclo
+        - fecha
+        - materiasDeclaradasIds
+        - estado
+      properties:
+        idDeclaracion:
+          type: integer
+        idAlumno:
+          type: integer
+        alumnoNombre:
+          type: string
+        idCiclo:
+          type: integer
+        cicloNombre:
+          type: string
+        fecha:
+          type: string
+          format: date
+        materiasDeclaradasIds:
+          type: array
+          items:
+            type: integer
+        materiasNombres:
+          type: array
+          items:
+            type: string
+        estado:
+          type: string
+          enum:
+            - VALIDADA
+            - PENDIENTE
+            - RECHAZADA
+        observaciones:
+          type: string
+    DeclaracionJuradaCreateDTO:
+      type: object
+      required:
+        - idAlumno
+        - idCiclo
+        - materiasDeclaradasIds
+      properties:
+        idAlumno:
+          type: integer
+        idCiclo:
+          type: integer
+        materiasDeclaradasIds:
+          type: array
+          items:
+            type: integer
+        observaciones:
+          type: string
+    DocumentacionDTO:
+      type: object
+      required:
+        - idDocumento
+        - idAlumno
+        - tipo
+        - obligatorio
+        - estado
+      properties:
+        idDocumento:
+          type: integer
+        idAlumno:
+          type: integer
+        alumnoNombre:
+          type: string
+        tipo:
+          $ref: '#/components/schemas/TipoDocumentacionEnum'
+        obligatorio:
+          type: boolean
+        estado:
+          type: string
+          enum:
+            - ENTREGADO
+            - PENDIENTE
+            - RECHAZADO
+        fechaEntrega:
+          type: string
+          format: date
+        observaciones:
+          type: string
+    DocumentacionUpdateDTO:
+      type: object
+      required:
+        - estado
+      properties:
+        estado:
+          type: string
+          enum:
+            - ENTREGADO
+            - PENDIENTE
+            - RECHAZADO
+        observaciones:
+          type: string
+        fechaEntrega:
+          type: string
+          format: date
+    UsuarioDTO:
+      type: object
+      required:
+        - idUsuario
+        - username
+        - nombre
+        - email
+        - rol
+        - estado
+      properties:
+        idUsuario:
+          type: integer
+        username:
+          type: string
+        nombre:
+          type: string
+        email:
+          type: string
+        telefono:
+          type: string
+        domicilio:
+          type: string
+        rol:
+          type: string
+          enum:
+            - ADMINISTRADOR
+            - ADMINISTRATIVO
+            - DOCENTE
+            - ALUMNO
+        estado:
+          type: string
+          enum:
+            - ACTIVO
+            - INACTIVO
+        ultimoAcceso:
+          type: string
+    UsuarioCreateDTO:
+      type: object
+      required:
+        - username
+        - password
+        - nombre
+        - email
+        - rol
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        nombre:
+          type: string
+        email:
+          type: string
+        telefono:
+          type: string
+        domicilio:
+          type: string
+        rol:
+          type: string
+          enum:
+            - ADMINISTRADOR
+            - ADMINISTRATIVO
+            - DOCENTE
+            - ALUMNO
+    UsuarioUpdateDTO:
+      type: object
+      properties:
+        nombre:
+          type: string
+        email:
+          type: string
+        telefono:
+          type: string
+        domicilio:
+          type: string
+        rol:
+          type: string
+          enum:
+            - ADMINISTRADOR
+            - ADMINISTRATIVO
+            - DOCENTE
+            - ALUMNO
+        estado:
+          type: string
+          enum:
+            - ACTIVO
+            - INACTIVO
+    PerfilUsuarioDTO:
+      type: object
+      required:
+        - username
+        - nombre
+        - email
+        - rol
+      properties:
+        username:
+          type: string
+        nombre:
+          type: string
+        email:
+          type: string
+        telefono:
+          type: string
+        domicilio:
+          type: string
+        rol:
+          type: string
+          enum:
+            - ADMINISTRADOR
+            - ADMINISTRATIVO
+            - DOCENTE
+            - ALUMNO
+    LoginRequestDTO:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+    LoginResponseDTO:
+      type: object
+      required:
+        - idUsuario
+        - usuario
+        - nombre
+        - rol
+        - email
+      properties:
+        idUsuario:
+          type: integer
+        usuario:
+          type: string
+        nombre:
+          type: string
+        rol:
+          type: string
+          enum:
+            - ADMINISTRADOR
+            - ADMINISTRATIVO
+            - DOCENTE
+            - ALUMNO
+        email:
+          type: string
+        token:
+          type: string
+    CambiarPasswordRequestDTO:
+      type: object
+      required:
+        - actual
+        - nueva
+      properties:
+        actual:
+          type: string
+        nueva:
+          type: string

@@ -3,13 +3,18 @@ import { Badge, ButtonGroup, Button } from 'react-bootstrap'
 import PageHeader from '../../components/PageHeader'
 import DataTable from '../../components/DataTable'
 import StatusBadge from '../../components/StatusBadge'
+import ConfirmModal from '../../components/ConfirmModal'
 import { useToast } from '../../context/ToastContext'
-import { getCuotas } from '../../api/cuotas'
+import { useAuth } from '../../context/AuthContext'
+import { getCuotas, anularCuota } from '../../api/cuotas'
 
 export const AdminCuotasPage = () => {
   const { showToast } = useToast()
+  const { rol } = useAuth()
   const [cuotas, setCuotas] = useState([])
   const [filtroTipo, setFiltroTipo] = useState('TODOS')
+  const [cuotaAAnular, setCuotaAAnular] = useState(null)
+  const [loadingAnulacion, setLoadingAnulacion] = useState(false)
 
   const cargar = async () => {
     try {
@@ -24,13 +29,35 @@ export const AdminCuotasPage = () => {
     cargar()
   }, [])
 
+  const handleConfirmAnulacion = async () => {
+    if (!cuotaAAnular) return
+    setLoadingAnulacion(true)
+    try {
+      await anularCuota(cuotaAAnular.idCuota)
+      showToast(`Cuota #${cuotaAAnular.idCuota} anulada correctamente`, 'success')
+      setCuotaAAnular(null)
+      cargar()
+    } catch (err) {
+      showToast(err, 'danger')
+    } finally {
+      setLoadingAnulacion(false)
+    }
+  }
+
   const cuotasFiltradas = cuotas.filter((c) => {
     if (filtroTipo === 'TODOS') return true
+    if (filtroTipo === 'CUOTA_MENSUAL') return c.tipo === 'MENSUAL'
     return c.tipo === filtroTipo
   })
 
   const columns = [
     { key: 'idCuota', label: '# ID', width: '70px' },
+    {
+      key: 'idMatricula',
+      label: '# Matrícula',
+      width: '90px',
+      render: (row) => (row.idMatricula ? `#${row.idMatricula}` : '—'),
+    },
     {
       key: 'alumnoNombre',
       label: 'Estudiante',
@@ -48,9 +75,9 @@ export const AdminCuotasPage = () => {
     },
     { key: 'periodo', label: 'Período' },
     {
-      key: 'monto',
+      key: 'importe',
       label: 'Importe',
-      render: (row) => <span className="fw-semibold">${row.monto.toLocaleString('es-AR')}</span>,
+      render: (row) => <span className="fw-semibold">${row.importe.toLocaleString('es-AR')}</span>,
     },
     { key: 'fechaVencimiento', label: 'Vencimiento' },
     {
@@ -61,8 +88,38 @@ export const AdminCuotasPage = () => {
     {
       key: 'comprobante',
       label: 'Recibo',
-      render: (row) => row.comprobante ? <span className="font-monospace small text-muted">{row.comprobante}</span> : <span className="text-muted small">—</span>,
+      render: (row) =>
+        row.comprobante ? (
+          <span className="font-monospace small text-muted">{row.comprobante}</span>
+        ) : (
+          <span className="text-muted small">—</span>
+        ),
     },
+    ...(rol === 'ADMINISTRADOR'
+      ? [
+          {
+            key: 'acciones',
+            label: 'Acciones',
+            align: 'right',
+            render: (row) => (
+              <div className="d-flex justify-content-end">
+                {row.estado !== 'ANULADA' && row.estado !== 'PAGADA' ? (
+                  <Button
+                    variant="outline-danger"
+                    size="sm"
+                    className="py-0 px-2 small fw-semibold"
+                    onClick={() => setCuotaAAnular(row)}
+                  >
+                    Anular
+                  </Button>
+                ) : (
+                  <span className="text-muted small">—</span>
+                )}
+              </div>
+            ),
+          },
+        ]
+      : []),
   ]
 
   return (
@@ -104,6 +161,22 @@ export const AdminCuotasPage = () => {
         pageSize={10}
         searchPlaceholder="Buscar por alumno, concepto o comprobante..."
         searchKeys={['alumnoNombre', 'concepto', 'comprobante', 'periodo', 'estado']}
+      />
+
+      <ConfirmModal
+        show={!!cuotaAAnular}
+        onHide={() => setCuotaAAnular(null)}
+        onConfirm={handleConfirmAnulacion}
+        loading={loadingAnulacion}
+        title="Anular Cuota Administrativa"
+        message={
+          cuotaAAnular
+            ? `¿Está seguro de anular la cuota #${cuotaAAnular.idCuota} (${cuotaAAnular.concepto}) del alumno ${cuotaAAnular.alumnoNombre}? Esta acción marcará la cuota como ANULADA.`
+            : ''
+        }
+        confirmText="Anular Cuota"
+        variant="danger"
+        icon="bi-x-circle"
       />
     </div>
   )

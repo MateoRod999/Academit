@@ -76,17 +76,7 @@ export const Layout = ({ children }) => {
         {/* Identidad de marca Academit */}
         <div className="p-3 border-bottom border-secondary border-opacity-25">
           <Link to="/" className="text-decoration-none d-flex align-items-center gap-2">
-            <div
-              className="d-flex align-items-center justify-content-center rounded-3 p-2"
-              style={{
-                backgroundColor: 'var(--m-surface)',
-                color: 'var(--m-primary)',
-                minWidth: '38px',
-                minHeight: '38px',
-              }}
-            >
-              <i className="bi bi-mortarboard-fill fs-5" />
-            </div>
+            <img src="/avatar-graduado.svg" alt="Academit" width="32" height="32" className="flex-shrink-0" />
             <div>
               <div className="fw-bold fs-5 lh-1" style={{ color: 'var(--m-primary)' }}>
                 Academit
@@ -182,8 +172,7 @@ export const Layout = ({ children }) => {
             variant="warning"
             dismissible
             onClose={() => setShowMockAlert(false)}
-            className="m-3 mb-0 py-2 px-3 small border-0 shadow-sm d-flex align-items-center gap-2"
-            style={{ backgroundColor: 'rgba(232, 224, 182, 0.15)', color: 'var(--m-primary)' }}
+            className="m-3 mb-0 py-2 px-3 small shadow-sm d-flex align-items-center gap-2"
           >
             <i className="bi bi-info-circle-fill fs-6" />
             <div className="flex-grow-1">
@@ -204,7 +193,7 @@ export const Layout = ({ children }) => {
               className="d-flex align-items-center gap-2 fs-6 fw-bold"
               style={{ color: 'var(--m-primary)' }}
             >
-              <i className="bi bi-mortarboard-fill fs-5" />
+              <img src="/avatar-graduado.svg" alt="Academit" width="22" height="22" />
               <span>Academit</span>
             </Offcanvas.Title>
           </Offcanvas.Header>

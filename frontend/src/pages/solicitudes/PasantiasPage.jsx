@@ -5,6 +5,7 @@ import DataTable from '../../components/DataTable'
 import StatusBadge from '../../components/StatusBadge'
 import { useToast } from '../../context/ToastContext'
 import { getSolicitudes, createSolicitud } from '../../api/solicitudes'
+import { ETIQUETAS_TIPO_SOLICITUD } from '../../config/etiquetas'
 
 export const PasantiasPage = () => {
   const { showToast } = useToast()
@@ -14,7 +15,7 @@ export const PasantiasPage = () => {
 
   const cargar = async () => {
     try {
-      const data = await getSolicitudes({ idAlumno: alumnoId, tipo: 'pasantías' })
+      const data = await getSolicitudes({ idAlumno: alumnoId, tipo: 'PASANTIA' })
       setSolicitudes(data)
     } catch {
       showToast('Error al cargar solicitudes de pasantías', 'danger')
@@ -30,7 +31,7 @@ export const PasantiasPage = () => {
     try {
       await createSolicitud({
         idAlumno: alumnoId,
-        tipo: 'Inscripción a pasantías formativas',
+        tipo: 'PASANTIA',
         motivo: formData.motivo,
         observaciones: formData.observaciones,
       })
@@ -44,7 +45,11 @@ export const PasantiasPage = () => {
   }
 
   const columns = [
-    { key: 'tipo', label: 'Convocatoria' },
+    {
+      key: 'tipo',
+      label: 'Tipo de Trámite',
+      render: (row) => ETIQUETAS_TIPO_SOLICITUD[row.tipo] || row.tipo,
+    },
     { key: 'fechaSolicitud', label: 'Fecha Postulación' },
     { key: 'motivo', label: 'Perfil / Empresa / Motivación' },
     {
@@ -68,7 +73,7 @@ export const PasantiasPage = () => {
       />
 
       <SolicitudForm
-        tipoPredefinido="Inscripción a pasantías formativas"
+        tipoPredefinido="PASANTIA"
         onSubmit={handleSubmit}
         loading={loading}
       />

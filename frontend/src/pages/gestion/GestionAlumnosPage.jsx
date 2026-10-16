@@ -25,7 +25,7 @@ export const GestionAlumnosPage = () => {
     dni: '',
     email: '',
     telefono: '',
-    direccion: '',
+    domicilio: '',
     fechaNacimiento: '',
     idCarrera: 1,
     carrera: 'Tecnicatura Superior en Desarrollo de Software',
@@ -95,7 +95,7 @@ export const GestionAlumnosPage = () => {
       dni: '',
       email: '',
       telefono: '',
-      direccion: '',
+      domicilio: '',
       fechaNacimiento: '',
       idCarrera: primeraCarrera.idCarrera,
       carrera: primeraCarrera.nombre,
@@ -114,7 +114,7 @@ export const GestionAlumnosPage = () => {
       dni: alumno.dni || '',
       email: alumno.email || '',
       telefono: alumno.telefono || '',
-      direccion: alumno.direccion || '',
+      domicilio: alumno.domicilio || '',
       fechaNacimiento: alumno.fechaNacimiento || '',
       idCarrera: alumno.idCarrera || 1,
       carrera: alumno.carrera || 'Tecnicatura Superior en Desarrollo de Software',
@@ -345,13 +345,13 @@ export const GestionAlumnosPage = () => {
           </Col>
 
           <Col md={12}>
-            <Form.Group controlId="aluDireccion">
-              <Form.Label className="small fw-semibold">Dirección</Form.Label>
+            <Form.Group controlId="aluDomicilio">
+              <Form.Label className="small fw-semibold">Domicilio</Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Calle, número, localidad"
-                value={formData.direccion}
-                onChange={(e) => setFormData({ ...formData, direccion: e.target.value })}
+                value={formData.domicilio}
+                onChange={(e) => setFormData({ ...formData, domicilio: e.target.value })}
                 style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)', borderColor: 'var(--m-outline)' }}
               />
             </Form.Group>

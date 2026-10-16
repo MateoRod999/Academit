@@ -17,10 +17,10 @@ export const AdminDeudasPage = () => {
         const cuotasAlu = cuotas.filter((c) => c.idAlumno === alu.idAlumno)
         const vencidas = cuotasAlu.filter((c) => c.estado === 'VENCIDA')
         const pendientes = cuotasAlu.filter((c) => c.estado === 'PENDIENTE')
-        const montoVencido = vencidas.reduce((s, c) => s + c.monto, 0)
-        const montoTotalDeuda = [...vencidas, ...pendientes].reduce((s, c) => s + c.monto, 0)
+        const importeVencido = vencidas.reduce((s, c) => s + c.importe, 0)
+        const importeTotalDeuda = [...vencidas, ...pendientes].reduce((s, c) => s + c.importe, 0)
 
-        sumaGlobal += montoVencido
+        sumaGlobal += importeVencido
 
         return {
           idAlumno: alu.idAlumno,
@@ -30,11 +30,11 @@ export const AdminDeudasPage = () => {
           email: alu.email,
           cursoNombre: alu.cursoNombre,
           cuotasVencidasCount: vencidas.length,
-          montoVencido,
-          montoTotalDeuda,
+          importeVencido,
+          importeTotalDeuda,
           estadoMatricula: alu.estadoMatricula,
         }
-      }).filter((item) => item.montoTotalDeuda > 0)
+      }).filter((item) => item.importeTotalDeuda > 0)
 
       setAlumnosConDeuda(lista)
       setTotalDeudaGlobal(sumaGlobal)
@@ -65,18 +65,18 @@ export const AdminDeudasPage = () => {
       ),
     },
     {
-      key: 'montoVencido',
+      key: 'importeVencido',
       label: 'Deuda Exigible (Vencida)',
       render: (row) => (
         <span className="fw-bold text-danger">
-          ${row.montoVencido.toLocaleString('es-AR')}
+          ${row.importeVencido.toLocaleString('es-AR')}
         </span>
       ),
     },
     {
-      key: 'montoTotalDeuda',
+      key: 'importeTotalDeuda',
       label: 'Compromiso Total',
-      render: (row) => <span>${row.montoTotalDeuda.toLocaleString('es-AR')}</span>,
+      render: (row) => <span>${row.importeTotalDeuda.toLocaleString('es-AR')}</span>,
     },
     {
       key: 'estadoMatricula',

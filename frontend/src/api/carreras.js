@@ -1,5 +1,6 @@
 import apiClient, { isMock } from './client'
 import { mockDb } from './mocks/data'
+import { createApiError } from './errors'
 
 /**
  * Obtiene el listado de carreras institucionales.
@@ -26,7 +27,11 @@ export const getCarreraById = async (idCarrera) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 100))
     const encontrada = mockDb.carreras.find((c) => c.idCarrera === Number(idCarrera))
-    if (!encontrada) throw new Error('Carrera no encontrada')
+    if (!encontrada) {
+      throw createApiError(404, 'Carrera no encontrada', [
+        { campo: 'idCarrera', mensaje: 'Carrera no encontrada' },
+      ])
+    }
     return { ...encontrada }
   }
 
@@ -49,7 +54,7 @@ export const createCarrera = async (data) => {
       codigo: data.codigo,
       nombre: data.nombre,
       tituloOtorgado: data.tituloOtorgado,
-      duracion: data.duracion || '3 años',
+      duracionAnios: Number(data.duracionAnios) || 3,
       resolucion: data.resolucion || 'En trámite',
       estado: 'ACTIVA',
       planesCount: 1,
@@ -89,7 +94,11 @@ export const updateCarrera = async (idCarrera, data) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 200))
     const idx = mockDb.carreras.findIndex((c) => c.idCarrera === Number(idCarrera))
-    if (idx === -1) throw new Error('Carrera no encontrada')
+    if (idx === -1) {
+      throw createApiError(404, 'Carrera no encontrada', [
+        { campo: 'idCarrera', mensaje: 'Carrera no encontrada' },
+      ])
+    }
     mockDb.carreras[idx] = {
       ...mockDb.carreras[idx],
       ...data,
@@ -111,7 +120,11 @@ export const deleteCarrera = async (idCarrera) => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))
     const idx = mockDb.carreras.findIndex((c) => c.idCarrera === Number(idCarrera))
-    if (idx === -1) throw new Error('Carrera no encontrada')
+    if (idx === -1) {
+      throw createApiError(404, 'Carrera no encontrada', [
+        { campo: 'idCarrera', mensaje: 'Carrera no encontrada' },
+      ])
+    }
     mockDb.carreras[idx].estado = 'INACTIVA'
     return { success: true }
   }

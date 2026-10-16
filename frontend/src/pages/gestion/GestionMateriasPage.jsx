@@ -41,6 +41,14 @@ export const GestionMateriasPage = () => {
     setShowModal(true)
   }
 
+  const getNombreCorrelativa = (c) => {
+    if (typeof c === 'number') {
+      const mat = materias.find((m) => m.idMateria === c)
+      return mat ? mat.nombre : `Materia #${c}`
+    }
+    return c
+  }
+
   const handleOpenEditar = (m) => {
     setEditingMateria(m)
     setForm({
@@ -49,7 +57,7 @@ export const GestionMateriasPage = () => {
       anio: m.anio,
       regimen: m.regimen,
       horasSemanales: m.horasSemanales,
-      correlativasTexto: m.correlativas.join(', '),
+      correlativasTexto: (m.correlativas || []).map(getNombreCorrelativa).join(', '),
     })
     setShowModal(true)
   }
@@ -59,7 +67,14 @@ export const GestionMateriasPage = () => {
     setLoading(true)
     try {
       const correlativas = form.correlativasTexto
-        ? form.correlativasTexto.split(',').map((s) => s.trim()).filter(Boolean)
+        ? form.correlativasTexto
+            .split(',')
+            .map((s) => s.trim())
+            .filter(Boolean)
+            .map((nomOId) => {
+              const mat = materias.find((m) => m.nombre.toLowerCase() === nomOId.toLowerCase())
+              return mat ? mat.idMateria : nomOId
+            })
         : []
 
       const payload = {
@@ -104,7 +119,7 @@ export const GestionMateriasPage = () => {
         row.correlativas.length > 0 ? (
           row.correlativas.map((c, idx) => (
             <Badge key={idx} bg="dark" className="me-1 border border-secondary">
-              {c}
+              {getNombreCorrelativa(c)}
             </Badge>
           ))
         ) : (

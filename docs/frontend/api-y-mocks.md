@@ -8,7 +8,7 @@ Este documento describe la arquitectura de la capa de datos de **Academit**, el 
 
 El frontend está diseñado bajo el principio de **desacoplamiento total**:
 - Las pantallas (`src/pages/*`) **nunca importan ni conocen la existencia de `mockDb`**.
-- Las pantallas consumen exclusivamente funciones asíncronas de servicio definidas en `src/api/*.js` (`getAlumnos()`, `createCurso()`, `pagarCuota()`, etc.).
+- Las pantallas consumen exclusivamente funciones asíncronas de servicio definidas en `src/api/*.js` (`getAlumnos()`, `createCurso()`, `registrarPago()`, etc.).
 - Toda la decisión sobre si llamar a la red real o simular la operación en memoria reside internamente en cada función del módulo API.
 
 ```mermaid

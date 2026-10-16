@@ -8,6 +8,7 @@ export const Login = () => {
   const [password, setPassword] = useState('')
   const [validated, setValidated] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
+  const [errorErrors, setErrorErrors] = useState([])
   const [loading, setLoading] = useState(false)
 
   const { login } = useAuth()
@@ -33,6 +34,7 @@ export const Login = () => {
       navigate(from, { replace: true })
     } catch (err) {
       setErrorMsg(err.message || 'Error al iniciar sesión')
+      setErrorErrors(err.errors || [])
     } finally {
       setLoading(false)
     }
@@ -43,6 +45,7 @@ export const Login = () => {
     setUsername(user)
     setPassword('1234')
     setErrorMsg('')
+    setErrorErrors([])
   }
 
   return (
@@ -52,20 +55,31 @@ export const Login = () => {
           <Card className="shadow-sm border-0">
             <Card.Body className="p-4 p-md-5">
               <div className="text-center mb-4">
-                <span className="nf-glyph fs-1 d-block mb-2" style={{ color: 'var(--m-primary)' }}>
-                </span>
-                <Card.Title as="h2" className="fw-bold mb-1" style={{ color: 'var(--m-primary)' }}>
-                  Academit
-                </Card.Title>
-                <Card.Subtitle className="text-muted small">
-                  Sistema Web de Gestión Académica
-                </Card.Subtitle>
+                <img
+                  src="/avatar-graduado.svg"
+                  alt="Academit Logo"
+                  width="76"
+                  height="76"
+                  className="d-inline-block"
+                />
               </div>
 
               {errorMsg && (
                 <Alert variant="danger" className="py-2 small">
-                  <span className="nf-glyph me-1"></span>
-                  {errorMsg}
+                  <div className="d-flex align-items-center gap-1">
+                    <span className="nf-glyph"></span>
+                    <strong>{errorMsg}</strong>
+                  </div>
+                  {errorErrors.length > 0 && (
+                    <ul className="mb-0 ps-3 mt-1">
+                      {errorErrors.map((e, idx) => (
+                        <li key={idx}>
+                          {e.campo && e.campo !== 'general' && <strong>{e.campo}: </strong>}
+                          {e.mensaje}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
                 </Alert>
               )}
 
@@ -152,6 +166,11 @@ export const Login = () => {
               </div>
             </Card.Body>
           </Card>
+          <div className="text-center mt-4">
+            <small className="text-muted" style={{ fontSize: '0.78rem' }}>
+              Este programa fue hecho como proyecto para Taller Integrador III y licenciado con BSD3.
+            </small>
+          </div>
         </Col>
       </Row>
     </Container>

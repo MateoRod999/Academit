@@ -10,6 +10,7 @@ import { getAsignaciones, createAsignacion, deleteAsignacion } from '../../api/a
 import { getDocentes } from '../../api/docentes'
 import { getMaterias } from '../../api/materias'
 import { getCursos } from '../../api/cursos'
+import { ETIQUETAS_TURNO } from '../../config/etiquetas'
 
 export const GestionAsignacionesPage = () => {
   const { showToast } = useToast()
@@ -150,7 +151,7 @@ export const GestionAsignacionesPage = () => {
                   >
                     {docentes.map((d) => (
                       <option key={d.idDocente} value={d.idDocente}>
-                        {d.apellido}, {d.nombre} ({d.especialidad})
+                        {d.apellido}, {d.nombre} ({d.titulo})
                       </option>
                     ))}
                   </Form.Select>
@@ -184,7 +185,7 @@ export const GestionAsignacionesPage = () => {
                   >
                     {cursos.map((c) => (
                       <option key={c.idCurso} value={c.idCurso}>
-                        {c.nombre} ({c.turno})
+                        {c.nombre} ({ETIQUETAS_TURNO[c.turno] || c.turno})
                       </option>
                     ))}
                   </Form.Select>

@@ -4,6 +4,7 @@ import PageHeader from '../../components/PageHeader'
 import DataTable from '../../components/DataTable'
 import StatusBadge from '../../components/StatusBadge'
 import { getDocumentacion } from '../../api/documentacion'
+import { ETIQUETAS_TIPO_DOCUMENTACION } from '../../config/etiquetas'
 
 export const DocumentacionPage = () => {
   const [docs, setDocs] = useState([])
@@ -14,7 +15,11 @@ export const DocumentacionPage = () => {
   }, [])
 
   const columns = [
-    { key: 'tipo', label: 'Documento Requerido' },
+    {
+      key: 'tipo',
+      label: 'Documento Requerido',
+      render: (row) => ETIQUETAS_TIPO_DOCUMENTACION[row.tipo] || row.tipo,
+    },
     {
       key: 'obligatorio',
       label: 'Carácter',

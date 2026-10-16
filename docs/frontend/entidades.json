@@ -1,123 +1,117 @@
 {
-  "version": "1.0.0",
-  "descripcion": "Inventario de entidades, campos, relaciones y pantallas del sistema Academit",
-  "totalEntidades": 22,
   "entidades": [
     {
       "nombre": "Alumno",
       "descripcion": "Estudiante inscripto en el instituto educativo.",
-      "campos": [
+      "pantallas": [
+        "GestionAlumnosPage.jsx",
+        "GestionInscripcionesPage.jsx",
+        "AdminSituacionAlumnoPage.jsx"
+      ],
+      "camposPersistidos": [
         {
           "nombre": "idAlumno",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único del alumno (PK)."
+          "descripcion": "Identificador único del alumno (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "legajo",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Código identificatorio institucional (ej. ALU-1001)."
+          "descripcion": "Código identificatorio institucional (ej. ALU-1001).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "nombre",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Nombres del estudiante."
+          "descripcion": "Nombres del estudiante.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "apellido",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Apellidos del estudiante."
+          "descripcion": "Apellidos del estudiante.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "dni",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Documento Nacional de Identidad único."
+          "descripcion": "Documento Nacional de Identidad único.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "email",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Correo electrónico de contacto."
+          "descripcion": "Correo electrónico de contacto.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "telefono",
           "tipo": "string",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "Teléfono de contacto."
+          "descripcion": "Teléfono de contacto.",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "direccion",
+          "nombre": "domicilio",
           "tipo": "string",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "Domicilio residencial del estudiante."
+          "descripcion": "Domicilio residencial del estudiante.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "fechaNacimiento",
           "tipo": "string (YYYY-MM-DD)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Fecha de nacimiento."
+          "descripcion": "Fecha de nacimiento.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idCarrera",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK a la Carrera en la que está inscripto."
-        },
-        {
-          "nombre": "carrera",
-          "tipo": "string",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Nombre desnormalizado de la carrera."
+          "descripcion": "FK a la Carrera en la que está inscripto.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idPlan",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK al Plan de Estudio asignado."
-        },
-        {
-          "nombre": "planNombre",
-          "tipo": "string",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Nombre desnormalizado del plan curricular."
+          "descripcion": "FK al Plan de Estudio asignado.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idCurso",
           "tipo": "number (Integer)",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "FK al curso/comisión principal asignada."
-        },
-        {
-          "nombre": "cursoNombre",
-          "tipo": "string",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Nombre del curso asignado."
+          "descripcion": "FK al curso/comisión principal asignada.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "cicloLectivo",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Año lectivo de ingreso o cursada activa."
+          "descripcion": "Año lectivo de ingreso o cursada activa.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "estado",
@@ -128,7 +122,8 @@
             "ACTIVO",
             "INACTIVO"
           ],
-          "descripcion": "Condición académica institucional."
+          "descripcion": "Condición académica institucional.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "estadoMatricula",
@@ -139,14 +134,204 @@
             "PENDIENTE",
             "CANCELADA"
           ],
-          "descripcion": "Estado de la matrícula para el ciclo lectivo actual."
+          "descripcion": "Estado de la matrícula para el ciclo lectivo actual.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idMatricula",
           "tipo": "number (Integer)",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "FK a la matrícula del ciclo actual."
+          "descripcion": "FK a la matrícula del ciclo actual.",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "camposCalculados": [
+        {
+          "nombre": "carrera",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre desnormalizado de la carrera.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "planNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre desnormalizado del plan curricular.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "cursoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del curso asignado.",
+          "categoria": "CALCULADO"
+        }
+      ],
+      "campos": [
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único del alumno (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "legajo",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Código identificatorio institucional (ej. ALU-1001).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "nombre",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Nombres del estudiante.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "apellido",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Apellidos del estudiante.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "dni",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Documento Nacional de Identidad único.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "email",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Correo electrónico de contacto.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "telefono",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Teléfono de contacto.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "domicilio",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Domicilio residencial del estudiante.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fechaNacimiento",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de nacimiento.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idCarrera",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la Carrera en la que está inscripto.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idPlan",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Plan de Estudio asignado.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idCurso",
+          "tipo": "number (Integer)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "FK al curso/comisión principal asignada.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "cicloLectivo",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Año lectivo de ingreso o cursada activa.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "REGULAR",
+            "ACTIVO",
+            "INACTIVO"
+          ],
+          "descripcion": "Condición académica institucional.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "estadoMatricula",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ACTIVA",
+            "PENDIENTE",
+            "CANCELADA"
+          ],
+          "descripcion": "Estado de la matrícula para el ciclo lectivo actual.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idMatricula",
+          "tipo": "number (Integer)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "FK a la matrícula del ciclo actual.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "carrera",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre desnormalizado de la carrera.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "planNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre desnormalizado del plan curricular.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "cursoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del curso asignado.",
+          "categoria": "CALCULADO"
         }
       ],
       "relaciones": [
@@ -174,80 +359,79 @@
           "campoDestino": "idMatricula",
           "tipo": "1:1"
         }
-      ],
-      "pantallas": [
-        "GestionAlumnosPage.jsx",
-        "GestionInscripcionesPage.jsx",
-        "AdminMatriculasPage.jsx",
-        "AdminCuotasPage.jsx",
-        "AdminPagosPage.jsx",
-        "AdminSituacionAlumnoPage.jsx",
-        "AdminDeudasPage.jsx",
-        "AsistenciasDocentePage.jsx",
-        "CalificacionesDocentePage.jsx",
-        "InicioPage.jsx",
-        "MisDatosPage.jsx"
       ]
     },
     {
       "nombre": "Docente",
-      "descripcion": "Profesor o docente que dicta asignaturas en el instituto.",
-      "campos": [
+      "descripcion": "Profesor o docente a cargo de cátedras y cursos.",
+      "pantallas": [
+        "GestionDocentesPage.jsx",
+        "GestionAsignacionesPage.jsx"
+      ],
+      "camposPersistidos": [
         {
           "nombre": "idDocente",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único del docente (PK)."
+          "descripcion": "Identificador único del docente (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "legajo",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Código identificatorio del docente (ej. DOC-201)."
+          "descripcion": "Código identificatorio del docente (ej. DOC-201).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "nombre",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Nombres del docente."
+          "descripcion": "Nombres del docente.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "apellido",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Apellidos del docente."
+          "descripcion": "Apellidos del docente.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "dni",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Documento Nacional de Identidad único."
+          "descripcion": "Documento Nacional de Identidad.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "email",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Correo electrónico institucional."
+          "descripcion": "Correo institucional o personal.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "telefono",
           "tipo": "string",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "Teléfono de contacto."
+          "descripcion": "Teléfono de contacto.",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "especialidad",
+          "nombre": "titulo",
           "tipo": "string",
-          "obligatorio": false,
+          "obligatorio": true,
           "enums": null,
-          "descripcion": "Área de especialidad académica o titulación."
+          "descripcion": "Título habilitante o especialidad académica.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "estado",
@@ -257,63 +441,152 @@
             "ACTIVO",
             "INACTIVO"
           ],
-          "descripcion": "Estado operativo del docente."
+          "descripcion": "Estado laboral/académico del docente.",
+          "categoria": "PERSISTIDO"
         }
       ],
-      "relaciones": [],
-      "pantallas": [
-        "GestionDocentesPage.jsx",
-        "GestionAsignacionesPage.jsx"
-      ]
-    },
-    {
-      "nombre": "Carrera",
-      "descripcion": "Oferta académica o tecnicatura superior dictada por el instituto.",
+      "camposCalculados": [],
       "campos": [
         {
-          "nombre": "idCarrera",
+          "nombre": "idDocente",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único de la carrera (PK)."
+          "descripcion": "Identificador único del docente (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "codigo",
+          "nombre": "legajo",
           "tipo": "string",
           "obligatorio": true,
-          "enums": [
-            "TSDS",
-            "TSCDIA"
-          ],
-          "descripcion": "Código corto o sigla oficial."
+          "enums": null,
+          "descripcion": "Código identificatorio del docente (ej. DOC-201).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "nombre",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Denominación oficial de la carrera."
+          "descripcion": "Nombres del docente.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "apellido",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Apellidos del docente.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "dni",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Documento Nacional de Identidad.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "email",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Correo institucional o personal.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "telefono",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Teléfono de contacto.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "titulo",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Título habilitante o especialidad académica.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ACTIVO",
+            "INACTIVO"
+          ],
+          "descripcion": "Estado laboral/académico del docente.",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idDocente",
+          "entidadDestino": "Asignacion",
+          "campoDestino": "idDocente",
+          "tipo": "1:N"
+        }
+      ]
+    },
+    {
+      "nombre": "Carrera",
+      "descripcion": "Titulación académica dictada por el instituto.",
+      "pantallas": [
+        "GestionCarrerasPage.jsx",
+        "GestionAlumnosPage.jsx"
+      ],
+      "camposPersistidos": [
+        {
+          "nombre": "idCarrera",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de la carrera (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "codigo",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Código identificador (ej. TSD, IA, REDES).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "nombre",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Nombre oficial de la carrera.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "tituloOtorgado",
           "tipo": "string",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Título expedido al egresar."
-        },
-        {
-          "nombre": "duracion",
-          "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Duración de cursada (ej. '3 años')."
+          "descripcion": "Título con validez nacional que expide.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "duracionAnios",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Duración teórica de la carrera en años.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "resolucion",
           "tipo": "string",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "Resolución ministerial habilitante."
+          "descripcion": "Resolución ministerial habilitante.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "estado",
@@ -323,94 +596,142 @@
             "ACTIVA",
             "INACTIVA"
           ],
-          "descripcion": "Estado de vigencia académica."
-        },
-        {
-          "nombre": "planesCount",
-          "tipo": "number (Integer)",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Cantidad desnormalizada de planes asociados."
-        },
-        {
-          "nombre": "cursosCount",
-          "tipo": "number (Integer)",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Cantidad desnormalizada de comisiones activas."
+          "descripcion": "Estado de oferta académica de la carrera.",
+          "categoria": "PERSISTIDO"
         }
       ],
-      "relaciones": [],
-      "pantallas": [
-        "GestionCarrerasPage.jsx",
-        "GestionAlumnosPage.jsx",
-        "GestionCursosPage.jsx",
-        "GestionPlanEstudiosPage.jsx",
-        "CambioCarreraPage.jsx"
-      ]
-    },
-    {
-      "nombre": "PlanEstudio",
-      "descripcion": "Currícula de materias estructurada para una cohorte y carrera.",
+      "camposCalculados": [],
       "campos": [
         {
-          "nombre": "idPlan",
+          "nombre": "idCarrera",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único del plan (PK)."
+          "descripcion": "Identificador único de la carrera (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "codigo",
           "tipo": "string",
           "obligatorio": true,
-          "enums": [
-            "PLAN-2024",
-            "PLAN-2025"
-          ],
-          "descripcion": "Código identificatorio del plan."
+          "enums": null,
+          "descripcion": "Código identificador (ej. TSD, IA, REDES).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "nombre",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Nombre del plan curricular."
+          "descripcion": "Nombre oficial de la carrera.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "tituloOtorgado",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Título con validez nacional que expide.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "duracionAnios",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Duración teórica de la carrera en años.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "resolucion",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Resolución ministerial habilitante.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ACTIVA",
+            "INACTIVA"
+          ],
+          "descripcion": "Estado de oferta académica de la carrera.",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idCarrera",
+          "entidadDestino": "PlanEstudio",
+          "campoDestino": "idCarrera",
+          "tipo": "1:N"
+        },
+        {
+          "campo": "idCarrera",
+          "entidadDestino": "Curso",
+          "campoDestino": "idCarrera",
+          "tipo": "1:N"
+        }
+      ]
+    },
+    {
+      "nombre": "PlanEstudio",
+      "descripcion": "Estructura curricular y materias que componen una carrera.",
+      "pantallas": [
+        "GestionPlanEstudiosPage.jsx",
+        "PlanEstudiosAlumnoPage.jsx"
+      ],
+      "camposPersistidos": [
+        {
+          "nombre": "idPlan",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único del plan (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idCarrera",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK a la carrera asociada."
+          "descripcion": "FK a la Carrera.",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "carreraNombre",
+          "nombre": "codigo",
           "tipo": "string",
-          "obligatorio": false,
+          "obligatorio": true,
           "enums": null,
-          "descripcion": "Nombre de la carrera desnormalizado."
+          "descripcion": "Código del plan (ej. PLAN-2023).",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "anioResolucion",
+          "nombre": "nombre",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Nombre descriptivo del plan.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "anioAprobacion",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Año de aprobación o entrada en vigencia."
-        },
-        {
-          "nombre": "horasTotales",
-          "tipo": "number (Integer)",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Carga horaria total de la currícula."
+          "descripcion": "Año de entrada en vigencia.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "cantidadMaterias",
           "tipo": "number (Integer)",
-          "obligatorio": false,
+          "obligatorio": true,
           "enums": null,
-          "descripcion": "Total de asignaturas del plan."
+          "descripcion": "Cantidad total de materias que lo integran.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "estado",
@@ -418,9 +739,89 @@
           "obligatorio": true,
           "enums": [
             "VIGENTE",
-            "CADUCO"
+            "CERRADO"
           ],
-          "descripcion": "Estado reglamentario del plan."
+          "descripcion": "Estado de vigencia del plan de estudios.",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "camposCalculados": [
+        {
+          "nombre": "carreraNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre desnormalizado de la carrera.",
+          "categoria": "CALCULADO"
+        }
+      ],
+      "campos": [
+        {
+          "nombre": "idPlan",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único del plan (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idCarrera",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la Carrera.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "codigo",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Código del plan (ej. PLAN-2023).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "nombre",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Nombre descriptivo del plan.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "anioAprobacion",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Año de entrada en vigencia.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "cantidadMaterias",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Cantidad total de materias que lo integran.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "VIGENTE",
+            "CERRADO"
+          ],
+          "descripcion": "Estado de vigencia del plan de estudios.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "carreraNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre desnormalizado de la carrera.",
+          "categoria": "CALCULADO"
         }
       ],
       "relaciones": [
@@ -429,209 +830,208 @@
           "entidadDestino": "Carrera",
           "campoDestino": "idCarrera",
           "tipo": "M:1"
+        },
+        {
+          "campo": "idPlan",
+          "entidadDestino": "Materia",
+          "campoDestino": "idPlan",
+          "tipo": "1:N"
         }
-      ],
-      "pantallas": [
-        "GestionPlanEstudiosPage.jsx",
-        "GestionAlumnosPage.jsx",
-        "GestionCarrerasPage.jsx",
-        "PlanEstudiosAlumnoPage.jsx"
       ]
     },
     {
       "nombre": "Materia",
-      "descripcion": "Asignatura perteneciente a un plan de estudios.",
-      "campos": [
+      "descripcion": "Asignatura curricular dictada dentro de un plan de estudio.",
+      "pantallas": [
+        "GestionMateriasPage.jsx",
+        "PlanEstudiosAlumnoPage.jsx"
+      ],
+      "camposPersistidos": [
         {
           "nombre": "idMateria",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único de la materia (PK)."
+          "descripcion": "Identificador único de la materia (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "codigo",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Código identificatorio (ej. MAT-101, CD-101)."
+          "descripcion": "Código curricular (ej. PROG-1).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "nombre",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Nombre de la materia."
+          "descripcion": "Nombre de la materia.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idCarrera",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK a la carrera a la que pertenece."
-        },
-        {
-          "nombre": "carreraNombre",
-          "tipo": "string",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Nombre de la carrera para visualización."
+          "descripcion": "FK a la Carrera.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idPlan",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK al plan curricular."
+          "descripcion": "FK al Plan de Estudio.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "anio",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Año de cursada en la carrera (1, 2, 3)."
+          "descripcion": "Año de cursada (1°, 2°, 3° año).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "regimen",
           "tipo": "string (Enum)",
           "obligatorio": true,
           "enums": [
-            "CUATRIMESTRAL",
-            "ANUAL"
+            "ANUAL",
+            "CUATRIMESTRAL"
           ],
-          "descripcion": "Régimen académico de dictado."
+          "descripcion": "Régimen de dictado.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "horasSemanales",
           "tipo": "number (Integer)",
-          "obligatorio": false,
+          "obligatorio": true,
           "enums": null,
-          "descripcion": "Horas semanales de cursada."
+          "descripcion": "Carga horaria semanal.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "correlativas",
           "tipo": "array of numbers",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "Lista de idMateria de asignaturas correlativas previas."
+          "descripcion": "IDs de materias correlativas previas requeridas.",
+          "categoria": "PERSISTIDO"
         }
       ],
-      "relaciones": [
+      "camposCalculados": [
         {
-          "campo": "idCarrera",
-          "entidadDestino": "Carrera",
-          "campoDestino": "idCarrera",
-          "tipo": "M:1"
+          "nombre": "carreraNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la carrera asociada.",
+          "categoria": "CALCULADO"
         },
         {
-          "campo": "idPlan",
-          "entidadDestino": "PlanEstudio",
-          "campoDestino": "idPlan",
-          "tipo": "M:1"
+          "nombre": "planNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del plan de estudio asociado.",
+          "categoria": "CALCULADO"
         }
       ],
-      "pantallas": [
-        "GestionMateriasPage.jsx",
-        "GestionPlanEstudiosPage.jsx",
-        "GestionAsignacionesPage.jsx",
-        "GestionMesasPage.jsx",
-        "PlanEstudiosAlumnoPage.jsx",
-        "AsistenciasDocentePage.jsx",
-        "CalificacionesDocentePage.jsx",
-        "EvaluacionesDocentePage.jsx"
-      ]
-    },
-    {
-      "nombre": "Curso",
-      "descripcion": "Comisión o división de cursada para un año y turno específico.",
       "campos": [
         {
-          "nombre": "idCurso",
+          "nombre": "idMateria",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único de la comisión (PK)."
+          "descripcion": "Identificador único de la materia (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "codigo",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Código identificatorio (ej. 1A-INF-TM, 1A-CD-TM)."
+          "descripcion": "Código curricular (ej. PROG-1).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "nombre",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Nombre descriptivo de la comisión."
+          "descripcion": "Nombre de la materia.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idCarrera",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK a la carrera a la que pertenece."
+          "descripcion": "FK a la Carrera.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idPlan",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Plan de Estudio.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "anio",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Año de cursada (1°, 2°, 3° año).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "regimen",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ANUAL",
+            "CUATRIMESTRAL"
+          ],
+          "descripcion": "Régimen de dictado.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "horasSemanales",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Carga horaria semanal.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "correlativas",
+          "tipo": "array of numbers",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "IDs de materias correlativas previas requeridas.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "carreraNombre",
           "tipo": "string",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "Nombre de la carrera para visualización."
+          "descripcion": "Nombre de la carrera asociada.",
+          "categoria": "CALCULADO"
         },
         {
-          "nombre": "idPlan",
-          "tipo": "number (Integer)",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "FK al plan curricular."
-        },
-        {
-          "nombre": "turno",
-          "tipo": "string (Enum)",
-          "obligatorio": true,
-          "enums": [
-            "MAÑANA",
-            "TARDE",
-            "NOCHE"
-          ],
-          "descripcion": "Turno de cursada."
-        },
-        {
-          "nombre": "aula",
+          "nombre": "planNombre",
           "tipo": "string",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "Aula física o laboratorio asignado."
-        },
-        {
-          "nombre": "capacidadMaxima",
-          "tipo": "number (Integer)",
-          "obligatorio": true,
-          "enums": null,
-          "descripcion": "Cupo máximo de inscriptos."
-        },
-        {
-          "nombre": "inscriptos",
-          "tipo": "number (Integer)",
-          "obligatorio": true,
-          "enums": null,
-          "descripcion": "Cantidad actual de alumnos inscriptos."
-        },
-        {
-          "nombre": "cuposDisponibles",
-          "tipo": "number (Integer)",
-          "obligatorio": true,
-          "enums": null,
-          "descripcion": "Vacantes disponibles restantes."
-        },
-        {
-          "nombre": "cicloLectivo",
-          "tipo": "number (Integer)",
-          "obligatorio": true,
-          "enums": null,
-          "descripcion": "Año lectivo al que corresponde la comisión."
+          "descripcion": "Nombre del plan de estudio asociado.",
+          "categoria": "CALCULADO"
         }
       ],
       "relaciones": [
@@ -647,55 +1047,298 @@
           "campoDestino": "idPlan",
           "tipo": "M:1"
         }
-      ],
-      "pantallas": [
-        "GestionCursosPage.jsx",
-        "GestionInscripcionesPage.jsx",
-        "GestionAsignacionesPage.jsx",
-        "MisCursosPage.jsx",
-        "AsistenciasDocentePage.jsx",
-        "CalificacionesDocentePage.jsx",
-        "EvaluacionesDocentePage.jsx"
       ]
     },
     {
-      "nombre": "CicloLectivo",
-      "descripcion": "Período lectivo anual del instituto que agrupa cursadas, matrículas e inscripciones.",
-      "campos": [
+      "nombre": "Curso",
+      "descripcion": "Comisión y división física/horaria donde se cursan materias.",
+      "pantallas": [
+        "GestionCursosPage.jsx",
+        "GestionInscripcionesPage.jsx"
+      ],
+      "camposPersistidos": [
         {
-          "nombre": "idCiclo",
+          "nombre": "idCurso",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único del ciclo (PK)."
+          "descripcion": "Identificador único del curso (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "anio",
-          "tipo": "number (Integer)",
+          "nombre": "codigo",
+          "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Año calendario del ciclo (ej. 2026)."
+          "descripcion": "Código de la comisión (ej. 1A-TM-2026).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "nombre",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Denominación del ciclo lectivo."
+          "descripcion": "Nombre descriptivo de la comisión.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idCarrera",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la Carrera.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idPlan",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Plan de Estudio.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "turno",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "MANANA",
+            "TARDE",
+            "NOCHE"
+          ],
+          "descripcion": "Turno de cursada (sin tildes).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "capacidadMaxima",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Límite de capacidad física o aula.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "cicloLectivo",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Año lectivo correspondiente.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "aula",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Aula física asignada.",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "camposCalculados": [
+        {
+          "nombre": "inscriptos",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Contador de alumnos matriculados confirmados.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "cuposDisponibles",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Cupos disponibles (capacidadMaxima - inscriptos).",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "carreraNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre desnormalizado de la carrera.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "planNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre desnormalizado del plan.",
+          "categoria": "CALCULADO"
+        }
+      ],
+      "campos": [
+        {
+          "nombre": "idCurso",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único del curso (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "codigo",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Código de la comisión (ej. 1A-TM-2026).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "nombre",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Nombre descriptivo de la comisión.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idCarrera",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la Carrera.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idPlan",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Plan de Estudio.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "turno",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "MANANA",
+            "TARDE",
+            "NOCHE"
+          ],
+          "descripcion": "Turno de cursada (sin tildes).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "capacidadMaxima",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Límite de capacidad física o aula.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "cicloLectivo",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Año lectivo correspondiente.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "aula",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Aula física asignada.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "inscriptos",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Contador de alumnos matriculados confirmados.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "cuposDisponibles",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Cupos disponibles (capacidadMaxima - inscriptos).",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "carreraNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre desnormalizado de la carrera.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "planNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre desnormalizado del plan.",
+          "categoria": "CALCULADO"
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idCarrera",
+          "entidadDestino": "Carrera",
+          "campoDestino": "idCarrera",
+          "tipo": "M:1"
+        },
+        {
+          "campo": "idPlan",
+          "entidadDestino": "PlanEstudio",
+          "campoDestino": "idPlan",
+          "tipo": "M:1"
+        }
+      ]
+    },
+    {
+      "nombre": "CicloLectivo",
+      "descripcion": "Período académico anual de actividades del instituto.",
+      "pantallas": [
+        "GestionCiclosLectivosPage.jsx"
+      ],
+      "camposPersistidos": [
+        {
+          "nombre": "idCiclo",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único del ciclo (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "anio",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Año calendario (ej. 2026).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "nombre",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Denominación (ej. Ciclo Lectivo 2026).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "fechaInicio",
           "tipo": "string (YYYY-MM-DD)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Fecha de inicio del ciclo escolar."
+          "descripcion": "Fecha de inicio del ciclo.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "fechaFin",
           "tipo": "string (YYYY-MM-DD)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Fecha de finalización del ciclo escolar."
+          "descripcion": "Fecha de cierre del ciclo.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "estado",
@@ -703,80 +1346,225 @@
           "obligatorio": true,
           "enums": [
             "ACTIVO",
-            "CERRADO"
+            "CERRADO",
+            "PLANIFICADO"
           ],
-          "descripcion": "Estado operativo del ciclo."
+          "descripcion": "Estado operativo del ciclo lectivo.",
+          "categoria": "PERSISTIDO"
         }
       ],
-      "relaciones": [],
-      "pantallas": [
-        "GestionCiclosLectivosPage.jsx",
-        "GestionInscripcionesPage.jsx"
+      "camposCalculados": [],
+      "campos": [
+        {
+          "nombre": "idCiclo",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único del ciclo (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "anio",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Año calendario (ej. 2026).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "nombre",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Denominación (ej. Ciclo Lectivo 2026).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fechaInicio",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de inicio del ciclo.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fechaFin",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de cierre del ciclo.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ACTIVO",
+            "CERRADO",
+            "PLANIFICADO"
+          ],
+          "descripcion": "Estado operativo del ciclo lectivo.",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idCiclo",
+          "entidadDestino": "Inscripcion",
+          "campoDestino": "cicloLectivo",
+          "tipo": "1:N"
+        }
       ]
     },
     {
       "nombre": "Asignacion",
-      "descripcion": "Vínculo tripartito entre docente, curso y materia (CursoMateria).",
-      "campos": [
+      "descripcion": "Asignación docente a un curso y materia específicos.",
+      "pantallas": [
+        "GestionAsignacionesPage.jsx"
+      ],
+      "camposPersistidos": [
         {
           "nombre": "idAsignacion",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único de la asignación (PK)."
+          "descripcion": "Identificador de la asignación (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idDocente",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK al docente asignado."
-        },
-        {
-          "nombre": "docenteNombre",
-          "tipo": "string",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Nombre y apellido del docente."
-        },
-        {
-          "nombre": "idCurso",
-          "tipo": "number (Integer)",
-          "obligatorio": true,
-          "enums": null,
-          "descripcion": "FK a la comisión o curso."
-        },
-        {
-          "nombre": "cursoNombre",
-          "tipo": "string",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Nombre de la comisión."
+          "descripcion": "FK al Docente asignado.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idMateria",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK a la materia dictada."
+          "descripcion": "FK a la Materia dictada.",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "materiaNombre",
-          "tipo": "string",
-          "obligatorio": false,
+          "nombre": "idCurso",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
           "enums": null,
-          "descripcion": "Nombre de la materia."
+          "descripcion": "FK al Curso / Comisión.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "rolDocente",
           "tipo": "string (Enum)",
           "obligatorio": true,
           "enums": [
-            "TITULAR",
-            "ADJUNTO",
-            "JTP"
+            "Titular",
+            "Adjunto",
+            "JTP",
+            "Ayudante"
           ],
-          "descripcion": "Rol en la cátedra."
+          "descripcion": "Cargo docente en la cátedra.",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "camposCalculados": [
+        {
+          "nombre": "docenteNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del docente.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "materiaNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la materia.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "cursoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del curso.",
+          "categoria": "CALCULADO"
+        }
+      ],
+      "campos": [
+        {
+          "nombre": "idAsignacion",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador de la asignación (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idDocente",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Docente asignado.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idMateria",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la Materia dictada.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idCurso",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Curso / Comisión.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "rolDocente",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "Titular",
+            "Adjunto",
+            "JTP",
+            "Ayudante"
+          ],
+          "descripcion": "Cargo docente en la cátedra.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "docenteNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del docente.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "materiaNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la materia.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "cursoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del curso.",
+          "categoria": "CALCULADO"
         }
       ],
       "relaciones": [
@@ -787,75 +1575,65 @@
           "tipo": "M:1"
         },
         {
-          "campo": "idCurso",
-          "entidadDestino": "Curso",
-          "campoDestino": "idCurso",
-          "tipo": "M:1"
-        },
-        {
           "campo": "idMateria",
           "entidadDestino": "Materia",
           "campoDestino": "idMateria",
           "tipo": "M:1"
+        },
+        {
+          "campo": "idCurso",
+          "entidadDestino": "Curso",
+          "campoDestino": "idCurso",
+          "tipo": "M:1"
         }
-      ],
-      "pantallas": [
-        "GestionAsignacionesPage.jsx",
-        "MisCursosPage.jsx"
       ]
     },
     {
       "nombre": "Inscripcion",
-      "descripcion": "Inscripción formal de un alumno a una comisión/curso específico.",
-      "campos": [
+      "descripcion": "Inscripción de un estudiante a una comisión/curso anual.",
+      "pantallas": [
+        "GestionInscripcionesPage.jsx"
+      ],
+      "camposPersistidos": [
         {
           "nombre": "idInscripcion",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único de inscripción (PK)."
+          "descripcion": "Identificador único de inscripción (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idAlumno",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK al alumno inscripto."
-        },
-        {
-          "nombre": "alumnoNombre",
-          "tipo": "string",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Nombre del alumno."
+          "descripcion": "FK al Alumno inscripto.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idCurso",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK al curso inscripto."
-        },
-        {
-          "nombre": "cursoNombre",
-          "tipo": "string",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Nombre del curso inscripto."
+          "descripcion": "FK al Curso/Comisión.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "cicloLectivo",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Año de la cursada."
+          "descripcion": "Año lectivo cursado.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "fechaInscripcion",
           "tipo": "string (YYYY-MM-DD)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Fecha de confirmación de la inscripción."
+          "descripcion": "Fecha de registro de la inscripción.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "estado",
@@ -865,7 +1643,95 @@
             "CONFIRMADA",
             "CANCELADA"
           ],
-          "descripcion": "Estado de la inscripción."
+          "descripcion": "Estado de la inscripción.",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "camposCalculados": [
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del alumno.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "cursoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del curso inscripto.",
+          "categoria": "CALCULADO"
+        }
+      ],
+      "campos": [
+        {
+          "nombre": "idInscripcion",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de inscripción (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Alumno inscripto.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idCurso",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Curso/Comisión.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "cicloLectivo",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Año lectivo cursado.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fechaInscripcion",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de registro de la inscripción.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "CONFIRMADA",
+            "CANCELADA"
+          ],
+          "descripcion": "Estado de la inscripción.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del alumno.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "cursoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del curso inscripto.",
+          "categoria": "CALCULADO"
         }
       ],
       "relaciones": [
@@ -881,56 +1747,63 @@
           "campoDestino": "idCurso",
           "tipo": "M:1"
         }
-      ],
-      "pantallas": [
-        "GestionInscripcionesPage.jsx"
       ]
     },
     {
       "nombre": "Matricula",
-      "descripcion": "Registro anual de matrícula académica que habilita la cursada del alumno.",
-      "campos": [
+      "descripcion": "Matrícula anual institucional habilitante de cursada.",
+      "pantallas": [
+        "AdminMatriculasPage.jsx",
+        "CancelarMatriculaPage.jsx"
+      ],
+      "camposPersistidos": [
         {
           "nombre": "idMatricula",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único de la matrícula (PK)."
+          "descripcion": "Identificador de la matrícula (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idAlumno",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK al alumno matriculado."
+          "descripcion": "FK al Alumno matriculado.",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "alumnoNombre",
-          "tipo": "string",
-          "obligatorio": false,
+          "nombre": "idCarrera",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
           "enums": null,
-          "descripcion": "Nombre del alumno."
+          "descripcion": "FK a la Carrera matriculada.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idCiclo",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Ciclo Lectivo correspondiente.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "cicloLectivo",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Año del ciclo lectivo."
+          "descripcion": "Año lectivo de la matrícula.",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "monto",
-          "tipo": "number (Monetario)",
-          "obligatorio": true,
-          "enums": null,
-          "descripcion": "Arancel fijado para la matrícula."
-        },
-        {
-          "nombre": "fechaAlta",
+          "nombre": "fecha",
           "tipo": "string (YYYY-MM-DD)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Fecha de emisión de la matrícula."
+          "descripcion": "Fecha de emisión de la matrícula.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "estado",
@@ -941,129 +1814,144 @@
             "PENDIENTE",
             "CANCELADA"
           ],
-          "descripcion": "Estado administrativo de la matrícula."
+          "descripcion": "Estado académico de la matrícula.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "estadoPago",
           "tipo": "string (Enum)",
           "obligatorio": true,
           "enums": [
-            "PAGADA",
-            "PENDIENTE",
-            "ANULADA"
+            "AL_DIA",
+            "CON_DEUDA",
+            "EXENTO"
           ],
-          "descripcion": "Estado del pago del arancel."
+          "descripcion": "Estado de regularidad financiera (pendiente de definir por backend: ningún flujo lo actualiza).",
+          "categoria": "PERSISTIDO"
         }
       ],
-      "relaciones": [
+      "camposCalculados": [
         {
-          "campo": "idAlumno",
-          "entidadDestino": "Alumno",
-          "campoDestino": "idAlumno",
-          "tipo": "M:1"
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del alumno.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "carreraNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la carrera matriculada.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "cicloLectivoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del ciclo lectivo.",
+          "categoria": "CALCULADO"
         }
       ],
-      "pantallas": [
-        "AdminMatriculasPage.jsx",
-        "AdminSituacionAlumnoPage.jsx",
-        "CancelarMatriculaPage.jsx",
-        "SituacionAcademicaArancelariaPage.jsx"
-      ]
-    },
-    {
-      "nombre": "Cuota",
-      "descripcion": "Obligación de pago arancelario periódica (cuota mensual o seguro).",
       "campos": [
         {
-          "nombre": "idCuota",
+          "nombre": "idMatricula",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único de la cuota (PK)."
+          "descripcion": "Identificador de la matrícula (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idAlumno",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK al alumno deudor."
+          "descripcion": "FK al Alumno matriculado.",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "alumnoNombre",
-          "tipo": "string",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Nombre del alumno."
-        },
-        {
-          "nombre": "concepto",
-          "tipo": "string",
-          "obligatorio": true,
-          "enums": null,
-          "descripcion": "Descripción del concepto facturado."
-        },
-        {
-          "nombre": "tipo",
-          "tipo": "string (Enum)",
-          "obligatorio": true,
-          "enums": [
-            "CUOTA_MENSUAL",
-            "SEGURO_CUATRIMESTRAL"
-          ],
-          "descripcion": "Tipo de obligación arancelaria."
-        },
-        {
-          "nombre": "numeroCuota",
+          "nombre": "idCarrera",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Número ordinal de cuota (1 a 10)."
+          "descripcion": "FK a la Carrera matriculada.",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "periodo",
-          "tipo": "string",
+          "nombre": "idCiclo",
+          "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Mes y año correspondiente (ej. 'Marzo 2026')."
+          "descripcion": "FK al Ciclo Lectivo correspondiente.",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "monto",
-          "tipo": "number (Monetario)",
+          "nombre": "cicloLectivo",
+          "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Importe de la cuota."
+          "descripcion": "Año lectivo de la matrícula.",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "fechaVencimiento",
+          "nombre": "fecha",
           "tipo": "string (YYYY-MM-DD)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Fecha límite de pago."
+          "descripcion": "Fecha de emisión de la matrícula.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "estado",
           "tipo": "string (Enum)",
           "obligatorio": true,
           "enums": [
-            "PAGADA",
+            "ACTIVA",
             "PENDIENTE",
-            "VENCIDA"
+            "CANCELADA"
           ],
-          "descripcion": "Estado de cobranza."
+          "descripcion": "Estado académico de la matrícula.",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "fechaPago",
-          "tipo": "string (YYYY-MM-DD)",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Fecha de cancelación de la cuota."
+          "nombre": "estadoPago",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "AL_DIA",
+            "CON_DEUDA",
+            "EXENTO"
+          ],
+          "descripcion": "Estado de regularidad financiera (pendiente de definir por backend: ningún flujo lo actualiza).",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "comprobante",
+          "nombre": "alumnoNombre",
           "tipo": "string",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "Número de recibo asociado si está paga."
+          "descripcion": "Nombre completo del alumno.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "carreraNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la carrera matriculada.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "cicloLectivoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del ciclo lectivo.",
+          "categoria": "CALCULADO"
         }
       ],
       "relaciones": [
@@ -1072,55 +1960,306 @@
           "entidadDestino": "Alumno",
           "campoDestino": "idAlumno",
           "tipo": "M:1"
+        },
+        {
+          "campo": "idCarrera",
+          "entidadDestino": "Carrera",
+          "campoDestino": "idCarrera",
+          "tipo": "M:1"
+        },
+        {
+          "campo": "idCiclo",
+          "entidadDestino": "CicloLectivo",
+          "campoDestino": "idCiclo",
+          "tipo": "M:1"
         }
-      ],
-      "pantallas": [
-        "AdminCuotasPage.jsx",
-        "AdminDeudasPage.jsx",
-        "AdminPagosPage.jsx",
-        "AdminSituacionAlumnoPage.jsx",
-        "InicioPage.jsx",
-        "SituacionAcademicaArancelariaPage.jsx"
       ]
     },
     {
-      "nombre": "Pago",
-      "descripcion": "Transacción financiera de cobro de una cuota o arancel.",
-      "campos": [
+      "nombre": "Cuota",
+      "descripcion": "Obligación arancelaria mensual o seguro cuatrimestral emitida para un alumno.",
+      "pantallas": [
+        "AdminCuotasPage.jsx",
+        "AdminPagosPage.jsx"
+      ],
+      "camposPersistidos": [
         {
-          "nombre": "idPago",
+          "nombre": "idCuota",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único del pago (PK)."
+          "descripcion": "Identificador único de la cuota (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "idAlumno",
+          "nombre": "idMatricula",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK al alumno pagador."
-        },
-        {
-          "nombre": "alumnoNombre",
-          "tipo": "string",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Nombre del alumno."
+          "descripcion": "FK a la Matrícula del ciclo.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "concepto",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Concepto cancelado."
+          "descripcion": "Descripción arancelaria (ej. Cuota 1 - Enero 2026).",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "monto",
-          "tipo": "number (Monetario)",
+          "nombre": "mes",
+          "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Importe cobrado."
+          "descripcion": "Número de mes correspondiente (1 a 12).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "anio",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Año lectivo de facturación.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fechaVencimiento",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha límite de pago.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "importe",
+          "tipo": "number (Float)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Monto a abonar en pesos argentinos.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "tipo",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "MENSUAL",
+            "SEGURO_CUATRIMESTRAL"
+          ],
+          "descripcion": "Concepto arancelario.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "PENDIENTE",
+            "PAGADA",
+            "VENCIDA",
+            "ANULADA"
+          ],
+          "descripcion": "Estado arancelario de la cuota.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fechaPago",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Fecha de cancelación efectiva.",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "camposCalculados": [
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Campo calculado derivado de la matrícula (idMatricula -> Matricula.idAlumno).",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del alumno derivado de matrícula.",
+          "categoria": "CALCULADO"
+        }
+      ],
+      "campos": [
+        {
+          "nombre": "idCuota",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de la cuota (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idMatricula",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la Matrícula del ciclo.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "concepto",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Descripción arancelaria (ej. Cuota 1 - Enero 2026).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "mes",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Número de mes correspondiente (1 a 12).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "anio",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Año lectivo de facturación.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fechaVencimiento",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha límite de pago.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "importe",
+          "tipo": "number (Float)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Monto a abonar en pesos argentinos.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "tipo",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "MENSUAL",
+            "SEGURO_CUATRIMESTRAL"
+          ],
+          "descripcion": "Concepto arancelario.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "PENDIENTE",
+            "PAGADA",
+            "VENCIDA",
+            "ANULADA"
+          ],
+          "descripcion": "Estado arancelario de la cuota.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fechaPago",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Fecha de cancelación efectiva.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Campo calculado derivado de la matrícula (idMatricula -> Matricula.idAlumno).",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del alumno derivado de matrícula.",
+          "categoria": "CALCULADO"
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "idMatricula",
+          "entidadDestino": "Matricula",
+          "campoDestino": "idMatricula",
+          "tipo": "M:1"
+        }
+      ]
+    },
+    {
+      "nombre": "Pago",
+      "descripcion": "Comprobante de recaudación arancelaria emitido por el instituto.",
+      "pantallas": [
+        "AdminPagosPage.jsx",
+        "SituacionAcademicaArancelariaPage.jsx"
+      ],
+      "camposPersistidos": [
+        {
+          "nombre": "idPago",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único del pago (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idCuota",
+          "tipo": "number (Integer)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "FK a la Cuota cancelada (null en matrícula u otros).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Alumno que realiza el pago.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "concepto",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Concepto cancelado.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "importe",
+          "tipo": "number (Float)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Monto total cancelado (exacto según RN09).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fechaPago",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de recepción del pago.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "medioPago",
@@ -1129,23 +2268,20 @@
           "enums": [
             "EFECTIVO",
             "TRANSFERENCIA",
-            "TARJETA"
+            "TARJETA_CREDITO",
+            "TARJETA_DEBITO",
+            "OTRO"
           ],
-          "descripcion": "Canal o medio de pago utilizado."
-        },
-        {
-          "nombre": "fechaPago",
-          "tipo": "string (YYYY-MM-DD)",
-          "obligatorio": true,
-          "enums": null,
-          "descripcion": "Fecha y hora del cobro."
+          "descripcion": "Canal de cobranza utilizado.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "comprobante",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Número de recibo oficial generado (ej. REC-2026-0001)."
+          "descripcion": "Número de recibo o comprobante fiscal.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "estado",
@@ -1153,63 +2289,185 @@
           "obligatorio": true,
           "enums": [
             "ACREDITADO",
-            "ANULADO"
+            "PENDIENTE",
+            "RECHAZADO"
           ],
-          "descripcion": "Estado de la transacción."
+          "descripcion": "Estado contable de acreditación.",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "camposCalculados": [
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del alumno pagador.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "cuotaConcepto",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Detalle de la cuota cancelada.",
+          "categoria": "CALCULADO"
+        }
+      ],
+      "campos": [
+        {
+          "nombre": "idPago",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único del pago (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idCuota",
+          "tipo": "number (Integer)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "FK a la Cuota cancelada (null en matrícula u otros).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Alumno que realiza el pago.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "concepto",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Concepto cancelado.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "importe",
+          "tipo": "number (Float)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Monto total cancelado (exacto según RN09).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fechaPago",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de recepción del pago.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "medioPago",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "EFECTIVO",
+            "TRANSFERENCIA",
+            "TARJETA_CREDITO",
+            "TARJETA_DEBITO",
+            "OTRO"
+          ],
+          "descripcion": "Canal de cobranza utilizado.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "comprobante",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Número de recibo o comprobante fiscal.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ACREDITADO",
+            "PENDIENTE",
+            "RECHAZADO"
+          ],
+          "descripcion": "Estado contable de acreditación.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del alumno pagador.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "cuotaConcepto",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Detalle de la cuota cancelada.",
+          "categoria": "CALCULADO"
         }
       ],
       "relaciones": [
+        {
+          "campo": "idCuota",
+          "entidadDestino": "Cuota",
+          "campoDestino": "idCuota",
+          "tipo": "M:1"
+        },
         {
           "campo": "idAlumno",
           "entidadDestino": "Alumno",
           "campoDestino": "idAlumno",
           "tipo": "M:1"
         }
-      ],
-      "pantallas": [
-        "AdminPagosPage.jsx",
-        "AdminSituacionAlumnoPage.jsx",
-        "SituacionAcademicaArancelariaPage.jsx"
       ]
     },
     {
       "nombre": "Evaluacion",
-      "descripcion": "Instancia evaluativa (parcial o TP) programada para una materia en un curso.",
-      "campos": [
+      "descripcion": "Instancia evaluativa planificada por el docente titular de cátedra.",
+      "pantallas": [
+        "EvaluacionesDocentePage.jsx",
+        "CalificacionesDocentePage.jsx"
+      ],
+      "camposPersistidos": [
         {
           "nombre": "idEvaluacion",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único de la evaluación (PK)."
+          "descripcion": "Identificador único de la evaluación (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idMateria",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK a la materia evaluada."
-        },
-        {
-          "nombre": "materiaNombre",
-          "tipo": "string",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Nombre de la materia."
+          "descripcion": "FK a la Materia evaluada.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idCurso",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK al curso/comisión evaluado."
+          "descripcion": "FK al Curso / Comisión evaluada.",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "cursoNombre",
-          "tipo": "string",
-          "obligatorio": false,
+          "nombre": "fecha",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
           "enums": null,
-          "descripcion": "Nombre del curso evaluado."
+          "descripcion": "Fecha planificada de la evaluación.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "tipo",
@@ -1219,28 +2477,119 @@
             "PARCIAL",
             "TRABAJO_PRACTICO"
           ],
-          "descripcion": "Tipo de evaluación."
+          "descripcion": "Tipo de examen.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "descripcion",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Nombre o tema de la evaluación."
-        },
-        {
-          "nombre": "fecha",
-          "tipo": "string (YYYY-MM-DD)",
-          "obligatorio": true,
-          "enums": null,
-          "descripcion": "Fecha de la prueba o entrega."
+          "descripcion": "Temario y alcance del examen.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "ponderacion",
           "tipo": "string",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "Ponderación en la nota final (ej. '40%')."
+          "descripcion": "Porcentaje en la nota final (ej. 30%).",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "camposCalculados": [
+        {
+          "nombre": "materiaNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la materia evaluada.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "cursoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la comisión evaluada.",
+          "categoria": "CALCULADO"
+        }
+      ],
+      "campos": [
+        {
+          "nombre": "idEvaluacion",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de la evaluación (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idMateria",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la Materia evaluada.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idCurso",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Curso / Comisión evaluada.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fecha",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha planificada de la evaluación.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "tipo",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "PARCIAL",
+            "TRABAJO_PRACTICO"
+          ],
+          "descripcion": "Tipo de examen.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "descripcion",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Temario y alcance del examen.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "ponderacion",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Porcentaje en la nota final (ej. 30%).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "materiaNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la materia evaluada.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "cursoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la comisión evaluada.",
+          "categoria": "CALCULADO"
         }
       ],
       "relaciones": [
@@ -1256,56 +2605,47 @@
           "campoDestino": "idCurso",
           "tipo": "M:1"
         }
-      ],
-      "pantallas": [
-        "EvaluacionesDocentePage.jsx"
       ]
     },
     {
       "nombre": "Calificacion",
-      "descripcion": "Nota numérica de 1 a 10 obtenida por un alumno en una evaluación.",
-      "campos": [
+      "descripcion": "Nota numérica obtenida por un alumno en una instancia evaluativa.",
+      "pantallas": [
+        "CalificacionesDocentePage.jsx",
+        "CalificacionesAlumnoPage.jsx"
+      ],
+      "camposPersistidos": [
         {
           "nombre": "idCalificacion",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único de la calificación (PK)."
+          "descripcion": "Identificador de la calificación (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idAlumno",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK al alumno calificado."
-        },
-        {
-          "nombre": "alumnoNombre",
-          "tipo": "string",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Nombre del alumno calificado."
+          "descripcion": "FK al Alumno calificado.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idMateria",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK a la materia calificada."
-        },
-        {
-          "nombre": "materiaNombre",
-          "tipo": "string",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Nombre de la materia."
+          "descripcion": "FK a la Materia evaluada.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "evaluacionNombre",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Nombre de la evaluación asociada."
+          "descripcion": "Nombre de la evaluación asociada.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "tipo",
@@ -1315,14 +2655,130 @@
             "PARCIAL",
             "TRABAJO_PRACTICO"
           ],
-          "descripcion": "Categoría evaluativa."
+          "descripcion": "Tipo de evaluación evaluada.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "nota",
-          "tipo": "number (Integer 1-10)",
+          "tipo": "number (Integer, 1-10)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Calificación numérica en escala oficial de 1 a 10."
+          "descripcion": "Calificación numérica obtenida (1 a 10).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fecha",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de registro de la nota.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "observacion",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Devolución pedagógica del docente.",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "camposCalculados": [
+        {
+          "nombre": "condicion",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "APROBADO",
+            "DESAPROBADO"
+          ],
+          "descripcion": "Condición calculada a partir de nota (nota >= 4 ? APROBADO : DESAPROBADO).",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del alumno.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "materiaNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la materia evaluada.",
+          "categoria": "CALCULADO"
+        }
+      ],
+      "campos": [
+        {
+          "nombre": "idCalificacion",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador de la calificación (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Alumno calificado.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idMateria",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la Materia evaluada.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "evaluacionNombre",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Nombre de la evaluación asociada.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "tipo",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "PARCIAL",
+            "TRABAJO_PRACTICO"
+          ],
+          "descripcion": "Tipo de evaluación evaluada.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "nota",
+          "tipo": "number (Integer, 1-10)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Calificación numérica obtenida (1 a 10).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fecha",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de registro de la nota.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "observacion",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Devolución pedagógica del docente.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "condicion",
@@ -1332,21 +2788,24 @@
             "APROBADO",
             "DESAPROBADO"
           ],
-          "descripcion": "Resultado (APROBADO si nota >= 4)."
+          "descripcion": "Condición calculada a partir de nota (nota >= 4 ? APROBADO : DESAPROBADO).",
+          "categoria": "CALCULADO"
         },
         {
-          "nombre": "fecha",
-          "tipo": "string (YYYY-MM-DD)",
-          "obligatorio": true,
-          "enums": null,
-          "descripcion": "Fecha de carga de la nota."
-        },
-        {
-          "nombre": "observacion",
+          "nombre": "alumnoNombre",
           "tipo": "string",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "Observaciones docentes sobre la calificación."
+          "descripcion": "Nombre completo del alumno.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "materiaNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la materia evaluada.",
+          "categoria": "CALCULADO"
         }
       ],
       "relaciones": [
@@ -1362,67 +2821,55 @@
           "campoDestino": "idMateria",
           "tipo": "M:1"
         }
-      ],
-      "pantallas": [
-        "CalificacionesDocentePage.jsx",
-        "ParcialesPage.jsx",
-        "TrabajosPracticosPage.jsx",
-        "SituacionAcademicaArancelariaPage.jsx",
-        "InicioPage.jsx"
       ]
     },
     {
       "nombre": "Asistencia",
-      "descripcion": "Registro diario de presentismo de un alumno a una clase.",
-      "campos": [
+      "descripcion": "Presentismo diario de clase tomado por cátedra.",
+      "pantallas": [
+        "AsistenciasDocentePage.jsx",
+        "AsistenciasAlumnoPage.jsx"
+      ],
+      "camposPersistidos": [
         {
           "nombre": "idAsistencia",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único de asistencia (PK)."
+          "descripcion": "Identificador del registro de asistencia (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idAlumno",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK al estudiante."
-        },
-        {
-          "nombre": "alumnoNombre",
-          "tipo": "string",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Nombre del estudiante."
-        },
-        {
-          "nombre": "idCurso",
-          "tipo": "number (Integer)",
-          "obligatorio": true,
-          "enums": null,
-          "descripcion": "FK al curso/comisión."
+          "descripcion": "FK al Alumno presente o ausente.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idMateria",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK a la materia dictada."
+          "descripcion": "FK a la Materia cursada.",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "materiaNombre",
-          "tipo": "string",
-          "obligatorio": false,
+          "nombre": "idCurso",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
           "enums": null,
-          "descripcion": "Nombre de la materia."
+          "descripcion": "FK al Curso / Comisión dictada.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "fecha",
           "tipo": "string (YYYY-MM-DD)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Fecha de la clase dictada."
+          "descripcion": "Fecha de la clase dictada.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "estado",
@@ -1434,7 +2881,97 @@
             "TARDANZA",
             "JUSTIFICADO"
           ],
-          "descripcion": "Estado de asistencia registrado."
+          "descripcion": "Estado de asistencia registrado.",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "camposCalculados": [
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del alumno.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "materiaNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la materia dictada.",
+          "categoria": "CALCULADO"
+        }
+      ],
+      "campos": [
+        {
+          "nombre": "idAsistencia",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador del registro de asistencia (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Alumno presente o ausente.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idMateria",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la Materia cursada.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idCurso",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Curso / Comisión dictada.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fecha",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de la clase dictada.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "PRESENTE",
+            "AUSENTE",
+            "TARDANZA",
+            "JUSTIFICADO"
+          ],
+          "descripcion": "Estado de asistencia registrado.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del alumno.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "materiaNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la materia dictada.",
+          "categoria": "CALCULADO"
         }
       ],
       "relaciones": [
@@ -1445,117 +2982,287 @@
           "tipo": "M:1"
         },
         {
-          "campo": "idCurso",
-          "entidadDestino": "Curso",
-          "campoDestino": "idCurso",
-          "tipo": "M:1"
-        },
-        {
           "campo": "idMateria",
           "entidadDestino": "Materia",
           "campoDestino": "idMateria",
           "tipo": "M:1"
+        },
+        {
+          "campo": "idCurso",
+          "entidadDestino": "Curso",
+          "campoDestino": "idCurso",
+          "tipo": "M:1"
         }
-      ],
-      "pantallas": [
-        "AsistenciasDocentePage.jsx",
-        "AsistenciasAlumnoPage.jsx"
       ]
     },
     {
       "nombre": "MesaExamen",
-      "descripcion": "Turno de examen final para una materia ante un tribunal evaluador.",
-      "campos": [
+      "descripcion": "Mesa examinadora de examen final institucional.",
+      "pantallas": [
+        "GestionMesasPage.jsx",
+        "MesasExamenPage.jsx",
+        "InscripcionMesasPage.jsx"
+      ],
+      "camposPersistidos": [
         {
           "nombre": "idMesa",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único de la mesa de examen (PK)."
+          "descripcion": "Identificador de la mesa de examen (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idMateria",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK a la materia evaluada."
+          "descripcion": "FK a la Materia a rendir.",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "materiaNombre",
-          "tipo": "string",
-          "obligatorio": false,
+          "nombre": "idCarrera",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
           "enums": null,
-          "descripcion": "Nombre de la materia evaluada."
+          "descripcion": "FK a la Carrera.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "fecha",
           "tipo": "string (YYYY-MM-DD)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Fecha programada del llamado."
+          "descripcion": "Fecha de la mesa examinadora.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "hora",
-          "tipo": "string (HH:MM)",
+          "tipo": "string (HH:mm)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Horario de inicio del examen."
+          "descripcion": "Hora fijada de inicio.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "turno",
           "tipo": "string (Enum)",
           "obligatorio": true,
           "enums": [
-            "MAÑANA",
+            "MANANA",
             "TARDE",
             "NOCHE"
           ],
-          "descripcion": "Turno del examen final."
-        },
-        {
-          "nombre": "aula",
-          "tipo": "string",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Aula física de sustanciación."
+          "descripcion": "Turno de la mesa (sin tildes).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "tribunal",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Nombres de los docentes que componen el tribunal."
+          "descripcion": "Nombres de los docentes del tribunal evaluador.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "aula",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Aula física asignada para el examen.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "cupoMaximo",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Cupo máximo de inscriptos."
+          "descripcion": "Capacidad máxima de inscriptos.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "alumnosInscriptosIds",
+          "tipo": "array of numbers",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Lista de IDs de alumnos inscriptos.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ABIERTA",
+            "CERRADA",
+            "FINALIZADA"
+          ],
+          "descripcion": "Estado de la mesa.",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "camposCalculados": [
+        {
+          "nombre": "inscriptos",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Contador de alumnos inscriptos.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "cuposDisponibles",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Cupos disponibles (cupoMaximo - inscriptos).",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "materiaNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la materia evaluada.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "carreraNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la carrera asociada.",
+          "categoria": "CALCULADO"
+        }
+      ],
+      "campos": [
+        {
+          "nombre": "idMesa",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador de la mesa de examen (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idMateria",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la Materia a rendir.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idCarrera",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la Carrera.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fecha",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de la mesa examinadora.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "hora",
+          "tipo": "string (HH:mm)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Hora fijada de inicio.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "turno",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "MANANA",
+            "TARDE",
+            "NOCHE"
+          ],
+          "descripcion": "Turno de la mesa (sin tildes).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "tribunal",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Nombres de los docentes del tribunal evaluador.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "aula",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Aula física asignada para el examen.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "cupoMaximo",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Capacidad máxima de inscriptos.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "alumnosInscriptosIds",
+          "tipo": "array of numbers",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Lista de IDs de alumnos inscriptos.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ABIERTA",
+            "CERRADA",
+            "FINALIZADA"
+          ],
+          "descripcion": "Estado de la mesa.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "inscriptos",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Cantidad actual de alumnos anotados."
+          "descripcion": "Contador de alumnos inscriptos.",
+          "categoria": "CALCULADO"
         },
         {
-          "nombre": "estadoMesa",
-          "tipo": "string (Enum)",
+          "nombre": "cuposDisponibles",
+          "tipo": "number (Integer)",
           "obligatorio": true,
-          "enums": [
-            "ABIERTA",
-            "CERRADA"
-          ],
-          "descripcion": "Estado de habilitación de inscripciones."
+          "enums": null,
+          "descripcion": "Cupos disponibles (cupoMaximo - inscriptos).",
+          "categoria": "CALCULADO"
         },
         {
-          "nombre": "alumnosInscriptosIds",
-          "tipo": "array of numbers",
+          "nombre": "materiaNombre",
+          "tipo": "string",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "Lista de IDs de alumnos actualmente inscriptos."
+          "descripcion": "Nombre de la materia evaluada.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "carreraNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la carrera asociada.",
+          "categoria": "CALCULADO"
         }
       ],
       "relaciones": [
@@ -1564,52 +3271,143 @@
           "entidadDestino": "Materia",
           "campoDestino": "idMateria",
           "tipo": "M:1"
+        },
+        {
+          "campo": "idCarrera",
+          "entidadDestino": "Carrera",
+          "campoDestino": "idCarrera",
+          "tipo": "M:1"
         }
-      ],
-      "pantallas": [
-        "GestionMesasPage.jsx",
-        "MesasExamenPage.jsx",
-        "InicioPage.jsx"
       ]
     },
     {
       "nombre": "InscripcionMesa",
-      "descripcion": "Inscripción de un alumno regular a una mesa de examen final.",
-      "campos": [
+      "descripcion": "Inscripción individual de un alumno para rendir examen final.",
+      "pantallas": [
+        "InscripcionMesasPage.jsx"
+      ],
+      "camposPersistidos": [
         {
           "nombre": "idInscripcionMesa",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único de la inscripción a mesa (PK)."
+          "descripcion": "Identificador único de inscripción a mesa (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idMesa",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK a la mesa de examen."
+          "descripcion": "FK a la Mesa de Examen.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idAlumno",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK al alumno inscripto."
+          "descripcion": "FK al Alumno inscripto.",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "fecha",
+          "nombre": "fechaInscripcion",
           "tipo": "string (YYYY-MM-DD)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Fecha en que se confirmó la inscripción."
+          "descripcion": "Fecha de registro de la inscripción.",
+          "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "activa",
-          "tipo": "boolean",
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "CONFIRMADA",
+            "CANCELADA"
+          ],
+          "descripcion": "Estado de la inscripción a mesa.",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "camposCalculados": [
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del alumno.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "materiaNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la materia a rendir.",
+          "categoria": "CALCULADO"
+        }
+      ],
+      "campos": [
+        {
+          "nombre": "idInscripcionMesa",
+          "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Indica si la inscripción está vigente o fue cancelada."
+          "descripcion": "Identificador único de inscripción a mesa (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idMesa",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK a la Mesa de Examen.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Alumno inscripto.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fechaInscripcion",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de registro de la inscripción.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "CONFIRMADA",
+            "CANCELADA"
+          ],
+          "descripcion": "Estado de la inscripción a mesa.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del alumno.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "materiaNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre de la materia a rendir.",
+          "categoria": "CALCULADO"
         }
       ],
       "relaciones": [
@@ -1625,64 +3423,75 @@
           "campoDestino": "idAlumno",
           "tipo": "M:1"
         }
-      ],
-      "pantallas": [
-        "MesasExamenPage.jsx"
       ]
     },
     {
       "nombre": "Solicitud",
-      "descripcion": "Trámite institucional o académico gestionado por un estudiante.",
-      "campos": [
+      "descripcion": "Trámite administrativo o académico solicitado por el alumno.",
+      "pantallas": [
+        "BandejaSolicitudesPage.jsx",
+        "ConstanciasPage.jsx",
+        "PasantiasPage.jsx",
+        "SolicitudTituloPage.jsx",
+        "SolicitudesAcademicasPage.jsx",
+        "CambioCarreraPage.jsx",
+        "ReincorporacionPage.jsx"
+      ],
+      "camposPersistidos": [
         {
           "nombre": "idSolicitud",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único del trámite (PK)."
+          "descripcion": "Identificador único de la solicitud (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idAlumno",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK al alumno solicitante."
-        },
-        {
-          "nombre": "alumnoNombre",
-          "tipo": "string",
-          "obligatorio": false,
-          "enums": null,
-          "descripcion": "Nombre del estudiante solicitante."
+          "descripcion": "FK al Alumno solicitante.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "tipo",
           "tipo": "string (Enum)",
           "obligatorio": true,
           "enums": [
-            "Constancia de Alumno Regular",
-            "Declaración jurada de materias a cursar",
-            "Inscripción a pasantías",
-            "Solicitud de título intermedio",
-            "Solicitudes académicas generales",
+            "CONSTANCIA",
+            "PASANTIA",
+            "TITULO_INTERMEDIO",
+            "ACADEMICA",
             "CAMBIO_CARRERA",
             "REINCORPORACION"
           ],
-          "descripcion": "Categoría o tipo de solicitud presentada."
-        },
-        {
-          "nombre": "motivo",
-          "tipo": "string",
-          "obligatorio": true,
-          "enums": null,
-          "descripcion": "Fundamentación y detalle de la solicitud."
+          "descripcion": "Tipo de trámite institucional (sin tildes ni espacios).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "fechaSolicitud",
           "tipo": "string (YYYY-MM-DD)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Fecha de ingreso del trámite."
+          "descripcion": "Fecha de presentación del trámite.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "motivo",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fundamentación o motivo del pedido.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "observaciones",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Información complementaria del alumno.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "estado",
@@ -1694,21 +3503,128 @@
             "APROBADA",
             "RECHAZADA"
           ],
-          "descripcion": "Estado de tramitación resolutiva."
+          "descripcion": "Estado administrativo de resolución.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "fechaResolucion",
           "tipo": "string (YYYY-MM-DD)",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "Fecha en que se dictaminó resolución."
+          "descripcion": "Fecha en la que fue resuelta.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "respuesta",
           "tipo": "string",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "Dictamen oficial o respuesta escrita de secretaría."
+          "descripcion": "Dictamen de secretaría académica.",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "camposCalculados": [
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del alumno solicitante.",
+          "categoria": "CALCULADO"
+        }
+      ],
+      "campos": [
+        {
+          "nombre": "idSolicitud",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de la solicitud (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Alumno solicitante.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "tipo",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "CONSTANCIA",
+            "PASANTIA",
+            "TITULO_INTERMEDIO",
+            "ACADEMICA",
+            "CAMBIO_CARRERA",
+            "REINCORPORACION"
+          ],
+          "descripcion": "Tipo de trámite institucional (sin tildes ni espacios).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fechaSolicitud",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de presentación del trámite.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "motivo",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fundamentación o motivo del pedido.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "observaciones",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Información complementaria del alumno.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "PENDIENTE",
+            "EN_PROCESO",
+            "APROBADA",
+            "RECHAZADA"
+          ],
+          "descripcion": "Estado administrativo de resolución.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fechaResolucion",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Fecha en la que fue resuelta.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "respuesta",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Dictamen de secretaría académica.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del alumno solicitante.",
+          "categoria": "CALCULADO"
         }
       ],
       "relaciones": [
@@ -1718,57 +3634,186 @@
           "campoDestino": "idAlumno",
           "tipo": "M:1"
         }
-      ],
-      "pantallas": [
-        "BandejaSolicitudesPage.jsx",
-        "ConstanciasPage.jsx",
-        "DeclaracionJuradaPage.jsx",
-        "PasantiasPage.jsx",
-        "SolicitudTituloPage.jsx",
-        "SolicitudesAcademicasPage.jsx",
-        "CambioCarreraPage.jsx",
-        "ReincorporacionPage.jsx",
-        "InicioPage.jsx"
       ]
     },
     {
       "nombre": "DeclaracionJurada",
-      "descripcion": "Declaración jurada de asignaturas que el estudiante cursará en el ciclo lectivo.",
-      "campos": [
+      "descripcion": "Declaración jurada de asignaturas que el estudiante cursará en el ciclo lectivo bajo compromiso de correlatividad (RF51).",
+      "pantallas": [
+        "DeclaracionJuradaPage.jsx"
+      ],
+      "camposPersistidos": [
         {
           "nombre": "idDeclaracion",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único de la declaración jurada (PK)."
+          "descripcion": "Identificador único de la declaración jurada (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idAlumno",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK al alumno firmante."
+          "descripcion": "FK al Alumno firmante.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idCiclo",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK al ciclo lectivo correspondiente."
+          "descripcion": "FK al Ciclo Lectivo correspondiente.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "fecha",
           "tipo": "string (YYYY-MM-DD)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Fecha de suscripción de la DJ."
+          "descripcion": "Fecha de presentación de la declaración jurada.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "materiasDeclaradasIds",
           "tipo": "array of numbers",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Lista de IDs de materias que se compromete a cursar."
+          "descripcion": "Lista de IDs de materias que se compromete a cursar.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "VALIDADA",
+            "PENDIENTE",
+            "RECHAZADA"
+          ],
+          "descripcion": "Estado de validación reglamentaria de la DJ.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "observaciones",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Observaciones o fundamentación de correlatividades.",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "camposCalculados": [
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del alumno.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "cicloNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del ciclo lectivo declarado.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "materiasNombres",
+          "tipo": "array of strings",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombres de las materias declaradas derivadas de IDs.",
+          "categoria": "CALCULADO"
+        }
+      ],
+      "campos": [
+        {
+          "nombre": "idDeclaracion",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único de la declaración jurada (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Alumno firmante.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idCiclo",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Ciclo Lectivo correspondiente.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fecha",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Fecha de presentación de la declaración jurada.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "materiasDeclaradasIds",
+          "tipo": "array of numbers",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Lista de IDs de materias que se compromete a cursar.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "VALIDADA",
+            "PENDIENTE",
+            "RECHAZADA"
+          ],
+          "descripcion": "Estado de validación reglamentaria de la DJ.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "observaciones",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Observaciones o fundamentación de correlatividades.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del alumno.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "cicloNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre del ciclo lectivo declarado.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "materiasNombres",
+          "tipo": "array of strings",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombres de las materias declaradas derivadas de IDs.",
+          "categoria": "CALCULADO"
         }
       ],
       "relaciones": [
@@ -1784,40 +3829,51 @@
           "campoDestino": "idCiclo",
           "tipo": "M:1"
         }
-      ],
-      "pantallas": [
-        "DeclaracionJuradaPage.jsx"
       ]
     },
     {
       "nombre": "Documentacion",
-      "descripcion": "Requisito documental o legal que el alumno debe presentar para su legajo.",
-      "campos": [
+      "descripcion": "Requisito documental obligatorio o probatorio para el legajo estudiantil.",
+      "pantallas": [
+        "DocumentacionPage.jsx"
+      ],
+      "camposPersistidos": [
         {
           "nombre": "idDocumento",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único del requisito (PK)."
+          "descripcion": "Identificador único del requisito documental (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "idAlumno",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "FK al alumno titular del legajo."
+          "descripcion": "FK al Alumno.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "tipo",
           "tipo": "string (Enum)",
           "obligatorio": true,
           "enums": [
-            "DNI (Frente y Dorso)",
-            "Título Secundario / Certificado Analítico",
-            "Certificado de Aptitud Médica",
-            "Fotos 4x4 (2 unidades)"
+            "DNI",
+            "TITULO_SECUNDARIO",
+            "APTO_MEDICO",
+            "FOTOS"
           ],
-          "descripcion": "Tipo de documento exigido por la institución."
+          "descripcion": "Tipo de documento exigido (sin tildes ni espacios).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "obligatorio",
+          "tipo": "boolean",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Indica si es indispensable para cursar.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "estado",
@@ -1825,30 +3881,112 @@
           "obligatorio": true,
           "enums": [
             "ENTREGADO",
-            "PENDIENTE"
+            "PENDIENTE",
+            "RECHAZADO"
           ],
-          "descripcion": "Estado de recepción documental."
-        },
-        {
-          "nombre": "obligatorio",
-          "tipo": "boolean",
-          "obligatorio": true,
-          "enums": null,
-          "descripcion": "Si es condición obligatoria para la regularidad."
+          "descripcion": "Estado de verificación del requisito.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "fechaEntrega",
           "tipo": "string (YYYY-MM-DD)",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "Fecha en que se recepcionó el papel en secretaría."
+          "descripcion": "Fecha de recepción física o digital.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "observaciones",
           "tipo": "string",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "Observaciones de control legal o formal."
+          "descripcion": "Notas de secretaría (legalizaciones, vencimientos).",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "camposCalculados": [
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del alumno.",
+          "categoria": "CALCULADO"
+        }
+      ],
+      "campos": [
+        {
+          "nombre": "idDocumento",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único del requisito documental (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "idAlumno",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "FK al Alumno.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "tipo",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "DNI",
+            "TITULO_SECUNDARIO",
+            "APTO_MEDICO",
+            "FOTOS"
+          ],
+          "descripcion": "Tipo de documento exigido (sin tildes ni espacios).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "obligatorio",
+          "tipo": "boolean",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Indica si es indispensable para cursar.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ENTREGADO",
+            "PENDIENTE",
+            "RECHAZADO"
+          ],
+          "descripcion": "Estado de verificación del requisito.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "fechaEntrega",
+          "tipo": "string (YYYY-MM-DD)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Fecha de recepción física o digital.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "observaciones",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Notas de secretaría (legalizaciones, vencimientos).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "alumnoNombre",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Nombre completo del alumno.",
+          "categoria": "CALCULADO"
         }
       ],
       "relaciones": [
@@ -1858,42 +3996,64 @@
           "campoDestino": "idAlumno",
           "tipo": "M:1"
         }
-      ],
-      "pantallas": [
-        "DocumentacionPage.jsx"
       ]
     },
     {
       "nombre": "Usuario",
-      "descripcion": "Cuenta de autenticación y acceso al sistema de gestión Academit.",
-      "campos": [
+      "descripcion": "Cuenta de usuario del sistema con credenciales y perfil.",
+      "pantallas": [
+        "GestionUsuariosPage.jsx",
+        "MisDatosPage.jsx",
+        "Login.jsx"
+      ],
+      "camposPersistidos": [
         {
           "nombre": "idUsuario",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador único de la cuenta de usuario (PK)."
+          "descripcion": "Identificador único del usuario (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "username",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Nombre de usuario único para login."
+          "descripcion": "Nombre de usuario único para acceso.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "nombre",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Nombre y apellido completo del usuario."
+          "descripcion": "Nombre y apellido visible.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "email",
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Correo electrónico registrado."
+          "descripcion": "Correo institucional o personal.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "telefono",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Teléfono de contacto.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "domicilio",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Domicilio de residencia.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "rol",
@@ -1905,7 +4065,8 @@
             "DOCENTE",
             "ALUMNO"
           ],
-          "descripcion": "Rol asignado para permisos del portal."
+          "descripcion": "Rol operativo y nivel de acceso en el sistema.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "estado",
@@ -1915,34 +4076,126 @@
             "ACTIVO",
             "INACTIVO"
           ],
-          "descripcion": "Estado de la cuenta."
+          "descripcion": "Estado de habilitación de la cuenta.",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "ultimoAcceso",
-          "tipo": "string (Timestamp)",
+          "tipo": "string (YYYY-MM-DD HH:mm)",
           "obligatorio": false,
           "enums": null,
-          "descripcion": "Fecha y hora del último acceso al sistema."
+          "descripcion": "Última fecha y hora de sesión registrada.",
+          "categoria": "PERSISTIDO"
         }
       ],
-      "relaciones": [],
-      "pantallas": [
-        "GestionUsuariosPage.jsx",
-        "Login.jsx",
-        "MisDatosPage.jsx",
-        "CambiarPasswordPage.jsx"
+      "camposCalculados": [],
+      "campos": [
+        {
+          "nombre": "idUsuario",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador único del usuario (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "username",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Nombre de usuario único para acceso.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "nombre",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Nombre y apellido visible.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "email",
+          "tipo": "string",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Correo institucional o personal.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "telefono",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Teléfono de contacto.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "domicilio",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Domicilio de residencia.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "rol",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ADMINISTRADOR",
+            "ADMINISTRATIVO",
+            "DOCENTE",
+            "ALUMNO"
+          ],
+          "descripcion": "Rol operativo y nivel de acceso en el sistema.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "estado",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ACTIVO",
+            "INACTIVO"
+          ],
+          "descripcion": "Estado de habilitación de la cuenta.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "ultimoAcceso",
+          "tipo": "string (YYYY-MM-DD HH:mm)",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Última fecha y hora de sesión registrada.",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "rol",
+          "entidadDestino": "Rol",
+          "campoDestino": "nombre",
+          "tipo": "M:1"
+        }
       ]
     },
     {
       "nombre": "Rol",
-      "descripcion": "Perfil de seguridad que define los privilegios y menús de acceso.",
-      "campos": [
+      "descripcion": "Rol de seguridad y autorización del sistema.",
+      "pantallas": [
+        "GestionUsuariosPage.jsx",
+        "Login.jsx",
+        "MisDatosPage.jsx"
+      ],
+      "camposPersistidos": [
         {
           "nombre": "idRol",
           "tipo": "number (Integer)",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Identificador del rol (PK)."
+          "descripcion": "Identificador del rol (PK).",
+          "categoria": "PERSISTIDO"
         },
         {
           "nombre": "nombre",
@@ -1954,14 +4207,57 @@
             "DOCENTE",
             "ALUMNO"
           ],
-          "descripcion": "Nombre del rol de usuario."
+          "descripcion": "Nombre del rol de usuario.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "descripcion",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Alcance de permisos del rol en la aplicación.",
+          "categoria": "PERSISTIDO"
         }
       ],
-      "relaciones": [],
-      "pantallas": [
-        "GestionUsuariosPage.jsx",
-        "Login.jsx",
-        "MisDatosPage.jsx"
+      "camposCalculados": [],
+      "campos": [
+        {
+          "nombre": "idRol",
+          "tipo": "number (Integer)",
+          "obligatorio": true,
+          "enums": null,
+          "descripcion": "Identificador del rol (PK).",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "nombre",
+          "tipo": "string (Enum)",
+          "obligatorio": true,
+          "enums": [
+            "ADMINISTRADOR",
+            "ADMINISTRATIVO",
+            "DOCENTE",
+            "ALUMNO"
+          ],
+          "descripcion": "Nombre del rol de usuario.",
+          "categoria": "PERSISTIDO"
+        },
+        {
+          "nombre": "descripcion",
+          "tipo": "string",
+          "obligatorio": false,
+          "enums": null,
+          "descripcion": "Alcance de permisos del rol en la aplicación.",
+          "categoria": "PERSISTIDO"
+        }
+      ],
+      "relaciones": [
+        {
+          "campo": "nombre",
+          "entidadDestino": "Usuario",
+          "campoDestino": "rol",
+          "tipo": "1:N"
+        }
       ]
     }
   ]
