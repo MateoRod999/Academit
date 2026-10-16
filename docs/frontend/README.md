@@ -72,3 +72,15 @@ Para iniciar sesión en modo maqueta, la contraseña universal de prueba es **`1
 5. [Catálogo de Componentes Compartidos](componentes.md): Documentación de props, funcionamiento y ejemplos de uso de los componentes en `src/components/`.
 6. [Contrato de API REST](contrato-api.md): Especificación exhaustiva de endpoints HTTP, métodos, parámetros y respuestas para el equipo de backend.
 7. [Mapa de Pantallas y Requisitos](mapa-de-pantallas.md): Listado completo de rutas, grupos, roles y trazabilidad con los RF01 a RF57.
+
+---
+
+## 6. Generación del Contrato de API
+
+Para regenerar automáticamente la documentación del contrato (`endpoints.csv`, `entidades.json`, `entidades-y-endpoints.md` y `openapi.yaml`):
+
+```bash
+node tools/generar-contrato.mjs
+```
+
+El script valida automáticamente la concordancia de endpoints entre todos los formatos, verifica la presencia de todas las funciones exportadas en `src/api/` y ejecuta el linter de OpenAPI (`@redocly/cli`).
