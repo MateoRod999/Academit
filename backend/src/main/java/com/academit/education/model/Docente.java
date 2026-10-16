@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import com.academit.education.model.enums.*;
 
 @Entity
 @Table(name = "docente")
@@ -37,7 +36,7 @@ public class Docente {
     @Column(name = "titulo", nullable = true, length = 100)
     private String titulo;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "estado", nullable = false, length = 10)
-    private EstadoPersona estado = EstadoPersona.ACTIVO;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_estado_persona", nullable = false)
+    private EstadoPersona estado;
 }

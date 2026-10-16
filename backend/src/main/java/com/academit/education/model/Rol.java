@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import com.academit.education.model.enums.*;
 
 @Entity
 @Table(name = "rol")
@@ -19,7 +18,6 @@ public class Rol {
     @Column(name = "id_rol")
     private Integer id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "nombre", nullable = false, length = 30)
-    private NombreRol nombre;
+    @Column(name = "nombre", nullable = false, length = 30, unique = true)
+    private String nombre;
 }

@@ -1,7 +1,6 @@
 package com.academit.education.repository;
 
 import com.academit.education.model.Asistencia;
-import com.academit.education.model.enums.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.time.LocalDate;
@@ -13,5 +12,5 @@ public interface AsistenciaRepository extends JpaRepository<Asistencia, Integer>
 
     boolean existsByAlumnoIdAndCursoIdAndFecha(Integer idAlumno, Integer idCurso, LocalDate fecha);
 
-    long countByAlumnoIdAndCursoIdAndEstado(Integer idAlumno, Integer idCurso, EstadoAsistencia estado);
+    long countByAlumnoIdAndCursoIdAndEstadoNombre(Integer idAlumno, Integer idCurso, String estado);
 }

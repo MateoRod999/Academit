@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import com.academit.education.model.enums.*;
 
 @Entity
 @Table(name = "asistencia")
@@ -31,7 +30,7 @@ public class Asistencia {
     @Column(name = "fecha", nullable = false)
     private LocalDate fecha;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "estado", nullable = false, length = 12)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_estado_asistencia", nullable = false)
     private EstadoAsistencia estado;
 }

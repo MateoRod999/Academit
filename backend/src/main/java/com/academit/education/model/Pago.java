@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import com.academit.education.model.enums.*;
 
 @Entity
 @Table(name = "pago")
@@ -35,7 +34,7 @@ public class Pago {
     @Column(name = "importe", nullable = false, precision = 10, scale = 2)
     private BigDecimal importe;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "medio_pago", nullable = false, length = 15)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_medio_pago", nullable = false)
     private MedioPago medioPago;
 }

@@ -7,7 +7,7 @@
 -- - Valores booleanos nativos (BOOLEAN).
 -- - Restricciones CHECK y UNIQUE explicitas en el esquema.
 --
--- Fuente: docs/Entregables/entregable 2/der.md (23 tablas).
+-- Fuente: docs/Entregables/entregable 2/der.md (30 tablas: 23 del DER + 7 catalogos).
 
 DROP SCHEMA IF EXISTS public CASCADE;
 CREATE SCHEMA public;
@@ -20,8 +20,69 @@ CREATE TABLE rol (
     id_rol  INTEGER GENERATED ALWAYS AS IDENTITY,
     nombre  VARCHAR(30) NOT NULL,
     CONSTRAINT pk_rol PRIMARY KEY (id_rol),
-    CONSTRAINT uk_rol_nombre UNIQUE (nombre),
-    CONSTRAINT ck_rol_nombre CHECK (nombre IN ('ADMINISTRADOR', 'ADMINISTRATIVO', 'DOCENTE', 'ALUMNO'))
+    CONSTRAINT uk_rol_nombre UNIQUE (nombre)
+);
+
+-- ============================================================
+-- Tablas catalogo (id + nombre)
+-- Reemplazan a los enums: agregar o cambiar un valor es un INSERT/UPDATE
+-- y no requiere modificar ni recompilar el codigo.
+-- ============================================================
+
+-- Estados de alumnos y docentes (ACTIVO, INACTIVO)
+CREATE TABLE estado_persona (
+    id_estado_persona INTEGER GENERATED ALWAYS AS IDENTITY,
+    nombre VARCHAR(30) NOT NULL,
+    CONSTRAINT pk_estado_persona PRIMARY KEY (id_estado_persona),
+    CONSTRAINT uk_estado_persona_nombre UNIQUE (nombre)
+);
+
+-- Estados de una matricula (PENDIENTE, ACTIVA, CANCELADA)
+CREATE TABLE estado_matricula (
+    id_estado_matricula INTEGER GENERATED ALWAYS AS IDENTITY,
+    nombre VARCHAR(30) NOT NULL,
+    CONSTRAINT pk_estado_matricula PRIMARY KEY (id_estado_matricula),
+    CONSTRAINT uk_estado_matricula_nombre UNIQUE (nombre)
+);
+
+-- Estados de una cuota (PENDIENTE, PAGADA, VENCIDA, ANULADA)
+CREATE TABLE estado_cuota (
+    id_estado_cuota INTEGER GENERATED ALWAYS AS IDENTITY,
+    nombre VARCHAR(30) NOT NULL,
+    CONSTRAINT pk_estado_cuota PRIMARY KEY (id_estado_cuota),
+    CONSTRAINT uk_estado_cuota_nombre UNIQUE (nombre)
+);
+
+-- Tipos de cuota (MENSUAL, SEGURO)
+CREATE TABLE tipo_cuota (
+    id_tipo_cuota INTEGER GENERATED ALWAYS AS IDENTITY,
+    nombre VARCHAR(30) NOT NULL,
+    CONSTRAINT pk_tipo_cuota PRIMARY KEY (id_tipo_cuota),
+    CONSTRAINT uk_tipo_cuota_nombre UNIQUE (nombre)
+);
+
+-- Medios de pago (EFECTIVO, TRANSFERENCIA, TARJETA, OTRO)
+CREATE TABLE medio_pago (
+    id_medio_pago INTEGER GENERATED ALWAYS AS IDENTITY,
+    nombre VARCHAR(30) NOT NULL,
+    CONSTRAINT pk_medio_pago PRIMARY KEY (id_medio_pago),
+    CONSTRAINT uk_medio_pago_nombre UNIQUE (nombre)
+);
+
+-- Tipos de evaluacion (PRIMER_PARCIAL, SEGUNDO_PARCIAL, ...)
+CREATE TABLE tipo_evaluacion (
+    id_tipo_evaluacion INTEGER GENERATED ALWAYS AS IDENTITY,
+    nombre VARCHAR(30) NOT NULL,
+    CONSTRAINT pk_tipo_evaluacion PRIMARY KEY (id_tipo_evaluacion),
+    CONSTRAINT uk_tipo_evaluacion_nombre UNIQUE (nombre)
+);
+
+-- Estados de asistencia (PRESENTE, AUSENTE, TARDANZA, JUSTIFICADO)
+CREATE TABLE estado_asistencia (
+    id_estado_asistencia INTEGER GENERATED ALWAYS AS IDENTITY,
+    nombre VARCHAR(30) NOT NULL,
+    CONSTRAINT pk_estado_asistencia PRIMARY KEY (id_estado_asistencia),
+    CONSTRAINT uk_estado_asistencia_nombre UNIQUE (nombre)
 );
 
 -- ============================================================
@@ -63,12 +124,12 @@ CREATE TABLE alumno (
     telefono         VARCHAR(20),
     email            VARCHAR(100) NOT NULL,
     fecha_ingreso    DATE         NOT NULL DEFAULT CURRENT_DATE,
-    estado           VARCHAR(10)  NOT NULL DEFAULT 'ACTIVO',
+    id_estado_persona INTEGER     NOT NULL,
     id_plan          INTEGER      NOT NULL,
     CONSTRAINT pk_alumno PRIMARY KEY (id_alumno),
     CONSTRAINT uk_alumno_dni UNIQUE (dni),
     CONSTRAINT fk_alumno_plan FOREIGN KEY (id_plan) REFERENCES plan_estudio (id_plan),
-    CONSTRAINT ck_alumno_estado CHECK (estado IN ('ACTIVO', 'INACTIVO')),
+    CONSTRAINT fk_alumno_estado FOREIGN KEY (id_estado_persona) REFERENCES estado_persona (id_estado_persona),
     CONSTRAINT ck_alumno_nacimiento CHECK (fecha_nacimiento < fecha_ingreso)
 );
 
@@ -80,10 +141,10 @@ CREATE TABLE docente (
     telefono   VARCHAR(20),
     email      VARCHAR(100) NOT NULL,
     titulo     VARCHAR(100),
-    estado     VARCHAR(10)  NOT NULL DEFAULT 'ACTIVO',
+    id_estado_persona INTEGER   NOT NULL,
     CONSTRAINT pk_docente PRIMARY KEY (id_docente),
     CONSTRAINT uk_docente_dni UNIQUE (dni),
-    CONSTRAINT ck_docente_estado CHECK (estado IN ('ACTIVO', 'INACTIVO'))
+    CONSTRAINT fk_docente_estado FOREIGN KEY (id_estado_persona) REFERENCES estado_persona (id_estado_persona)
 );
 
 CREATE TABLE usuario (
@@ -203,12 +264,12 @@ CREATE TABLE matricula (
     id_ciclo     INTEGER       NOT NULL,
     fecha        DATE          NOT NULL DEFAULT CURRENT_DATE,
     importe      NUMERIC(10,2),
-    estado       VARCHAR(10)   NOT NULL DEFAULT 'PENDIENTE',
+    id_estado_matricula INTEGER NOT NULL,
     CONSTRAINT pk_matricula PRIMARY KEY (id_matricula),
     CONSTRAINT fk_matricula_alumno FOREIGN KEY (id_alumno) REFERENCES alumno (id_alumno),
     CONSTRAINT fk_matricula_ciclo FOREIGN KEY (id_ciclo) REFERENCES ciclo_lectivo (id_ciclo),
     CONSTRAINT uk_matricula_alumno_ciclo UNIQUE (id_alumno, id_ciclo),   -- RN05
-    CONSTRAINT ck_matricula_estado CHECK (estado IN ('PENDIENTE', 'ACTIVA', 'CANCELADA')),
+    CONSTRAINT fk_matricula_estado FOREIGN KEY (id_estado_matricula) REFERENCES estado_matricula (id_estado_matricula),
     CONSTRAINT ck_matricula_importe CHECK (importe IS NULL OR importe >= 0)
 );
 
@@ -220,20 +281,19 @@ CREATE TABLE cuota (
     id_cuota          INTEGER GENERATED ALWAYS AS IDENTITY,
     id_matricula      INTEGER       NOT NULL,   -- RN06: no hay cuotas sueltas
     numero            INTEGER       NOT NULL,
-    tipo              VARCHAR(25)   NOT NULL,
+    id_tipo_cuota     INTEGER       NOT NULL,
     fecha_vencimiento DATE          NOT NULL,
     importe           NUMERIC(10,2) NOT NULL,
-    estado            VARCHAR(10)   NOT NULL DEFAULT 'PENDIENTE',
+    id_estado_cuota   INTEGER       NOT NULL,
     CONSTRAINT pk_cuota PRIMARY KEY (id_cuota),
     CONSTRAINT fk_cuota_matricula FOREIGN KEY (id_matricula) REFERENCES matricula (id_matricula),
-    CONSTRAINT uk_cuota UNIQUE (id_matricula, numero, tipo),
+    CONSTRAINT uk_cuota UNIQUE (id_matricula, numero, id_tipo_cuota),
     CONSTRAINT ck_cuota_importe CHECK (importe > 0),
-    CONSTRAINT ck_cuota_estado CHECK (estado IN ('PENDIENTE', 'PAGADA', 'VENCIDA', 'ANULADA')),
-    -- RN18: 12 cuotas mensuales y 3 seguros cuatrimestrales por matricula
-    CONSTRAINT ck_cuota_tipo_numero CHECK (
-        (tipo = 'MENSUAL' AND numero BETWEEN 1 AND 12) OR
-        (tipo = 'SEGURO'  AND numero BETWEEN 1 AND 3)
-    )
+    CONSTRAINT ck_cuota_numero CHECK (numero > 0),
+    CONSTRAINT fk_cuota_tipo FOREIGN KEY (id_tipo_cuota) REFERENCES tipo_cuota (id_tipo_cuota),
+    CONSTRAINT fk_cuota_estado FOREIGN KEY (id_estado_cuota) REFERENCES estado_cuota (id_estado_cuota)
+    -- RN18 (12 cuotas MENSUAL y 3 SEGURO por matricula) se valida en el Service,
+    -- porque el tipo ahora es un catalogo y no un valor fijo del esquema.
 );
 
 CREATE TABLE pago (
@@ -242,13 +302,13 @@ CREATE TABLE pago (
     id_usuario INTEGER       NOT NULL,   -- quien registro el pago (RNF12)
     fecha      DATE          NOT NULL DEFAULT CURRENT_DATE,
     importe    NUMERIC(10,2) NOT NULL,
-    medio_pago VARCHAR(15)   NOT NULL,
+    id_medio_pago INTEGER    NOT NULL,
     CONSTRAINT pk_pago PRIMARY KEY (id_pago),
     CONSTRAINT uk_pago_cuota UNIQUE (id_cuota),   -- RN08: una cuota, un unico pago
     CONSTRAINT fk_pago_cuota FOREIGN KEY (id_cuota) REFERENCES cuota (id_cuota),
     CONSTRAINT fk_pago_usuario FOREIGN KEY (id_usuario) REFERENCES usuario (id_usuario),
     CONSTRAINT ck_pago_importe CHECK (importe > 0),
-    CONSTRAINT ck_pago_medio CHECK (medio_pago IN ('EFECTIVO', 'TRANSFERENCIA', 'TARJETA', 'OTRO'))
+    CONSTRAINT fk_pago_medio FOREIGN KEY (id_medio_pago) REFERENCES medio_pago (id_medio_pago)
 );
 
 -- ============================================================
@@ -259,13 +319,12 @@ CREATE TABLE evaluacion (
     id_evaluacion    INTEGER GENERATED ALWAYS AS IDENTITY,
     id_curso_materia INTEGER      NOT NULL,
     fecha            DATE         NOT NULL,
-    tipo             VARCHAR(20)  NOT NULL,
+    id_tipo_evaluacion INTEGER    NOT NULL,
     descripcion      VARCHAR(200),
     CONSTRAINT pk_evaluacion PRIMARY KEY (id_evaluacion),
     CONSTRAINT fk_evaluacion_curso_materia FOREIGN KEY (id_curso_materia)
         REFERENCES curso_materia (id_curso_materia),
-    CONSTRAINT ck_evaluacion_tipo CHECK (tipo IN (
-        'PRIMER_PARCIAL', 'SEGUNDO_PARCIAL', 'TRABAJO_PRACTICO', 'EXAMEN_FINAL', 'RECUPERATORIO'))
+    CONSTRAINT fk_evaluacion_tipo FOREIGN KEY (id_tipo_evaluacion) REFERENCES tipo_evaluacion (id_tipo_evaluacion)
 );
 
 CREATE TABLE calificacion (
@@ -285,12 +344,12 @@ CREATE TABLE asistencia (
     id_alumno     INTEGER     NOT NULL,
     id_curso      INTEGER     NOT NULL,
     fecha         DATE        NOT NULL,
-    estado        VARCHAR(12) NOT NULL,
+    id_estado_asistencia INTEGER NOT NULL,
     CONSTRAINT pk_asistencia PRIMARY KEY (id_asistencia),
     CONSTRAINT fk_asistencia_alumno FOREIGN KEY (id_alumno) REFERENCES alumno (id_alumno),
     CONSTRAINT fk_asistencia_curso FOREIGN KEY (id_curso) REFERENCES curso (id_curso),
     CONSTRAINT uk_asistencia UNIQUE (id_alumno, id_curso, fecha),   -- RN15
-    CONSTRAINT ck_asistencia_estado CHECK (estado IN ('PRESENTE', 'AUSENTE', 'TARDANZA', 'JUSTIFICADO'))
+    CONSTRAINT fk_asistencia_estado FOREIGN KEY (id_estado_asistencia) REFERENCES estado_asistencia (id_estado_asistencia)
 );
 
 -- ============================================================
@@ -355,7 +414,7 @@ CREATE INDEX ix_curso_carrera ON curso (id_carrera);
 CREATE INDEX ix_curso_materia_docente ON curso_materia (id_docente);
 CREATE INDEX ix_inscripcion_curso ON inscripcion (id_curso);
 CREATE INDEX ix_matricula_ciclo ON matricula (id_ciclo);
-CREATE INDEX ix_cuota_estado_venc ON cuota (estado, fecha_vencimiento);   -- job de vencidas (RF30)
+CREATE INDEX ix_cuota_estado_venc ON cuota (id_estado_cuota, fecha_vencimiento);   -- job de vencidas (RF30)
 CREATE INDEX ix_pago_usuario ON pago (id_usuario);
 CREATE INDEX ix_pago_fecha ON pago (fecha);
 CREATE INDEX ix_evaluacion_curso_materia ON evaluacion (id_curso_materia);

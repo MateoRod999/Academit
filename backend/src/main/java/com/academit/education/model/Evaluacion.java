@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDate;
-import com.academit.education.model.enums.*;
 
 @Entity
 @Table(name = "evaluacion")
@@ -27,8 +26,8 @@ public class Evaluacion {
     @Column(name = "fecha", nullable = false)
     private LocalDate fecha;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "tipo", nullable = false, length = 20)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_tipo_evaluacion", nullable = false)
     private TipoEvaluacion tipo;
 
     @Column(name = "descripcion", nullable = true, length = 200)

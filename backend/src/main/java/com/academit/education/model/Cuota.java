@@ -7,7 +7,6 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import com.academit.education.model.enums.*;
 
 @Entity
 @Table(name = "cuota")
@@ -28,8 +27,8 @@ public class Cuota {
     @Column(name = "numero", nullable = false)
     private Integer numero;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "tipo", nullable = false, length = 25)
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_tipo_cuota", nullable = false)
     private TipoCuota tipo;
 
     @Column(name = "fecha_vencimiento", nullable = false)
@@ -38,7 +37,7 @@ public class Cuota {
     @Column(name = "importe", nullable = false, precision = 10, scale = 2)
     private BigDecimal importe;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "estado", nullable = false, length = 10)
-    private EstadoCuota estado = EstadoCuota.PENDIENTE;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "id_estado_cuota", nullable = false)
+    private EstadoCuota estado;
 }

@@ -1,7 +1,7 @@
 package com.academit.education.repository;
 
 import com.academit.education.model.Cuota;
-import com.academit.education.model.enums.*;
+import com.academit.education.model.EstadoCuota;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -17,7 +17,7 @@ public interface CuotaRepository extends JpaRepository<Cuota, Integer> {
 
     List<Cuota> findByMatriculaAlumnoId(Integer idAlumno);
 
-    List<Cuota> findByMatriculaAlumnoIdAndEstadoIn(Integer idAlumno, Collection<EstadoCuota> estados);
+    List<Cuota> findByMatriculaAlumnoIdAndEstadoNombreIn(Integer idAlumno, Collection<String> estados);
 
     /** RF30 / RN07: pasa a VENCIDA las cuotas pendientes con vencimiento anterior a hoy. */
     @Modifying
