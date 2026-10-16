@@ -8,6 +8,16 @@
 -- Roles (RF04, RN17)
 INSERT INTO rol (nombre) VALUES ('ADMINISTRADOR'), ('ADMINISTRATIVO'), ('DOCENTE'), ('ALUMNO');
 
+-- Catalogos (reemplazan a los enums; se pueden ampliar con un INSERT)
+INSERT INTO estado_persona (nombre) VALUES ('ACTIVO'), ('INACTIVO');
+INSERT INTO estado_matricula (nombre) VALUES ('PENDIENTE'), ('ACTIVA'), ('CANCELADA');
+INSERT INTO estado_cuota (nombre) VALUES ('PENDIENTE'), ('PAGADA'), ('VENCIDA'), ('ANULADA');
+INSERT INTO tipo_cuota (nombre) VALUES ('MENSUAL'), ('SEGURO');
+INSERT INTO medio_pago (nombre) VALUES ('EFECTIVO'), ('TRANSFERENCIA'), ('TARJETA'), ('OTRO');
+INSERT INTO tipo_evaluacion (nombre) VALUES
+    ('PRIMER_PARCIAL'), ('SEGUNDO_PARCIAL'), ('TRABAJO_PRACTICO'), ('EXAMEN_FINAL'), ('RECUPERATORIO');
+INSERT INTO estado_asistencia (nombre) VALUES ('PRESENTE'), ('AUSENTE'), ('TARDANZA'), ('JUSTIFICADO');
+
 -- Carrera, plan y materias (RF47)
 INSERT INTO carrera (nombre, duracion_anios)
 VALUES ('Tecnicatura Universitaria en Programación', 3);
@@ -44,18 +54,21 @@ WHERE p.nombre = 'Plan 2024';
 INSERT INTO ciclo_lectivo (anio, fecha_inicio, fecha_fin)
 VALUES (2026, '2026-03-02', '2026-12-18');
 
-INSERT INTO docente (dni, apellido, nombre, telefono, email, titulo) VALUES
-    ('25111222', 'Pérez', 'Laura', '3815000001', 'laura.perez@example.com', 'Ingeniera en Informática'),
-    ('27333444', 'Gómez', 'Carlos', '3815000002', 'carlos.gomez@example.com', 'Licenciado en Matemática');
+INSERT INTO docente (dni, apellido, nombre, telefono, email, titulo, id_estado_persona)
+SELECT v.dni, v.apellido, v.nombre, v.tel, v.email, v.titulo, e.id_estado_persona
+FROM (VALUES ('25111222', 'Pérez', 'Laura', '3815000001', 'laura.perez@example.com', 'Ingeniera en Informática'),
+             ('27333444', 'Gómez', 'Carlos', '3815000002', 'carlos.gomez@example.com', 'Licenciado en Matemática')
+     ) AS v(dni, apellido, nombre, tel, email, titulo)
+JOIN estado_persona e ON e.nombre = 'ACTIVO';
 
-INSERT INTO alumno (dni, apellido, nombre, fecha_nacimiento, domicilio, telefono, email, id_plan)
-SELECT v.dni, v.apellido, v.nombre, v.nac::date, v.dom, v.tel, v.email, p.id_plan
-FROM plan_estudio p,
+INSERT INTO alumno (dni, apellido, nombre, fecha_nacimiento, domicilio, telefono, email, id_plan, id_estado_persona)
+SELECT v.dni, v.apellido, v.nombre, v.nac::date, v.dom, v.tel, v.email, p.id_plan, e.id_estado_persona
+FROM plan_estudio p, estado_persona e,
      (VALUES ('44111222', 'Rojas', 'Lucía', '2003-05-14', 'Calle Falsa 123', '3815100001', 'lucia.rojas@example.com'),
              ('44333444', 'Díaz', 'Mateo', '2002-11-02', 'Calle Falsa 456', '3815100002', 'mateo.diaz@example.com'),
              ('44555666', 'Silva', 'Camila', '2004-01-27', 'Calle Falsa 789', '3815100003', 'camila.silva@example.com')
      ) AS v(dni, apellido, nombre, nac, dom, tel, email)
-WHERE p.nombre = 'Plan 2024';
+WHERE p.nombre = 'Plan 2024' AND e.nombre = 'ACTIVO';
 
 -- Usuarios de prueba, uno por rol (RF01, RF03)
 INSERT INTO usuario (username, password_hash, id_rol, id_alumno, id_docente)
@@ -95,42 +108,48 @@ SELECT a.id_alumno, c.id_curso, c.id_ciclo
 FROM alumno a JOIN curso c ON c.nombre = '1° Año A'
 WHERE a.dni IN ('44111222', '44333444');
 
-INSERT INTO matricula (id_alumno, id_ciclo, importe, estado)
-SELECT a.id_alumno, ci.id_ciclo, v.importe, v.estado
+INSERT INTO matricula (id_alumno, id_ciclo, importe, id_estado_matricula)
+SELECT a.id_alumno, ci.id_ciclo, v.importe, em.id_estado_matricula
 FROM (VALUES ('44111222', 15000.00, 'ACTIVA'), ('44333444', 15000.00, 'PENDIENTE')) AS v(dni, importe, estado)
 JOIN alumno a ON a.dni = v.dni
-JOIN ciclo_lectivo ci ON ci.anio = 2026;
+JOIN ciclo_lectivo ci ON ci.anio = 2026
+JOIN estado_matricula em ON em.nombre = v.estado;
 
 -- Cuotas de la matricula de Lucia: 12 mensuales + 3 seguros (RF28, RF46, RN18).
 -- Las pendientes con vencimiento pasado sirven para probar el job de vencidas (RF30).
-INSERT INTO cuota (id_matricula, numero, tipo, fecha_vencimiento, importe, estado)
-SELECT m.id_matricula, n, 'MENSUAL',
-       (DATE '2026-03-10' + ((n - 1) * INTERVAL '1 month'))::date, 12000.00,
-       CASE WHEN n <= 6 THEN 'PAGADA' ELSE 'PENDIENTE' END
+INSERT INTO cuota (id_matricula, numero, id_tipo_cuota, fecha_vencimiento, importe, id_estado_cuota)
+SELECT m.id_matricula, n, t.id_tipo_cuota,
+       (DATE '2026-03-10' + ((n - 1) * INTERVAL '1 month'))::date, 12000.00, e.id_estado_cuota
 FROM matricula m
 JOIN alumno a ON a.id_alumno = m.id_alumno
 CROSS JOIN generate_series(1, 12) AS n
+JOIN tipo_cuota t ON t.nombre = 'MENSUAL'
+JOIN estado_cuota e ON e.nombre = CASE WHEN n <= 6 THEN 'PAGADA' ELSE 'PENDIENTE' END
 WHERE a.dni = '44111222';
 
-INSERT INTO cuota (id_matricula, numero, tipo, fecha_vencimiento, importe, estado)
-SELECT m.id_matricula, n, 'SEGURO',
-       (DATE '2026-03-31' + ((n - 1) * INTERVAL '4 months'))::date, 3000.00,
-       CASE WHEN n = 1 THEN 'PAGADA' ELSE 'PENDIENTE' END
+INSERT INTO cuota (id_matricula, numero, id_tipo_cuota, fecha_vencimiento, importe, id_estado_cuota)
+SELECT m.id_matricula, n, t.id_tipo_cuota,
+       (DATE '2026-03-31' + ((n - 1) * INTERVAL '4 months'))::date, 3000.00, e.id_estado_cuota
 FROM matricula m
 JOIN alumno a ON a.id_alumno = m.id_alumno
 CROSS JOIN generate_series(1, 3) AS n
+JOIN tipo_cuota t ON t.nombre = 'SEGURO'
+JOIN estado_cuota e ON e.nombre = CASE WHEN n = 1 THEN 'PAGADA' ELSE 'PENDIENTE' END
 WHERE a.dni = '44111222';
 
 -- Pagos de las cuotas pagadas (RF32, RN08-RN10)
-INSERT INTO pago (id_cuota, id_usuario, fecha, importe, medio_pago)
-SELECT c.id_cuota, u.id_usuario, c.fecha_vencimiento, c.importe, 'EFECTIVO'
-FROM cuota c, usuario u
-WHERE c.estado = 'PAGADA' AND u.username = 'administrativo';
+INSERT INTO pago (id_cuota, id_usuario, fecha, importe, id_medio_pago)
+SELECT c.id_cuota, u.id_usuario, c.fecha_vencimiento, c.importe, mp.id_medio_pago
+FROM cuota c
+JOIN estado_cuota e ON e.id_estado_cuota = c.id_estado_cuota AND e.nombre = 'PAGADA'
+JOIN usuario u ON u.username = 'administrativo'
+JOIN medio_pago mp ON mp.nombre = 'EFECTIVO';
 
 -- Evaluacion, notas y asistencias (RF36-RF41)
-INSERT INTO evaluacion (id_curso_materia, fecha, tipo, descripcion)
-SELECT cm.id_curso_materia, DATE '2026-05-20', 'PRIMER_PARCIAL', 'Primer parcial de Programación I'
+INSERT INTO evaluacion (id_curso_materia, fecha, id_tipo_evaluacion, descripcion)
+SELECT cm.id_curso_materia, DATE '2026-05-20', te.id_tipo_evaluacion, 'Primer parcial de Programación I'
 FROM curso_materia cm
+JOIN tipo_evaluacion te ON te.nombre = 'PRIMER_PARCIAL'
 JOIN curso c ON c.id_curso = cm.id_curso
 JOIN materia m ON m.id_materia = cm.id_materia
 WHERE c.nombre = '1° Año A' AND m.nombre = 'Programación I';
@@ -141,14 +160,15 @@ FROM evaluacion e
 JOIN (VALUES ('44111222', 8), ('44333444', 3)) AS v(dni, nota) ON TRUE
 JOIN alumno a ON a.dni = v.dni;
 
-INSERT INTO asistencia (id_alumno, id_curso, fecha, estado)
-SELECT a.id_alumno, c.id_curso, v.fecha::date, v.estado
+INSERT INTO asistencia (id_alumno, id_curso, fecha, id_estado_asistencia)
+SELECT a.id_alumno, c.id_curso, v.fecha::date, ea.id_estado_asistencia
 FROM (VALUES ('44111222', '2026-03-09', 'PRESENTE'), ('44333444', '2026-03-09', 'PRESENTE'),
              ('44111222', '2026-03-10', 'PRESENTE'), ('44333444', '2026-03-10', 'AUSENTE'),
              ('44111222', '2026-03-11', 'TARDANZA'), ('44333444', '2026-03-11', 'JUSTIFICADO')
      ) AS v(dni, fecha, estado)
 JOIN alumno a ON a.dni = v.dni
-JOIN curso c ON c.nombre = '1° Año A';
+JOIN curso c ON c.nombre = '1° Año A'
+JOIN estado_asistencia ea ON ea.nombre = v.estado;
 
 -- Mesa de examen (RF49)
 INSERT INTO mesa_examen (id_materia, id_docente, fecha, cupo)
