@@ -15,14 +15,12 @@ export const Login = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  // Ruta a la que intentaba acceder antes de ser redirigido
   const from = location.state?.from?.pathname || '/'
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setErrorMsg('')
 
-    // Validación de campos obligatorios
     if (!username.trim() || !password.trim()) {
       setValidated(true)
       return
@@ -40,7 +38,6 @@ export const Login = () => {
     }
   }
 
-  // Atajo para autocompletar usuario de prueba y facilitar la corrección
   const handleQuickFill = (user) => {
     setUsername(user)
     setPassword('1234')
@@ -49,27 +46,23 @@ export const Login = () => {
   }
 
   return (
-    <Container className="py-5">
-      <Row className="justify-content-center">
-        <Col xs={12} sm={10} md={8} lg={5}>
-          <Card className="shadow-sm border-0">
-            <Card.Body className="p-4 p-md-5">
+    <div className="d-flex flex-column justify-content-center align-items-center min-vh-100 py-5" style={{ backgroundColor: 'var(--fondo)' }}>
+      <Container>
+        <Row className="justify-content-center">
+          <Col xs={12} sm={10} md={7} lg={5} xl={4}>
+            <Card className="p-4 p-md-5" style={{ backgroundColor: 'var(--superficie)', border: '1px solid var(--borde)' }}>
               <div className="text-center mb-4">
-                <img
-                  src="/avatar-graduado.svg"
-                  alt="Academit Logo"
-                  width="76"
-                  height="76"
-                  className="d-inline-block"
-                />
+                <h1 className="h2 mb-1 academic-serif" style={{ color: 'var(--texto)' }}>
+                  Academit
+                </h1>
+                <p className="small text-muted mb-0" style={{ letterSpacing: '0.04em' }}>
+                  Gestión Institucional
+                </p>
               </div>
 
               {errorMsg && (
-                <Alert variant="danger" className="py-2 small">
-                  <div className="d-flex align-items-center gap-1">
-                    <span className="nf-glyph"></span>
-                    <strong>{errorMsg}</strong>
-                  </div>
+                <Alert variant="danger" transition={false} className="py-2 px-3 small mb-4">
+                  <strong>{errorMsg}</strong>
                   {errorErrors.length > 0 && (
                     <ul className="mb-0 ps-3 mt-1">
                       {errorErrors.map((e, idx) => (
@@ -85,10 +78,10 @@ export const Login = () => {
 
               <Form noValidate validated={validated} onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formUsername">
-                  <Form.Label className="fw-semibold small">Usuario</Form.Label>
+                  <Form.Label>Usuario</Form.Label>
                   <Form.Control
                     type="text"
-                    placeholder="Ej. admin, docente..."
+                    placeholder="Ej. admin, docente, alumno..."
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required
@@ -99,7 +92,7 @@ export const Login = () => {
                 </Form.Group>
 
                 <Form.Group className="mb-4" controlId="formPassword">
-                  <Form.Label className="fw-semibold small">Contraseña</Form.Label>
+                  <Form.Label>Contraseña</Form.Label>
                   <Form.Control
                     type="password"
                     placeholder="Contraseña"
@@ -115,33 +108,32 @@ export const Login = () => {
                 <Button
                   variant="primary"
                   type="submit"
-                  className="w-100 py-2 fw-semibold"
+                  className="w-100 py-2"
                   disabled={loading}
                 >
-                  {loading ? 'Ingresando...' : 'Iniciar Sesión'}
+                  {loading ? 'Cargando…' : 'Iniciar Sesión'}
                 </Button>
               </Form>
 
-              <hr className="my-4 border-secondary border-opacity-25" />
+              <hr className="my-4" style={{ borderColor: 'var(--borde)' }} />
 
-              <div className="p-3 rounded" style={{ backgroundColor: 'var(--m-surface)', border: '1px solid var(--m-outline)' }}>
-                <p className="small text-muted fw-bold mb-2">
-                  <span className="nf-glyph me-1"></span>
+              <div className="p-3" style={{ backgroundColor: 'var(--superficie-alt)', border: '1px solid var(--borde)' }}>
+                <p className="small text-muted mb-2 fw-semibold">
                   Usuarios de prueba (Contraseña: <code>1234</code>):
                 </p>
                 <div className="d-flex flex-wrap gap-1">
                   <Button
                     variant="outline-secondary"
                     size="sm"
-                    className="small"
+                    className="py-1 px-2"
                     onClick={() => handleQuickFill('admin')}
                   >
-                    admin (Admin)
+                    admin
                   </Button>
                   <Button
                     variant="outline-secondary"
                     size="sm"
-                    className="small"
+                    className="py-1 px-2"
                     onClick={() => handleQuickFill('administrativo')}
                   >
                     administrativo
@@ -149,7 +141,7 @@ export const Login = () => {
                   <Button
                     variant="outline-secondary"
                     size="sm"
-                    className="small"
+                    className="py-1 px-2"
                     onClick={() => handleQuickFill('docente')}
                   >
                     docente
@@ -157,23 +149,24 @@ export const Login = () => {
                   <Button
                     variant="outline-secondary"
                     size="sm"
-                    className="small"
+                    className="py-1 px-2"
                     onClick={() => handleQuickFill('alumno')}
                   >
                     alumno
                   </Button>
                 </div>
               </div>
-            </Card.Body>
-          </Card>
-          <div className="text-center mt-4">
-            <small className="text-muted" style={{ fontSize: '0.78rem' }}>
-              Este programa fue hecho como proyecto para Taller Integrador III y licenciado con BSD3.
-            </small>
-          </div>
-        </Col>
-      </Row>
-    </Container>
+            </Card>
+
+            <div className="text-center mt-4">
+              <small className="text-muted" style={{ fontSize: '0.78rem' }}>
+                Este programa fue hecho como proyecto para Taller Integrador III y licenciado con BSD3.
+              </small>
+            </div>
+          </Col>
+        </Row>
+      </Container>
+    </div>
   )
 }
 

@@ -25,7 +25,6 @@ export const Layout = ({ children }) => {
   }
 
   // Filtrar grupos y opciones según el rol del usuario activo
-  // Regla: "Cada grupo solo aparece si el rol tiene al menos una opción en él."
   const gruposVisibles = MENU_GRUPOS.map((grupo) => {
     const itemsPermitidos = grupo.items.filter((item) =>
       rol ? item.roles.includes(rol) : false
@@ -49,7 +48,7 @@ export const Layout = ({ children }) => {
           {gIdx > 0 && <hr className="sidebar-divider" />}
           <div className="sidebar-section-title">{grupo.titulo}</div>
 
-          <div className="d-flex flex-column gap-1 mt-1">
+          <div className="d-flex flex-column mt-1">
             {grupo.items.map((item) => (
               <Nav.Link
                 key={item.path}
@@ -74,29 +73,19 @@ export const Layout = ({ children }) => {
       {/* 1. BARRA LATERAL FIJA EN ESCRITORIO (>= lg) */}
       <aside className="desktop-sidebar d-none d-lg-flex">
         {/* Identidad de marca Academit */}
-        <div className="p-3 border-bottom border-secondary border-opacity-25">
-          <Link to="/" className="text-decoration-none d-flex align-items-center gap-2">
-            <img src="/avatar-graduado.svg" alt="Academit" width="32" height="32" className="flex-shrink-0" />
-            <div>
-              <div className="fw-bold fs-5 lh-1" style={{ color: 'var(--m-primary)' }}>
-                Academit
-              </div>
-              <small className="text-muted" style={{ fontSize: '0.72rem' }}>
-                Gestión Institucional
-              </small>
-            </div>
+        <div className="p-3 border-bottom" style={{ borderColor: '#36312F' }}>
+          <Link to="/" className="text-decoration-none d-block">
+            <div className="sidebar-brand">Academit</div>
+            <div className="sidebar-brand-subtitle">Gestión Institucional</div>
           </Link>
         </div>
 
         {/* Tarjeta de usuario en sidebar */}
-        <div
-          className="px-3 py-2 border-bottom border-secondary border-opacity-25"
-          style={{ backgroundColor: 'var(--m-surface)' }}
-        >
+        <div className="sidebar-user-panel">
           <div className="d-flex align-items-center justify-content-between mb-1">
             <span
               className="fw-semibold text-truncate small"
-              style={{ color: 'var(--m-on-surface)', maxWidth: '140px' }}
+              style={{ maxWidth: '140px', color: 'var(--sidebar-texto)' }}
             >
               {nombre || usuario}
             </span>
@@ -104,8 +93,7 @@ export const Layout = ({ children }) => {
               {rol}
             </Badge>
           </div>
-          <div className="text-muted" style={{ fontSize: '0.72rem' }}>
-            <i className="bi bi-person me-1" />
+          <div className="small" style={{ fontSize: '0.72rem', color: 'var(--sidebar-grupos)' }}>
             @{usuario}
           </div>
         </div>
@@ -121,25 +109,25 @@ export const Layout = ({ children }) => {
         {/* Barra superior con Academit, Usuario, Rol y botón Salir */}
         <header className="top-navbar d-flex align-items-center justify-content-between">
           <div className="d-flex align-items-center">
-            {/* Botón hamburguesa sólo en pantallas chicas (< lg) */}
+            {/* Botón menú simple en pantallas chicas (< lg), sin animación */}
             <Button
-              variant="outline-light"
+              variant="outline-secondary"
               size="sm"
               onClick={() => setShowMobileSidebar(true)}
-              className="d-lg-none me-3 p-1 px-2 border-secondary d-flex align-items-center justify-content-center"
-              aria-label="Abrir menú lateral"
+              className="d-lg-none me-3 py-1 px-2 border"
+              aria-label="Abrir menú"
             >
-              <i className="bi bi-list fs-5" />
+              Menú
             </Button>
 
             {/* Nombre de la institución | Página activa */}
-            <span className="fw-bold me-2" style={{ color: 'var(--m-primary)' }}>
+            <span className="fw-bold me-2 academic-serif" style={{ fontSize: '1.15rem', color: 'var(--texto)' }}>
               Academit
             </span>
             <span className="text-muted me-2 opacity-50">|</span>
             <span
-              className="fw-semibold small text-truncate"
-              style={{ color: 'var(--m-on-surface)', maxWidth: '300px' }}
+              className="small text-truncate"
+              style={{ color: 'var(--texto-secundario)', maxWidth: '300px' }}
             >
               {activeTitle}
             </span>
@@ -148,7 +136,7 @@ export const Layout = ({ children }) => {
           {/* Datos del usuario y botón Salir en la barra superior */}
           <div className="d-flex align-items-center gap-3">
             <div className="d-none d-sm-flex align-items-center gap-2">
-              <span className="small text-muted">{nombre || usuario}</span>
+              <span className="small" style={{ color: 'var(--texto)' }}>{nombre || usuario}</span>
               <Badge bg="secondary" className="text-uppercase small">
                 {rol}
               </Badge>
@@ -158,82 +146,79 @@ export const Layout = ({ children }) => {
               variant="outline-danger"
               size="sm"
               onClick={handleLogout}
-              className="d-flex align-items-center gap-1 py-1 px-2 fw-semibold"
+              className="py-1 px-2"
             >
-              <i className="bi bi-box-arrow-right" />
-              <span>Salir</span>
+              Salir
             </Button>
           </div>
         </header>
 
-        {/* Alerta descartable superior: 'Vista de maqueta con datos de ejemplo' si VITE_USE_MOCK=true */}
+        {/* Alerta de maqueta descartable sin animación */}
         {isMock && showMockAlert && (
-          <Alert
-            variant="warning"
-            dismissible
-            onClose={() => setShowMockAlert(false)}
-            className="m-3 mb-0 py-2 px-3 small shadow-sm d-flex align-items-center gap-2"
-          >
-            <i className="bi bi-info-circle-fill fs-6" />
-            <div className="flex-grow-1">
-              <strong>Vista de maqueta con datos de ejemplo:</strong> Todas las operaciones simulan su efecto de manera local en el frontend sin comunicarse con un servidor real.
-            </div>
-          </Alert>
+          <div className="content-container pb-0 pt-3">
+            <Alert
+              variant="warning"
+              dismissible
+              transition={false}
+              onClose={() => setShowMockAlert(false)}
+              className="mb-0 py-2 px-3 small d-flex align-items-center justify-content-between"
+            >
+              <div>
+                <strong>Vista de maqueta:</strong> Todas las operaciones simulan su efecto de manera local en el frontend sin comunicarse con un servidor real.
+              </div>
+            </Alert>
+          </div>
         )}
 
-        {/* 3. BARRA LATERAL OFFCANVAS PARA MÓVILES (< lg) */}
+        {/* 3. BARRA LATERAL OFFCANVAS PARA MÓVILES (< lg) SIN ANIMACIÓN */}
         <Offcanvas
           show={showMobileSidebar}
           onHide={() => setShowMobileSidebar(false)}
           placement="start"
           className="d-lg-none"
+          animation={false}
+          style={{
+            backgroundColor: 'var(--sidebar-fondo)',
+            color: 'var(--sidebar-texto)',
+            width: '260px',
+            borderRight: '1px solid var(--borde-fuerte)',
+          }}
         >
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title
-              className="d-flex align-items-center gap-2 fs-6 fw-bold"
-              style={{ color: 'var(--m-primary)' }}
-            >
-              <img src="/avatar-graduado.svg" alt="Academit" width="22" height="22" />
-              <span>Academit</span>
+          <Offcanvas.Header closeButton closeVariant="white" style={{ borderBottom: '1px solid #36312F' }}>
+            <Offcanvas.Title className="sidebar-brand fs-5">
+              Academit
             </Offcanvas.Title>
           </Offcanvas.Header>
 
           <Offcanvas.Body className="d-flex flex-column p-0">
-            {/* Cabecera del usuario en móvil */}
-            <div
-              className="p-3 border-bottom border-secondary border-opacity-25"
-              style={{ backgroundColor: 'var(--m-surface)' }}
-            >
-              <div className="fw-semibold" style={{ color: 'var(--m-on-surface)' }}>
+            <div className="sidebar-user-panel">
+              <div className="fw-semibold small" style={{ color: 'var(--sidebar-texto)' }}>
                 {nombre || usuario}
               </div>
               <div className="d-flex align-items-center justify-content-between mt-1">
-                <span className="text-muted small">@{usuario}</span>
+                <span className="small" style={{ fontSize: '0.72rem', color: 'var(--sidebar-grupos)' }}>@{usuario}</span>
                 <Badge bg="secondary">{rol}</Badge>
               </div>
             </div>
 
-            {/* Opciones agrupadas */}
             <div className="p-3 flex-grow-1 overflow-auto">
               {renderNavGrupos(() => setShowMobileSidebar(false))}
             </div>
 
-            {/* Botón Salir al pie del drawer móvil */}
-            <div className="p-3 border-top border-secondary border-opacity-25 mt-auto">
+            <div className="p-3 border-top mt-auto" style={{ borderColor: '#36312F' }}>
               <Button
                 variant="outline-danger"
-                className="w-100 d-flex align-items-center justify-content-center gap-2 py-2"
+                className="w-100 py-2"
                 onClick={handleLogout}
               >
-                <i className="bi bi-box-arrow-right" />
-                <span className="fw-semibold">Cerrar sesión</span>
+                Cerrar sesión
               </Button>
             </div>
           </Offcanvas.Body>
         </Offcanvas>
 
-        {/* Contenido principal de la página */}
-        <main className="p-3 p-lg-4 flex-grow-1">
+        {/* Contenido principal de la página (máximo 1200px) */}
+        <main className="content-container">
           {children}
         </main>
       </div>
