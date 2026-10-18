@@ -3,8 +3,8 @@ export const StatusBadge = ({ status, className = '' }) => {
 
   const s = String(status).toUpperCase()
 
-  let badgeClass = 'badge-estado-informativo'
-  let label = status
+  let badgeClass
+  let label
 
   switch (s) {
     // Aprobados / Éxitos / Pagados (#4F5E49)
