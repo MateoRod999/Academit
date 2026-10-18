@@ -6,21 +6,8 @@ export const AppToast = ({
   message,
   errors = [],
   variant = 'success',
-  title = 'Acción simulada',
+  title = 'Notificación',
 }) => {
-  const getIcon = () => {
-    switch (variant) {
-      case 'success':
-        return 'bi-check-circle-fill text-success'
-      case 'danger':
-        return 'bi-x-circle-fill text-danger'
-      case 'warning':
-        return 'bi-exclamation-triangle-fill text-warning'
-      default:
-        return 'bi-info-circle-fill text-info'
-    }
-  }
-
   return (
     <ToastContainer position="top-end" className="p-3 position-fixed" style={{ zIndex: 9999 }}>
       <Toast
@@ -28,36 +15,33 @@ export const AppToast = ({
         onClose={onClose}
         delay={4500}
         autohide
-        className="shadow-lg border-0"
+        animation={false}
         style={{
-          backgroundColor: 'var(--m-surfaceVariant)',
-          color: 'var(--m-onSurfaceVariant)',
-          minWidth: '320px',
+          backgroundColor: 'var(--superficie)',
+          border: '1px solid var(--borde)',
+          borderRadius: '2px',
+          minWidth: '300px',
         }}
       >
         <Toast.Header
           closeButton
           style={{
-            backgroundColor: 'var(--m-surface)',
-            color: 'var(--m-onSurface)',
-            borderBottom: '1px solid var(--m-outline)',
+            backgroundColor: 'var(--superficie-alt)',
+            borderBottom: '1px solid var(--borde)',
           }}
         >
-          <i className={`bi ${getIcon()} me-2 fs-6`} />
-          <strong className="me-auto" style={{ color: 'var(--m-primary)' }}>
+          <strong className="me-auto" style={{ color: variant === 'danger' ? 'var(--error)' : 'var(--primario)' }}>
             {title}
           </strong>
-          <small className="text-muted">Ahora</small>
         </Toast.Header>
-        <Toast.Body className="py-3 fs-6">
+        <Toast.Body className="py-2 small">
           <div>{message}</div>
           {errors && errors.length > 0 && (
-            <div className="mt-2 pt-2 border-top border-secondary border-opacity-25 small">
+            <div className="mt-2 pt-2 border-top small" style={{ borderColor: 'var(--borde)' }}>
               {errors.map((e, idx) => (
-                <div key={idx} className="d-flex align-items-baseline gap-1 text-danger">
-                  <i className="bi bi-arrow-right-short" />
+                <div key={idx} style={{ color: 'var(--error)' }}>
                   {e.campo && e.campo !== 'general' && (
-                    <strong className="text-capitalize">{e.campo}: </strong>
+                    <strong>{e.campo}: </strong>
                   )}
                   <span>{e.mensaje}</span>
                 </div>
