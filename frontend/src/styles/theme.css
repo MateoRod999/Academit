@@ -518,6 +518,88 @@ a:hover {
   color: var(--texto) !important;
 }
 
+/* --- Utilidades de Color de Bootstrap Redefinidas --- */
+.bg-primary {
+  background-color: var(--primario) !important;
+  color: var(--sobre-primario) !important;
+}
+
+.bg-secondary {
+  background-color: var(--superficie-alt) !important;
+  color: var(--texto) !important;
+}
+
+.bg-success {
+  background-color: var(--superficie) !important;
+  border: 1px solid var(--estado-aprobado) !important;
+  color: var(--estado-aprobado) !important;
+}
+
+.bg-warning {
+  background-color: var(--superficie) !important;
+  border: 1px solid var(--estado-pendiente) !important;
+  color: var(--estado-pendiente) !important;
+}
+
+.bg-danger {
+  background-color: var(--superficie) !important;
+  border: 1px solid var(--estado-vencida) !important;
+  color: var(--estado-vencida) !important;
+}
+
+.bg-info {
+  background-color: var(--superficie) !important;
+  border: 1px solid var(--estado-informativo) !important;
+  color: var(--estado-informativo) !important;
+}
+
+.bg-light {
+  background-color: var(--superficie-alt) !important;
+  color: var(--texto) !important;
+}
+
+.bg-dark {
+  background-color: var(--texto) !important;
+  color: var(--fondo) !important;
+}
+
+.text-primary {
+  color: var(--primario) !important;
+}
+
+.text-secondary,
+.text-muted {
+  color: var(--texto-secundario) !important;
+}
+
+.text-success {
+  color: var(--estado-aprobado) !important;
+}
+
+.text-warning {
+  color: var(--estado-pendiente) !important;
+}
+
+.text-danger {
+  color: var(--estado-vencida) !important;
+}
+
+.text-info {
+  color: var(--estado-informativo) !important;
+}
+
+.text-dark {
+  color: var(--texto) !important;
+}
+
+.border-primary {
+  border-color: var(--primario) !important;
+}
+
+.border-secondary {
+  border-color: var(--borde) !important;
+}
+
 /* --- Impresión --- */
 @media print {
   .desktop-sidebar,

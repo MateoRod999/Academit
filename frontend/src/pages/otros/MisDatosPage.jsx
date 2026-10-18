@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Card, Form, Button, Row, Col, Spinner } from 'react-bootstrap'
+import { Card, Form, Button, Row, Col } from 'react-bootstrap'
 import PageHeader from '../../components/PageHeader'
 import StatusBadge from '../../components/StatusBadge'
 import { useAuth } from '../../context/AuthContext'
@@ -60,9 +60,8 @@ export const MisDatosPage = () => {
 
   if (loading) {
     return (
-      <div className="text-center py-5">
-        <Spinner animation="border" variant="primary" />
-        <div className="mt-2 text-muted small">Cargando datos personales...</div>
+      <div className="text-center py-5 small text-muted">
+        Cargando…
       </div>
     )
   }
@@ -200,7 +199,7 @@ export const MisDatosPage = () => {
                     {isEditing && (
                       <Col md={12} className="d-flex justify-content-end mt-4">
                         <Button variant="primary" type="submit" size="sm" className="px-4" disabled={saving}>
-                          {saving ? <Spinner size="sm" animation="border" className="me-1" /> : <i className="bi bi-save me-1" />} Guardar Modificaciones
+                          {saving ? 'Guardando…' : 'Guardar Modificaciones'}
                         </Button>
                       </Col>
                     )}

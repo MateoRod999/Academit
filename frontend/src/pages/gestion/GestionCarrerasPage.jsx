@@ -385,7 +385,7 @@ export const GestionCarrerasPage = () => {
         onHide={() => setCarreraDetalle(null)}
         size="lg"
         centered
-        contentClassName="border-0 shadow-lg"
+        animation={false}
       >
         <Modal.Header
           closeButton

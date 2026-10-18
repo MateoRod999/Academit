@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Card, Table, Form, Button, Row, Col, ButtonGroup, Spinner } from 'react-bootstrap'
+import { Card, Table, Form, Button, Row, Col, ButtonGroup } from 'react-bootstrap'
 import PageHeader from '../../components/PageHeader'
 import StatusBadge from '../../components/StatusBadge'
 import { useToast } from '../../context/ToastContext'
@@ -87,10 +87,8 @@ export const AsistenciasDocentePage = () => {
             size="sm"
             disabled={saving || alumnosDelCurso.length === 0}
             onClick={handleGuardar}
-            className="d-flex align-items-center gap-1"
           >
-            {saving ? <Spinner size="sm" animation="border" /> : <i className="bi bi-save" />}
-            <span>Guardar Presentismo</span>
+            {saving ? 'Guardando…' : 'Guardar Presentismo'}
           </Button>
         }
       />
