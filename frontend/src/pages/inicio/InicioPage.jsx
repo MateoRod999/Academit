@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Row, Col, Card, Button, ProgressBar } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import PageHeader from '../../components/PageHeader'
 import StatusBadge from '../../components/StatusBadge'
 import { getCuotas } from '../../api/cuotas'
 import { getMesasExamen } from '../../api/mesasExamen'
@@ -19,286 +17,314 @@ export const InicioPage = () => {
   const [alumnosCount, setAlumnosCount] = useState(0)
 
   useEffect(() => {
-    getCuotas(1).then((data) => setAlumnoCuotas(data)).catch(() => {})
-    getMesasExamen().then((data) => setAlumnoMesas(data.filter((m) => m.alumnosInscriptosIds.includes(1)))).catch(() => {})
-    getCalificaciones({ idAlumno: 1 }).then((data) => setAlumnoCalificaciones(data)).catch(() => {})
-    getSolicitudes().then((data) => setSolicitudesCount(data.filter((s) => s.estado === 'PENDIENTE').length)).catch(() => {})
-    getAlumnos().then((data) => setAlumnosCount(data.length)).catch(() => {})
+    getCuotas(1).then((data) => setAlumnoCuotas(data || [])).catch(() => {})
+    getMesasExamen()
+      .then((data) => setAlumnoMesas((data || []).filter((m) => m.alumnosInscriptosIds?.includes(1))))
+      .catch(() => {})
+    getCalificaciones({ idAlumno: 1 }).then((data) => setAlumnoCalificaciones(data || [])).catch(() => {})
+    getSolicitudes().then((data) => setSolicitudesCount((data || []).filter((s) => s.estado === 'PENDIENTE').length)).catch(() => {})
+    getAlumnos().then((data) => setAlumnosCount((data || []).length)).catch(() => {})
   }, [rol])
 
-  const proximaCuota = alumnoCuotas.find((c) => c.estado === 'PENDIENTE' || c.estado === 'VENCIDA')
-  const proximaMesa = alumnoMesas[0]
+  const getGreeting = () => {
+    const h = new Date().getHours()
+    if (h < 6) return 'Buenas noches'
+    if (h < 13) return 'Buenos días'
+    if (h < 20) return 'Buenas tardes'
+    return 'Buenas noches'
+  }
+
+  const getHoyFormatted = () => {
+    const f = new Date().toLocaleDateString('es-AR', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric',
+    })
+    return f.charAt(0).toUpperCase() + f.slice(1) + '.'
+  }
+
+  const DIA_MS = 86400000
+  const getCuando = (dateStr) => {
+    if (!dateStr) return ''
+    const d = new Date(dateStr)
+    d.setHours(0, 0, 0, 0)
+    const hoy = new Date()
+    hoy.setHours(0, 0, 0, 0)
+    const diff = Math.round((d.getTime() - hoy.getTime()) / DIA_MS)
+    if (diff === 0) return 'hoy'
+    if (diff === 1) return 'mañana'
+    if (diff === -1) return 'ayer'
+    if (diff < 0) return `hace ${-diff} días`
+    return `en ${diff} días`
+  }
+
+  const cuotasVencidas = alumnoCuotas.filter((c) => c.estado === 'VENCIDA')
   const promedioNotas = alumnoCalificaciones.length > 0
-    ? (alumnoCalificaciones.reduce((acc, c) => acc + c.nota, 0) / alumnoCalificaciones.length).toFixed(1)
-    : '8.5'
+    ? (alumnoCalificaciones.reduce((acc, c) => acc + (c.nota || 0), 0) / alumnoCalificaciones.length).toFixed(2).replace('.', ',')
+    : '8,50'
+
+  // Materias de ejemplo para el alumno
+  const materiasAlumno = [
+    { materia: 'Análisis de Sistemas', docente: 'Paz, Marta', p1: 9, p2: 8, asis: 95, cond: 'Promociona', condTipo: 'e-ok' },
+    { materia: 'Base de Datos II', docente: 'Aguirre, Hernán', p1: 8, p2: null, asis: 88, cond: 'En curso', condTipo: 'e-pend' },
+    { materia: 'Programación III', docente: 'Roldán, Esteban', p1: 7, p2: 6, asis: 91, cond: 'Regular', condTipo: 'e-ok' },
+    { materia: 'Inglés Técnico', docente: 'Medina, Carla', p1: 3, p2: null, asis: 72, cond: 'En riesgo', condTipo: 'e-mal' },
+  ]
 
   return (
     <div>
-      <PageHeader
-        title={`Bienvenido/a, ${nombre || usuario}`}
-        subtitle={`Panel institucional de autogestión | Perfil activo: ${rol}`}
-      />
+      <h1>{getGreeting()}, {nombre || usuario}</h1>
+      <p className="fecha">{getHoyFormatted()}</p>
 
-      {/* 1. SECCIÓN ESPECÍFICA PARA ALUMNO */}
-      {rol === 'ALUMNO' && (
-        <>
-          <h2 className="h4 mb-3 academic-serif" style={{ color: 'var(--texto)' }}>
-            Resumen Académico y Arancelario
-          </h2>
+      <div className="cols">
+        <div>
+          {/* Ficha "Tu situación" */}
+          <section className="bloque">
+            <h2>Tu situación</h2>
+            <dl className="ficha">
+              <dt>Legajo</dt>
+              <dd className="num">{rol === 'ALUMNO' ? '2024-0318' : (rol === 'DOCENTE' ? 'DOC-104' : 'ADM-012')}</dd>
+              <dt>Carrera</dt>
+              <dd>Tecnicatura en Programación, plan 2022</dd>
+              <dt>Ciclo lectivo</dt>
+              <dd className="num">2026, segundo cuatrimestre</dd>
+              {rol === 'ALUMNO' && (
+                <>
+                  <dt>Promedio</dt>
+                  <dd className="num">{promedioNotas} sobre {alumnoCalificaciones.length || 4} notas cargadas</dd>
+                  <dt>Cuotas</dt>
+                  <dd>
+                    {cuotasVencidas.length > 0 ? (
+                      <>
+                        <span className="estado e-mal">
+                          {cuotasVencidas.length} {cuotasVencidas.length === 1 ? 'vencida' : 'vencidas'}
+                        </span>
+                        {' · '}
+                        <Link to="/academico/situacion" style={{ color: 'var(--primario)' }}>
+                          ver detalle
+                        </Link>
+                      </>
+                    ) : (
+                      <span className="estado e-ok">Al día</span>
+                    )}
+                  </dd>
+                </>
+              )}
+            </dl>
+          </section>
 
-          <Row className="g-3 mb-4">
-            <Col md={6} xl={3}>
-              <Card className="h-100 p-3" style={{ backgroundColor: 'var(--superficie)', border: '1px solid var(--borde)' }}>
-                <div className="stat-card-title">Próximo Vencimiento</div>
-                <div className="stat-card-number">
-                  {proximaCuota ? `$${proximaCuota.importe.toLocaleString('es-AR')}` : 'Al día'}
-                </div>
-                <div className="small mb-3 text-muted">
-                  {proximaCuota ? `${proximaCuota.concepto} (${proximaCuota.fechaVencimiento})` : 'Sin cuotas pendientes'}
-                </div>
-                <Button as={Link} to="/academico/situacion" variant="outline-primary" size="sm" className="w-100 mt-auto">
-                  Ver Estado de Deuda
-                </Button>
-              </Card>
-            </Col>
-
-            <Col md={6} xl={3}>
-              <Card className="h-100 p-3" style={{ backgroundColor: 'var(--superficie)', border: '1px solid var(--borde)' }}>
-                <div className="stat-card-title">Próxima Mesa Final</div>
-                <div className="stat-card-number" style={{ fontSize: '1.25rem', minHeight: '2.5rem', display: 'flex', alignItems: 'center' }}>
-                  {proximaMesa ? proximaMesa.materiaNombre : 'Sin inscripción'}
-                </div>
-                <div className="small mb-3 text-muted">
-                  {proximaMesa ? `${proximaMesa.fecha} — ${proximaMesa.hora}` : 'Inscripciones habilitadas'}
-                </div>
-                <Button as={Link} to="/academico/mesas-examen" variant="outline-primary" size="sm" className="w-100 mt-auto">
-                  Gestionar Mesas
-                </Button>
-              </Card>
-            </Col>
-
-            <Col md={6} xl={3}>
-              <Card className="h-100 p-3" style={{ backgroundColor: 'var(--superficie)', border: '1px solid var(--borde)' }}>
-                <div className="stat-card-title">Promedio General</div>
-                <div className="stat-card-number">
-                  {promedioNotas} <small style={{ fontSize: '1rem', color: 'var(--texto-secundario)' }}>/ 10</small>
-                </div>
-                <div className="small mb-3 text-muted">
-                  {alumnoCalificaciones.length} evaluaciones registradas
-                </div>
-                <Button as={Link} to="/academico/parciales" variant="outline-primary" size="sm" className="w-100 mt-auto">
-                  Ver Calificaciones
-                </Button>
-              </Card>
-            </Col>
-
-            <Col md={6} xl={3}>
-              <Card className="h-100 p-3" style={{ backgroundColor: 'var(--superficie)', border: '1px solid var(--borde)' }}>
-                <div className="stat-card-title">Mi Carrera</div>
-                <div className="stat-card-number" style={{ fontSize: '1.1rem', minHeight: '2.5rem', display: 'flex', alignItems: 'center' }}>
-                  Tecnicatura Superior en Software
-                </div>
-                <div className="small mb-3 text-muted">
-                  Plan 2024 • Matrícula <StatusBadge status="ACTIVA" />
-                </div>
-                <Button as={Link} to="/academico/plan-estudios" variant="outline-primary" size="sm" className="w-100 mt-auto">
-                  Ver Plan de Estudios
-                </Button>
-              </Card>
-            </Col>
-          </Row>
-
-          <h3 className="h5 mb-3 academic-serif" style={{ color: 'var(--texto)' }}>
-            Accesos Frecuentes
-          </h3>
-          <Row className="g-3">
-            <Col sm={6} md={3}>
-              <Card as={Link} to="/academico/situacion" className="p-3 text-decoration-none h-100" style={{ backgroundColor: 'var(--superficie)', border: '1px solid var(--borde)' }}>
-                <div className="fw-semibold" style={{ color: 'var(--texto)' }}>Situación Arancelaria</div>
-                <small className="text-muted">Consulta de cuotas y pagos</small>
-              </Card>
-            </Col>
-            <Col sm={6} md={3}>
-              <Card as={Link} to="/solicitudes/constancias" className="p-3 text-decoration-none h-100" style={{ backgroundColor: 'var(--superficie)', border: '1px solid var(--borde)' }}>
-                <div className="fw-semibold" style={{ color: 'var(--texto)' }}>Constancias</div>
-                <small className="text-muted">Alumno regular y examen</small>
-              </Card>
-            </Col>
-            <Col sm={6} md={3}>
-              <Card as={Link} to="/academico/plan-estudios" className="p-3 text-decoration-none h-100" style={{ backgroundColor: 'var(--superficie)', border: '1px solid var(--borde)' }}>
-                <div className="fw-semibold" style={{ color: 'var(--texto)' }}>Plan de Estudios</div>
-                <small className="text-muted">Materias y correlatividades</small>
-              </Card>
-            </Col>
-            <Col sm={6} md={3}>
-              <Card as={Link} to="/academico/asistencias" className="p-3 text-decoration-none h-100" style={{ backgroundColor: 'var(--superficie)', border: '1px solid var(--borde)' }}>
-                <div className="fw-semibold" style={{ color: 'var(--texto)' }}>Mis Asistencias</div>
-                <small className="text-muted">Porcentaje y detalle por materia</small>
-              </Card>
-            </Col>
-          </Row>
-        </>
-      )}
-
-      {/* 2. SECCIÓN PARA DOCENTE */}
-      {rol === 'DOCENTE' && (
-        <>
-          <h2 className="h4 mb-3 academic-serif" style={{ color: 'var(--texto)' }}>
-            Gestión de Cursos a Cargo
-          </h2>
-
-          <Row className="g-3 mb-4">
-            <Col md={4}>
-              <Card className="p-3" style={{ backgroundColor: 'var(--superficie)', border: '1px solid var(--borde)' }}>
-                <div className="stat-card-title">Cursos Asignados</div>
-                <div className="stat-card-number">2</div>
-                <Button as={Link} to="/docencia/mis-cursos" variant="outline-primary" size="sm" className="w-100 mt-3">
-                  Ver Mis Cursos
-                </Button>
-              </Card>
-            </Col>
-            <Col md={4}>
-              <Card className="p-3" style={{ backgroundColor: 'var(--superficie)', border: '1px solid var(--borde)' }}>
-                <div className="stat-card-title">Evaluaciones Creadas</div>
-                <div className="stat-card-number">4</div>
-                <Button as={Link} to="/docencia/evaluaciones" variant="outline-secondary" size="sm" className="w-100 mt-3">
-                  Nueva Evaluación
-                </Button>
-              </Card>
-            </Col>
-            <Col md={4}>
-              <Card className="p-3" style={{ backgroundColor: 'var(--superficie)', border: '1px solid var(--borde)' }}>
-                <div className="stat-card-title">Asistencias</div>
-                <div className="stat-card-number" style={{ fontSize: '1.4rem', minHeight: '2.4rem', display: 'flex', alignItems: 'center' }}>
-                  Al día
-                </div>
-                <Button as={Link} to="/docencia/asistencias" variant="outline-secondary" size="sm" className="w-100 mt-3">
-                  Tomar Lista
-                </Button>
-              </Card>
-            </Col>
-          </Row>
-
-          <Row className="g-3">
-            <Col md={6}>
-              <Card style={{ backgroundColor: 'var(--superficie)', border: '1px solid var(--borde)' }}>
-                <Card.Header className="p-3 border-bottom" style={{ backgroundColor: 'var(--superficie-alt)' }}>
-                  <strong>Materia: Programación I (1° Año - TM)</strong>
-                </Card.Header>
-                <Card.Body className="p-3">
-                  <p className="small text-muted mb-2">Comisión 1A-INF-TM | 29 alumnos inscriptos</p>
-                  <div className="d-flex gap-2">
-                    <Button as={Link} to="/docencia/calificaciones" variant="primary" size="sm">
-                      Calificar Alumnos
-                    </Button>
-                    <Button as={Link} to="/docencia/asistencias" variant="outline-secondary" size="sm">
-                      Pasar Asistencia
-                    </Button>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={6}>
-              <Card style={{ backgroundColor: 'var(--superficie)', border: '1px solid var(--borde)' }}>
-                <Card.Header className="p-3 border-bottom" style={{ backgroundColor: 'var(--superficie-alt)' }}>
-                  <strong>Materia: Programación II (2° Año - TT)</strong>
-                </Card.Header>
-                <Card.Body className="p-3">
-                  <p className="small text-muted mb-2">Comisión 2A-INF-TT | 28 alumnos inscriptos</p>
-                  <div className="d-flex gap-2">
-                    <Button as={Link} to="/docencia/calificaciones" variant="primary" size="sm">
-                      Calificar Alumnos
-                    </Button>
-                    <Button as={Link} to="/docencia/asistencias" variant="outline-secondary" size="sm">
-                      Pasar Asistencia
-                    </Button>
-                  </div>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </>
-      )}
-
-      {/* 3. SECCIÓN PARA ADMINISTRATIVO Y ADMINISTRADOR */}
-      {(rol === 'ADMINISTRATIVO' || rol === 'ADMINISTRADOR') && (
-        <>
-          <h2 className="h4 mb-3 academic-serif" style={{ color: 'var(--texto)' }}>
-            Métricas Operativas del Instituto
-          </h2>
-
-          <Row className="g-3 mb-4">
-            <Col md={6} xl={3}>
-              <Card className="p-3" style={{ backgroundColor: 'var(--superficie)', border: '1px solid var(--borde)' }}>
-                <div className="stat-card-title">Alumnos Matriculados</div>
-                <div className="stat-card-number">{alumnosCount}</div>
-                <Button as={Link} to="/gestion/alumnos" variant="outline-primary" size="sm" className="w-100 mt-3">
-                  Gestión de Alumnos
-                </Button>
-              </Card>
-            </Col>
-
-            <Col md={6} xl={3}>
-              <Card className="p-3" style={{ backgroundColor: 'var(--superficie)', border: '1px solid var(--borde)' }}>
-                <div className="stat-card-title">Solicitudes Pendientes</div>
-                <div className="stat-card-number">{solicitudesCount}</div>
-                <Button as={Link} to="/solicitudes/bandeja" variant="outline-primary" size="sm" className="w-100 mt-3">
-                  Bandeja de Solicitudes
-                </Button>
-              </Card>
-            </Col>
-
-            <Col md={6} xl={3}>
-              <Card className="p-3" style={{ backgroundColor: 'var(--superficie)', border: '1px solid var(--borde)' }}>
-                <div className="stat-card-title">Registro de Cobros</div>
-                <div className="stat-card-number">6</div>
-                <Button as={Link} to="/administrativo/pagos" variant="outline-primary" size="sm" className="w-100 mt-3">
-                  Registrar Cobro
-                </Button>
-              </Card>
-            </Col>
-
-            <Col md={6} xl={3}>
-              <Card className="p-3" style={{ backgroundColor: 'var(--superficie)', border: '1px solid var(--borde)' }}>
-                <div className="stat-card-title">Cursos del Ciclo</div>
-                <div className="stat-card-number">3</div>
-                <Button as={Link} to="/gestion/cursos" variant="outline-primary" size="sm" className="w-100 mt-3">
-                  Ocupación de Cursos
-                </Button>
-              </Card>
-            </Col>
-          </Row>
-
-          <Card style={{ backgroundColor: 'var(--superficie)', border: '1px solid var(--borde)' }}>
-            <Card.Header className="p-3 border-bottom" style={{ backgroundColor: 'var(--superficie-alt)' }}>
-              <strong>Ocupación de Comisiones — Ciclo Lectivo 2026</strong>
-            </Card.Header>
-            <Card.Body className="p-3">
-              <div className="mb-3">
-                <div className="d-flex justify-content-between small mb-1">
-                  <span>1° Año - Turno Mañana (Aula 101)</span>
-                  <span className="fw-semibold">29 / 35 cupos (83%)</span>
-                </div>
-                <ProgressBar variant="secondary" now={83} />
+          {/* Bloque principal según rol */}
+          {rol === 'ALUMNO' && (
+            <section className="bloque">
+              <h2>Materias que cursás</h2>
+              <div className="tabla-caja">
+                <table>
+                  <caption>Nota mínima para aprobar: 4. Asistencia mínima para regularizar: 75 %.</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Materia</th>
+                      <th scope="col">Docente</th>
+                      <th scope="col" className="d">Parcial 1</th>
+                      <th scope="col" className="d">Parcial 2</th>
+                      <th scope="col" className="d">Asistencia</th>
+                      <th scope="col">Condición</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {materiasAlumno.map((m) => (
+                      <tr key={m.materia}>
+                        <td className="titulo-ficha" data-l="Materia">{m.materia}</td>
+                        <td data-l="Docente">{m.docente}</td>
+                        <td className="d num" data-l="Parcial 1">{m.p1 !== null ? m.p1 : '–'}</td>
+                        <td className="d num" data-l="Parcial 2">{m.p2 !== null ? m.p2 : '–'}</td>
+                        <td className="d num" data-l="Asistencia">{m.asis} %</td>
+                        <td data-l="Condición">
+                          <span className={`estado ${m.condTipo}`}>{m.cond}</span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
-              <div className="mb-3">
-                <div className="d-flex justify-content-between small mb-1">
-                  <span>2° Año - Turno Tarde (Lab Sistemas 2)</span>
-                  <span className="fw-semibold">28 / 30 cupos (93%)</span>
-                </div>
-                <ProgressBar variant="secondary" now={93} />
+            </section>
+          )}
+
+          {rol === 'DOCENTE' && (
+            <section className="bloque">
+              <h2>Mis comisiones activas</h2>
+              <div className="tabla-caja">
+                <table>
+                  <caption>Ciclo lectivo 2026 · Cursado del segundo cuatrimestre</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Materia</th>
+                      <th scope="col">Comisión</th>
+                      <th scope="col" className="d">Alumnos</th>
+                      <th scope="col">Acción</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="titulo-ficha" data-l="Materia">Programación I</td>
+                      <td data-l="Comisión">1° Año - Turno Mañana (Aula 101)</td>
+                      <td className="d num" data-l="Alumnos">29</td>
+                      <td data-l="Acción">
+                        <Link to="/docencia/calificaciones" className="btn lig chico">
+                          Calificar
+                        </Link>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="titulo-ficha" data-l="Materia">Programación II</td>
+                      <td data-l="Comisión">2° Año - Turno Tarde (Lab 2)</td>
+                      <td className="d num" data-l="Alumnos">28</td>
+                      <td data-l="Acción">
+                        <Link to="/docencia/calificaciones" className="btn lig chico">
+                          Calificar
+                        </Link>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-              <div>
-                <div className="d-flex justify-content-between small mb-1">
-                  <span>1° Año - Turno Noche (Aula Magna 3)</span>
-                  <span className="fw-semibold">40 / 40 cupos (100% - Cupo lleno)</span>
-                </div>
-                <ProgressBar variant="danger" now={100} />
+            </section>
+          )}
+
+          {(rol === 'ADMINISTRATIVO' || rol === 'ADMINISTRADOR') && (
+            <section className="bloque">
+              <h2>Ocupación de comisiones</h2>
+              <div className="tabla-caja">
+                <table>
+                  <caption>Ciclo lectivo 2026 · {alumnosCount} alumnos matriculados · {solicitudesCount} solicitudes pendientes</caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Comisión</th>
+                      <th scope="col">Turno y Aula</th>
+                      <th scope="col" className="d">Inscriptos</th>
+                      <th scope="col" className="d">Cupo</th>
+                      <th scope="col">Estado</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td className="titulo-ficha" data-l="Comisión">1° Año - Programación</td>
+                      <td data-l="Turno y Aula">Mañana (Aula 101)</td>
+                      <td className="d num" data-l="Inscriptos">29</td>
+                      <td className="d num" data-l="Cupo">35</td>
+                      <td data-l="Estado"><StatusBadge status="ACTIVO" /></td>
+                    </tr>
+                    <tr>
+                      <td className="titulo-ficha" data-l="Comisión">2° Año - Programación</td>
+                      <td data-l="Turno y Aula">Tarde (Lab 2)</td>
+                      <td className="d num" data-l="Inscriptos">28</td>
+                      <td className="d num" data-l="Cupo">30</td>
+                      <td data-l="Estado"><StatusBadge status="ACTIVO" /></td>
+                    </tr>
+                    <tr>
+                      <td className="titulo-ficha" data-l="Comisión">1° Año - Sistemas</td>
+                      <td data-l="Turno y Aula">Noche (Aula Magna)</td>
+                      <td className="d num" data-l="Inscriptos">40</td>
+                      <td className="d num" data-l="Cupo">40</td>
+                      <td data-l="Estado"><StatusBadge status="CERRADO" /></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
-            </Card.Body>
-          </Card>
-        </>
-      )}
+            </section>
+          )}
+        </div>
+
+        {/* Columna lateral de 300px */}
+        <aside className="lateral">
+          <section>
+            <h2>Agenda</h2>
+            <ul className="agenda">
+              {alumnoMesas.length > 0 ? (
+                alumnoMesas.slice(0, 4).map((m) => {
+                  const d = new Date(m.fecha)
+                  const diaNum = isNaN(d.getDate()) ? '28' : d.getDate()
+                  const mesStr = isNaN(d.getMonth())
+                    ? 'oct'
+                    : d.toLocaleDateString('es-AR', { month: 'short' }).replace('.', '')
+
+                  return (
+                    <li key={m.idMesa}>
+                      <div className="dia">
+                        <b className="num">{diaNum}</b>
+                        <small>{mesStr}</small>
+                      </div>
+                      <div>
+                        <div>{m.materiaNombre}</div>
+                        <div className="cuando">{getCuando(m.fecha)}</div>
+                        <div className="quien">
+                          Tribunal: {m.presidente || 'Roldán, Ibarra'} · {m.hora || '18:30'}
+                        </div>
+                      </div>
+                    </li>
+                  )
+                })
+              ) : (
+                <>
+                  <li>
+                    <div className="dia">
+                      <b className="num">24</b>
+                      <small>oct</small>
+                    </div>
+                    <div>
+                      <div>Parcial 2 de Base de Datos II</div>
+                      <div className="cuando">en 4 días</div>
+                      <div className="quien">Aula 4, 19:00</div>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="dia">
+                      <b className="num">28</b>
+                      <small>oct</small>
+                    </div>
+                    <div>
+                      <div>Mesa de examen: Programación II</div>
+                      <div className="cuando">en 8 días</div>
+                      <div className="quien">Tribunal Roldán, Ibarra · 18:30</div>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="dia">
+                      <b className="num">4</b>
+                      <small>nov</small>
+                    </div>
+                    <div>
+                      <div>Mesa de examen: Base de Datos I</div>
+                      <div className="cuando">en 15 días</div>
+                      <div className="quien">Tribunal Aguirre, Paz · 18:30</div>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="dia">
+                      <b className="num">20</b>
+                      <small>nov</small>
+                    </div>
+                    <div>
+                      <div>Cierre de inscripción a mesas</div>
+                      <div className="cuando">en 31 días</div>
+                      <div className="quien">Secretaría académica</div>
+                    </div>
+                  </li>
+                </>
+              )}
+            </ul>
+          </section>
+
+          <section>
+            <h2>Avisos de secretaría</h2>
+            <ul className="avisos">
+              <li>La inscripción a mesas de examen cierra 48 horas antes de cada fecha.</li>
+              <li>Quien tenga cuotas vencidas debe regularizar su situación en administración antes de rendir.</li>
+              <li>La declaración jurada de materias del próximo ciclo se presenta hasta fin de noviembre.</li>
+            </ul>
+          </section>
+        </aside>
+      </div>
     </div>
   )
 }
