@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
 import { Alert } from 'react-bootstrap'
 import { useAuth } from '../context/AuthContext'
@@ -7,6 +7,11 @@ import { MENU_GRUPOS } from '../config/menu'
 export const Layout = ({ children }) => {
   const { isAuthenticated, rol, nombre, usuario, logout } = useAuth()
   const [showMockAlert, setShowMockAlert] = useState(true)
+  const [cerrados, setCerrados] = useState({})
+  const [menuAbierto, setMenuAbierto] = useState(false)
+  const abrirBtnRef = useRef(null)
+  const cerrarBtnRef = useRef(null)
+
   const location = useLocation()
   const navigate = useNavigate()
 
@@ -23,21 +28,70 @@ export const Layout = ({ children }) => {
     }
   }).filter((grupo) => grupo.items.length > 0)
 
-  // Índice del grupo correspondiente a la ruta actual
-  const currentGroupIndex = gruposVisibles.findIndex((g) =>
-    g.items.some((item) => item.path === location.pathname)
-  )
-
-  const [grupoAbierto, setGrupoAbierto] = useState(
-    currentGroupIndex !== -1 ? currentGroupIndex : 0
-  )
-
-  // Sincronizar el grupo abierto al navegar
-  useEffect(() => {
-    if (currentGroupIndex !== -1) {
-      setGrupoAbierto(currentGroupIndex)
+  // Determinar grupo y pantalla activa para miga de pan
+  let grupoActivo = null
+  let itemActivo = null
+  for (const g of gruposVisibles) {
+    const it = g.items.find((item) => item.path === location.pathname)
+    if (it) {
+      grupoActivo = g
+      itemActivo = it
+      break
     }
-  }, [location.pathname, currentGroupIndex])
+  }
+
+  // Toggle de grupo abierto/cerrado (abierto por defecto)
+  const toggleGrupo = (grupoId) => {
+    setCerrados((prev) => ({
+      ...prev,
+      [grupoId]: !prev[grupoId],
+    }))
+  }
+
+  const abrirMenu = () => {
+    setMenuAbierto(true)
+    document.body.classList.add('bloqueado')
+    setTimeout(() => {
+      cerrarBtnRef.current?.focus()
+    }, 0)
+  }
+
+  const cerrarMenu = () => {
+    setMenuAbierto(false)
+    document.body.classList.remove('bloqueado')
+    abrirBtnRef.current?.focus()
+  }
+
+  // Cerrar con Escape
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && menuAbierto) {
+        cerrarMenu()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [menuAbierto])
+
+  // Cerrar panel automáticamente en >= 901px
+  useEffect(() => {
+    const mql = window.matchMedia('(min-width: 901px)')
+    const handleChange = (e) => {
+      if (e.matches) {
+        setMenuAbierto(false)
+        document.body.classList.remove('bloqueado')
+      }
+    }
+    mql.addEventListener('change', handleChange)
+    return () => mql.removeEventListener('change', handleChange)
+  }, [])
+
+  // Limpieza al desmontar
+  useEffect(() => {
+    return () => {
+      document.body.classList.remove('bloqueado')
+    }
+  }, [])
 
   // Si no está autenticado o está en login, renderizar children directamente
   if (!isAuthenticated || location.pathname === '/login') {
@@ -58,135 +112,174 @@ export const Layout = ({ children }) => {
     return r.charAt(0) + r.slice(1).toLowerCase()
   }
 
-  const grupoActivo = gruposVisibles[grupoAbierto] || gruposVisibles[0]
-
   return (
-    <div className="app-container">
-      {/* Cabecera institucional con escudo, marca y menú por grupos */}
-      <header className="cabecera">
-        <div className="gutter">
-          <div className="contenedor">
-            <div className="cab-fila">
-              <Link to="/" className="marca">
-                <svg
-                  className="escudo"
-                  width="44"
-                  height="44"
-                  viewBox="0 0 56 56"
-                  aria-hidden="true"
-                >
-                  <circle cx="28" cy="28" r="26" fill="none" stroke="currentColor" strokeWidth="1.5" />
-                  <circle cx="28" cy="28" r="21" fill="none" stroke="currentColor" strokeWidth=".8" />
-                  <text
-                    x="28"
-                    y="37"
-                    textAnchor="middle"
-                    fontFamily="Georgia, serif"
-                    fontSize="27"
-                    fontWeight="700"
-                    fill="currentColor"
-                  >
-                    A
-                  </text>
-                </svg>
-                <div>
-                  <b>Academit</b>
-                  <small>Instituto de formación superior</small>
-                </div>
-              </Link>
-
-              <div className="usuario">
-                <div>
-                  <b>{nombre || usuario}</b> <span>{formatRol(rol)}</span>
-                </div>
-                <button
-                  className="salir"
-                  type="button"
-                  onClick={handleLogout}
-                  aria-label="Cerrar sesión"
-                >
-                  Salir
-                </button>
-              </div>
-            </div>
-
-            {/* Menú de grupos como pestañas horizontales */}
-            <nav className="menu" aria-label="Navegación principal">
-              {gruposVisibles.map((grupo, idx) => {
-                const esGrupoActual = grupo.items.some((it) => it.path === location.pathname)
-                const estaAbierto = grupoAbierto === idx
-                return (
-                  <button
-                    key={grupo.id}
-                    type="button"
-                    aria-expanded={estaAbierto}
-                    className={esGrupoActual ? 'actual' : ''}
-                    onClick={() => setGrupoAbierto(idx)}
-                  >
-                    {grupo.titulo}
-                  </button>
-                )
-              })}
-            </nav>
-          </div>
-        </div>
-      </header>
-
-      {/* Franja de submenú que muestra los ítems del grupo seleccionado */}
-      {grupoActivo && (
-        <nav className="submenu" aria-label="Submenú de sección">
-          <div className="gutter">
-            <div className="contenedor">
-              <ul>
-                {grupoActivo.items.map((item) => (
-                  <li key={item.path}>
-                    {item.component ? (
-                      <NavLink
-                        to={item.path}
-                        end={item.path === '/'}
-                        className={({ isActive }) => (isActive ? 'activo' : '')}
-                      >
-                        {item.label}
-                      </NavLink>
-                    ) : (
-                      <span className="no" title="Pantalla no implementada">
-                        {item.label}
-                      </span>
-                    )}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        </nav>
+    <div className="app">
+      {/* Velo oscuro para mobile */}
+      {menuAbierto && (
+        <div
+          className="velo"
+          id="velo"
+          onClick={cerrarMenu}
+          aria-hidden="true"
+        />
       )}
 
-      {/* Alerta de maqueta si VITE_USE_MOCK=true */}
-      {isMock && showMockAlert && (
-        <div className="gutter pt-3">
-          <div className="contenedor">
-            <Alert
-              variant="warning"
-              dismissible
-              transition={false}
-              onClose={() => setShowMockAlert(false)}
-              className="py-2 px-3 small d-flex justify-content-between align-items-center mb-0"
-              style={{ backgroundColor: 'var(--papel)', borderColor: 'var(--acento)', color: 'var(--texto)' }}
+      {/* 1. Barra lateral fija de 276px (o panel responsive <= 900px) */}
+      <aside
+        className={`lateral ${menuAbierto ? 'abierto' : ''}`.trim()}
+        id="lateral"
+        aria-label="Navegación"
+      >
+        <div className="marca">
+          <Link
+            to="/"
+            style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', color: 'inherit' }}
+            onClick={cerrarMenu}
+          >
+            <svg
+              className="escudo"
+              width="40"
+              height="40"
+              viewBox="0 0 56 56"
+              aria-hidden="true"
             >
-              <div>
-                <strong>Vista de maqueta:</strong> Operaciones simuladas en memoria local.
+              <circle cx="28" cy="28" r="26" fill="none" stroke="currentColor" strokeWidth="1.5" />
+              <circle cx="28" cy="28" r="21" fill="none" stroke="currentColor" strokeWidth=".8" />
+              <text
+                x="28"
+                y="37"
+                textAnchor="middle"
+                fontFamily="Georgia, serif"
+                fontSize="27"
+                fontWeight="700"
+                fill="currentColor"
+              >
+                A
+              </text>
+            </svg>
+            <div>
+              <b>Academit</b>
+              <small>Instituto de formación superior</small>
+            </div>
+          </Link>
+
+          <button
+            className="cerrar"
+            type="button"
+            id="cerrar"
+            ref={cerrarBtnRef}
+            onClick={cerrarMenu}
+            aria-label="Cerrar menú"
+          >
+            ✕
+          </button>
+        </div>
+
+        {/* Navegación por grupos plegables */}
+        <nav className="nav" id="nav" aria-label="Principal">
+          {gruposVisibles.map((grupo) => {
+            const estaAbierto = !cerrados[grupo.id]
+            return (
+              <div key={grupo.id} className="grupo">
+                <button
+                  type="button"
+                  aria-expanded={estaAbierto}
+                  onClick={() => toggleGrupo(grupo.id)}
+                >
+                  {grupo.titulo}
+                  <span aria-hidden="true">{estaAbierto ? '▾' : '▸'}</span>
+                </button>
+                {estaAbierto && (
+                  <ul>
+                    {grupo.items.map((item) => (
+                      <li key={item.path}>
+                        <NavLink
+                          to={item.path}
+                          end={item.path === '/'}
+                          className={({ isActive }) => `item ${isActive ? 'activo' : ''}`.trim()}
+                          onClick={cerrarMenu}
+                        >
+                          {item.label}
+                        </NavLink>
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </div>
-            </Alert>
+            )
+          })}
+        </nav>
+
+        {/* Pie de barra lateral fijo con usuario y botón Salir */}
+        <div className="pie">
+          <div>
+            <b id="u-nombre">{nombre || usuario}</b>
+            <small id="u-rol">{formatRol(rol)}</small>
+          </div>
+          <button
+            className="salir"
+            type="button"
+            onClick={handleLogout}
+            aria-label="Cerrar sesión"
+          >
+            Salir
+          </button>
+        </div>
+      </aside>
+
+      {/* 2. Área principal */}
+      <div className="principal">
+        {/* Franja superior con botón Menú (mobile), miga de pan y usuario */}
+        <div className="superior gutter">
+          <button
+            className="abrir"
+            type="button"
+            id="abrir"
+            ref={abrirBtnRef}
+            aria-controls="lateral"
+            aria-expanded={menuAbierto}
+            onClick={abrirMenu}
+          >
+            <svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true">
+              <path d="M0 1h18M0 7h18M0 13h18" stroke="currentColor" strokeWidth="2" />
+            </svg>
+            Menú
+          </button>
+
+          <div className="miga" id="miga">
+            {grupoActivo ? grupoActivo.titulo : 'Inicio'} / <b>{itemActivo ? itemActivo.label : 'Inicio'}</b>
+          </div>
+
+          <div className="quien">
+            <b id="q-nombre">{nombre || usuario}</b> · <span id="q-rol">{formatRol(rol)}</span>
           </div>
         </div>
-      )}
 
-      {/* Contenido principal centrado de máximo 1180px */}
-      <main className="pagina gutter">
-        <div className="contenedor">
+        {/* Alerta de maqueta si VITE_USE_MOCK=true */}
+        {isMock && showMockAlert && (
+          <div className="gutter pt-3">
+            <div className="pagina" style={{ paddingBlock: 0 }}>
+              <Alert
+                variant="warning"
+                dismissible
+                transition={false}
+                onClose={() => setShowMockAlert(false)}
+                className="py-2 px-3 small d-flex justify-content-between align-items-center mb-0"
+                style={{ backgroundColor: 'var(--papel)', borderColor: 'var(--acento)', color: 'var(--texto)' }}
+              >
+                <div>
+                  <strong>Vista de maqueta:</strong> Operaciones simuladas en memoria local.
+                </div>
+              </Alert>
+            </div>
+          </div>
+        )}
+
+        {/* Contenido principal de la página */}
+        <main className="pagina gutter">
           {children}
-        </div>
-      </main>
+        </main>
+      </div>
     </div>
   )
 }

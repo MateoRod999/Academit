@@ -1,164 +1,239 @@
 /* ==========================================================================
    ACADEMIT - ESTILOS COMPLEMENTARIOS DE MAQUETACIÓN
-   Complementa src/styles/theme.css con la disposición de Layout, Cabecera y Grillas
+   Basado en docs/frontend/referencia-estetica.html
    ========================================================================== */
 
-/* --- Layout Principal --- */
-.app-container {
+body.bloqueado {
+  overflow: hidden;
+}
+
+.num {
+  font-variant-numeric: tabular-nums;
+}
+
+.gutter {
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+
+/* Estructura general con barra lateral */
+.app {
+  display: grid;
+  grid-template-columns: 276px minmax(0, 1fr);
+  align-items: start;
   min-height: 100vh;
+}
+
+.lateral {
+  background: var(--lateral);
+  color: var(--sobre-lateral);
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  height: 100dvh;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  background-color: var(--fondo);
-}
-
-/* Cabecera superior */
-.cabecera {
-  background: var(--cabecera);
-  color: var(--sobre-cabecera);
-}
-
-.cab-fila {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  padding-block: 14px;
-  flex-wrap: wrap;
 }
 
 .marca {
   display: flex;
   align-items: center;
   gap: 12px;
+  padding: 18px 20px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.18);
   text-decoration: none !important;
   color: inherit !important;
 }
 
-.escudo {
-  flex: none;
-}
-
 .marca b {
   display: block;
-  font: 600 23px/1.1 var(--serif);
-  color: var(--sobre-cabecera);
+  font: 600 22px/1.1 var(--serif);
+  color: var(--sobre-lateral);
 }
 
 .marca small {
-  color: var(--cabecera-suave);
-  font-size: 13px;
+  color: var(--lateral-suave);
+  font-size: 12.5px;
+  line-height: 1.3;
+  display: block;
 }
 
-.usuario {
-  display: flex;
+.marca .cerrar {
+  margin-left: auto;
+  display: none;
+  background: none;
+  border: 1px solid var(--lateral-suave);
+  color: var(--sobre-lateral);
+  border-radius: 3px;
+  width: 44px;
+  height: 44px;
+  font-size: 18px;
+  cursor: pointer;
   align-items: center;
-  gap: 14px;
-  font-size: 14px;
-  flex-wrap: wrap;
+  justify-content: center;
 }
 
-.usuario span {
-  color: var(--cabecera-suave);
+.nav {
+  padding: 8px 0 16px;
+  flex: 1;
 }
 
-.usuario b {
-  color: var(--sobre-cabecera);
+.grupo {
+  padding-top: 10px;
+}
+
+.grupo > button {
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  background: none;
+  border: 0;
+  padding: 6px 20px;
+  color: var(--lateral-suave);
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.grupo > button:hover {
+  color: var(--sobre-lateral);
+}
+
+.grupo > button span {
+  font-size: 11px;
+}
+
+.grupo ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: 0;
+  border-left: 3px solid transparent;
+  padding: 7px 20px 7px 17px;
+  color: var(--sobre-lateral);
+  text-decoration: none !important;
+  font-size: 14.5px;
+  cursor: pointer;
+}
+
+.item:hover {
+  background: rgba(255, 255, 255, 0.09);
+  color: var(--sobre-lateral);
+}
+
+.item.activo {
+  border-left-color: var(--lateral-marca);
+  background: rgba(255, 255, 255, 0.13);
   font-weight: 600;
+}
+
+.pie {
+  position: sticky;
+  bottom: 0;
+  background: var(--lateral);
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  padding: 14px 20px max(14px, env(safe-area-inset-bottom, 0px));
+  display: grid;
+  gap: 8px;
+}
+
+.pie b {
+  display: block;
+  font-weight: 600;
+  color: var(--sobre-lateral);
+}
+
+.pie small {
+  color: var(--lateral-suave);
+  font-size: 13px;
 }
 
 .salir {
   background: none;
-  border: 1px solid var(--cabecera-suave);
-  color: var(--sobre-cabecera);
+  border: 1px solid var(--lateral-suave);
+  color: var(--sobre-lateral);
   border-radius: 3px;
-  padding: 3px 12px;
+  padding: 6px 12px;
+  justify-self: start;
+  cursor: pointer;
   font-size: 14px;
-  min-height: 34px;
-  display: inline-flex;
-  align-items: center;
 }
+
 .salir:hover {
   background: rgba(255, 255, 255, 0.1);
 }
 
-/* Menú de Grupos Horizontal */
-.menu {
+.velo {
+  position: fixed;
+  inset: 0;
+  background: rgba(20, 18, 17, 0.55);
+  z-index: 20;
+}
+
+/* Área principal */
+.principal {
+  min-width: 0;
+}
+
+.superior {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0 4px;
-  border-top: 1px solid rgba(255, 255, 255, 0.18);
+  align-items: center;
+  gap: 14px;
+  min-height: 52px;
+  border-bottom: 1px solid var(--linea);
+  padding-block: 6px;
 }
 
-.menu button {
-  background: none;
-  border: 0;
-  border-bottom: 3px solid transparent;
-  padding: 10px 14px;
-  color: var(--sobre-cabecera);
-  font-size: 14.5px;
-  font-weight: 500;
-}
-
-.menu button:hover {
-  background: rgba(255, 255, 255, 0.08);
-}
-
-.menu button[aria-expanded="true"] {
+.superior .abrir {
+  display: none;
+  align-items: center;
+  gap: 8px;
   background: var(--papel);
+  border: 1px solid var(--linea-fuerte);
+  border-radius: 3px;
+  min-height: 44px;
+  padding: 0 14px;
+  cursor: pointer;
   color: var(--texto);
-  border-bottom-color: var(--papel);
+  font-size: 14px;
 }
 
-.menu button.actual {
-  border-bottom-color: #E2AA82;
-}
-
-/* Franja de Submenú */
-.submenu {
-  background: var(--papel);
-  border-bottom: 1px solid var(--linea-fuerte);
-}
-
-.submenu ul {
-  list-style: none;
-  margin: 0;
-  padding: 10px 0;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: 4px 22px;
-}
-
-.submenu li {
-  display: block;
-  line-height: 1.5;
-}
-
-.submenu a,
-.submenu button {
-  background: none;
-  border: 0;
-  padding: 0;
-  color: var(--primario);
-  text-decoration: underline;
-  text-underline-offset: 3px;
-  font-size: 14.5px;
-}
-
-.submenu a.activo,
-.submenu a.active {
-  font-weight: 600;
-  color: var(--acento);
-}
-
-.submenu .no {
+.miga {
   color: var(--suave);
+  font-size: 14px;
+  min-width: 0;
+}
+
+.miga b {
+  color: var(--texto);
+  font-weight: 600;
+}
+
+.superior .quien {
+  margin-left: auto;
+  color: var(--suave);
+  font-size: 14px;
+  white-space: nowrap;
+}
+
+.superior .quien b {
+  color: var(--texto);
+  font-weight: 600;
 }
 
 /* Página principal */
 .pagina {
+  max-width: 1100px;
   padding-block: 28px 56px;
-  flex: 1;
 }
 
 .pagina h1 {
@@ -170,13 +245,14 @@
 .fecha {
   color: var(--suave);
   margin-bottom: 24px;
+  max-width: 70ch;
 }
 
 /* Grilla en dos columnas */
 .cols {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 300px;
-  gap: 40px;
+  grid-template-columns: minmax(0, 1fr) 260px;
+  gap: 32px;
   align-items: start;
 }
 
@@ -207,14 +283,14 @@ dl.ficha dd {
   color: var(--texto);
 }
 
-/* Columna lateral */
-.lateral section {
+/* Columna lateral de página (lat) */
+.lat section {
   border-top: 3px solid var(--primario);
   padding-top: 10px;
   margin-bottom: 28px;
 }
 
-.lateral h2 {
+.lat h2 {
   font-size: 16px;
 }
 
@@ -273,6 +349,100 @@ dl.ficha dd {
   margin-bottom: 8px;
   font-size: 14px;
 }
+
+/* Tablas */
+.tabla-caja {
+  overflow-x: auto;
+  background: var(--papel);
+  border: 1px solid var(--linea);
+  border-radius: 3px;
+}
+
+table {
+  border-collapse: collapse;
+  width: 100%;
+  min-width: 600px;
+}
+
+caption {
+  text-align: left;
+  padding: 10px 14px;
+  color: var(--suave);
+  font-size: 13.5px;
+  border-bottom: 1px solid var(--linea);
+}
+
+th {
+  text-align: left;
+  font-weight: 600;
+  font-size: 13.5px;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--linea-fuerte);
+  white-space: nowrap;
+  background: var(--papel);
+}
+
+th button {
+  background: none;
+  border: 0;
+  font-weight: 600;
+  padding: 0;
+}
+
+th button:hover {
+  text-decoration: underline;
+}
+
+th.d, td.d {
+  text-align: right;
+}
+
+td {
+  padding: 9px 14px;
+  border-top: 1px solid var(--linea);
+  vertical-align: top;
+}
+
+td.nw {
+  white-space: nowrap;
+}
+
+tbody tr:first-child td {
+  border-top: 0;
+}
+
+tbody tr:hover td {
+  background: var(--hover);
+}
+
+tr.det td {
+  background: var(--fondo);
+  color: var(--suave);
+  font-size: 14px;
+}
+
+.mas {
+  background: none;
+  border: 0;
+  padding: 0 6px 0 0;
+  color: var(--primario);
+}
+
+/* Badges de estado con punto */
+.estado::before {
+  content: "";
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 7px;
+  background: currentColor;
+}
+
+.e-ok { color: var(--primario); }
+.e-pend { color: var(--acento); }
+.e-mal { color: var(--error); }
+.e-neu { color: var(--suave); }
 
 /* Controles y formularios según referencia */
 .btn {
@@ -383,8 +553,8 @@ input:focus, select.c:focus, textarea:focus {
 }
 
 .ingreso .izq {
-  background: var(--cabecera);
-  color: var(--sobre-cabecera);
+  background: var(--lateral);
+  color: var(--sobre-lateral);
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -394,11 +564,11 @@ input:focus, select.c:focus, textarea:focus {
 
 .ingreso .izq b {
   font: 600 38px/1.1 var(--serif);
-  color: var(--sobre-cabecera);
+  color: var(--sobre-lateral);
 }
 
 .ingreso .izq p {
-  color: var(--cabecera-suave);
+  color: var(--lateral-suave);
   max-width: 38ch;
   font-size: 15px;
 }
@@ -427,20 +597,66 @@ input:focus, select.c:focus, textarea:focus {
   min-height: 44px;
 }
 
-/* Responsive <= 900px */
-@media (max-width: 900px) {
+/* Responsive <= 1240px: las dos columnas se apilan */
+@media (max-width: 1240px) {
   .cols {
     grid-template-columns: minmax(0, 1fr);
-    gap: 16px;
+    gap: 8px;
+  }
+}
+
+/* Responsive <= 900px: la barra lateral se vuelve drawer overlay */
+@media (max-width: 900px) {
+  .app {
+    display: block;
+  }
+  .lateral {
+    display: none;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 30;
+    width: min(88vw, 330px);
+    height: auto;
+    padding-left: env(safe-area-inset-left, 0px);
+  }
+  .lateral.abierto {
+    display: flex;
+  }
+  .marca .cerrar {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .item {
+    padding-block: 11px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+  .grupo > button {
+    padding-block: 10px;
+    min-height: 44px;
+  }
+  .salir {
+    min-height: 44px;
+  }
+  .superior .abrir {
+    display: inline-flex;
+  }
+  .superior .quien {
+    display: none;
+  }
+  .cols {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8px;
   }
   .ingreso {
     grid-template-columns: minmax(0, 1fr);
-    height: auto;
-    min-height: 100vh;
   }
   .ingreso .izq {
     padding-block: 32px;
-    justify-content: center;
   }
   dl.ficha {
     grid-template-columns: minmax(0, 1fr);
@@ -449,33 +665,23 @@ input:focus, select.c:focus, textarea:focus {
   dl.ficha dd {
     margin-bottom: 8px;
   }
-}
-
-/* Responsive <= 700px */
-@media (max-width: 700px) {
-  .menu {
-    gap: 2px 4px;
+  .pagina h1 {
+    font-size: 25px;
   }
-  .menu button {
-    padding: 8px 10px;
-    font-size: 13.5px;
+  input, select.c {
+    font-size: 16px;
     min-height: 44px;
   }
-  .submenu ul {
-    gap: 8px 16px;
+  .btn, .btn.chico {
+    min-height: 44px;
   }
-  .submenu a,
-  .submenu button {
-    display: inline-block;
-    padding: 4px 0;
-    min-height: 36px;
+  .filtros .campo {
+    flex: 1 1 140px;
   }
-  .pagina h1 {
-    font-size: 24px;
-  }
-  .cab-fila {
-    padding-block: 10px;
-  }
+}
+
+/* Responsive <= 700px: tablas a fichas */
+@media (max-width: 700px) {
   .tabla-caja {
     overflow: visible;
     background: none;
@@ -550,26 +756,20 @@ input:focus, select.c:focus, textarea:focus {
   .campo {
     width: 100%;
   }
-  input, select.c, textarea {
-    font-size: 16px;
-  }
-  .btn {
-    min-height: 44px;
-  }
 }
 
 /* Modo impresión */
 @media print {
-  .cabecera,
-  .submenu,
-  .menu,
+  .lateral,
+  .velo,
+  .superior,
   .btn,
   button,
   .filtros,
   .alert {
     display: none !important;
   }
-  body, .pagina, .contenedor {
+  body, .principal, .pagina {
     background: #fff !important;
     color: #000 !important;
     padding: 0 !important;

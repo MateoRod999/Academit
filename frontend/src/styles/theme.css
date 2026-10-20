@@ -13,6 +13,10 @@
   --cabecera: #4F5E49;
   --sobre-cabecera: #F3EFE3;
   --cabecera-suave: #C9D2C0;
+  --lateral: #4F5E49;
+  --sobre-lateral: #F3EFE3;
+  --lateral-suave: #C9D2C0;
+  --lateral-marca: #E2AA82;
   --primario: #4F5E49;
   --primario-hover: #3F4C3A;
   --sobre-primario: #FAF8F2;
@@ -119,6 +123,10 @@
     --cabecera: #2E3829;
     --sobre-cabecera: #E5DEC9;
     --cabecera-suave: #A9B79F;
+    --lateral: #2E3829;
+    --sobre-lateral: #E5DEC9;
+    --lateral-suave: #A9B79F;
+    --lateral-marca: #E2AA82;
     --primario: #8BA37E;
     --primario-hover: #9CB793;
     --sobre-primario: #1D1A19;
@@ -401,7 +409,7 @@ select.c:focus,
 table {
   border-collapse: collapse;
   width: 100%;
-  min-width: 640px;
+  min-width: 600px;
 }
 
 caption {
