@@ -235,8 +235,8 @@ export const InicioPage = () => {
           )}
         </div>
 
-        {/* Columna lateral de 300px */}
-        <aside className="lateral">
+        {/* Columna lateral de página (lat) */}
+        <aside className="lat">
           <section>
             <h2>Agenda</h2>
             <ul className="agenda">
