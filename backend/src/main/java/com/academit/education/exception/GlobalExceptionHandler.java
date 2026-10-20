@@ -1,8 +1,11 @@
 package com.academit.education.exception;
 
-import com.academit.education.dto.common.ApiErrorDTO;
+import com.academit.education.dto.common.FieldErrorDTO;
+import jakarta.validation.ConstraintViolation;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,92 +20,123 @@ import java.util.List;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
+    private ProblemDetail buildProblemDetail(HttpStatus status, String title, String detail, List<FieldErrorDTO> errors) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(status, detail);
+        problemDetail.setTitle(title);
+        problemDetail.setProperty("message", detail);
+        problemDetail.setProperty("errors", errors != null ? errors : List.of());
+        return problemDetail;
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<ApiErrorDTO> handleValidationExceptions(MethodArgumentNotValidException ex) {
-        List<String> errors = new ArrayList<>();
+    public ResponseEntity<ProblemDetail> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        List<FieldErrorDTO> errors = new ArrayList<>();
         for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            errors.add(error.getField() + ": " + error.getDefaultMessage());
+            errors.add(new FieldErrorDTO(error.getField(), error.getDefaultMessage()));
         }
-        ApiErrorDTO apiError = ApiErrorDTO.builder()
-                .status(HttpStatus.BAD_REQUEST.value())
-                .message("Error de validación en los datos enviados")
-                .errors(errors)
-                .build();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
+        ProblemDetail pd = buildProblemDetail(
+                HttpStatus.BAD_REQUEST,
+                "Error de validación",
+                "Error de validación en los datos enviados",
+                errors
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(pd);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<ProblemDetail> handleConstraintViolationException(ConstraintViolationException ex) {
+        List<FieldErrorDTO> errors = new ArrayList<>();
+        for (ConstraintViolation<?> violation : ex.getConstraintViolations()) {
+            errors.add(new FieldErrorDTO(violation.getPropertyPath().toString(), violation.getMessage()));
+        }
+        ProblemDetail pd = buildProblemDetail(
+                HttpStatus.BAD_REQUEST,
+                "Error de validación",
+                "Error de validación de restricciones",
+                errors
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(pd);
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ApiErrorDTO> handleResourceNotFoundException(ResourceNotFoundException ex) {
-        ApiErrorDTO apiError = ApiErrorDTO.builder()
-                .status(HttpStatus.NOT_FOUND.value())
-                .message(ex.getMessage())
-                .errors(List.of(ex.getMessage()))
-                .build();
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(apiError);
+    public ResponseEntity<ProblemDetail> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        ProblemDetail pd = buildProblemDetail(
+                HttpStatus.NOT_FOUND,
+                "Recurso no encontrado",
+                ex.getMessage(),
+                List.of()
+        );
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(pd);
     }
 
     @ExceptionHandler(BusinessRuleException.class)
-    public ResponseEntity<ApiErrorDTO> handleBusinessRuleException(BusinessRuleException ex) {
-        ApiErrorDTO apiError = ApiErrorDTO.builder()
-                .status(HttpStatus.BAD_REQUEST.value())
-                .message(ex.getMessage())
-                .errors(List.of(ex.getMessage()))
-                .build();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
+    public ResponseEntity<ProblemDetail> handleBusinessRuleException(BusinessRuleException ex) {
+        ProblemDetail pd = buildProblemDetail(
+                HttpStatus.BAD_REQUEST,
+                "Regla de negocio violada",
+                ex.getMessage(),
+                List.of()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(pd);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ApiErrorDTO> handleBadCredentialsException(BadCredentialsException ex) {
-        ApiErrorDTO apiError = ApiErrorDTO.builder()
-                .status(HttpStatus.UNAUTHORIZED.value())
-                .message("Credenciales inválidas")
-                .errors(List.of("Nombre de usuario o contraseña incorrectos"))
-                .build();
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiError);
+    public ResponseEntity<ProblemDetail> handleBadCredentialsException(BadCredentialsException ex) {
+        ProblemDetail pd = buildProblemDetail(
+                HttpStatus.UNAUTHORIZED,
+                "Unauthorized",
+                "Credenciales inválidas",
+                List.of()
+        );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(pd);
     }
 
     @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<ApiErrorDTO> handleUnauthorizedException(UnauthorizedException ex) {
-        ApiErrorDTO apiError = ApiErrorDTO.builder()
-                .status(HttpStatus.UNAUTHORIZED.value())
-                .message(ex.getMessage())
-                .errors(List.of(ex.getMessage()))
-                .build();
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(apiError);
+    public ResponseEntity<ProblemDetail> handleUnauthorizedException(UnauthorizedException ex) {
+        ProblemDetail pd = buildProblemDetail(
+                HttpStatus.UNAUTHORIZED,
+                "Unauthorized",
+                ex.getMessage(),
+                List.of()
+        );
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(pd);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ApiErrorDTO> handleAccessDeniedException(AccessDeniedException ex) {
-        ApiErrorDTO apiError = ApiErrorDTO.builder()
-                .status(HttpStatus.FORBIDDEN.value())
-                .message("Acceso denegado: no posee los permisos requeridos")
-                .errors(List.of("Permisos insuficientes para realizar esta operación"))
-                .build();
-        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(apiError);
+    public ResponseEntity<ProblemDetail> handleAccessDeniedException(AccessDeniedException ex) {
+        ProblemDetail pd = buildProblemDetail(
+                HttpStatus.FORBIDDEN,
+                "Forbidden",
+                "Acceso denegado: no posee los permisos requeridos",
+                List.of()
+        );
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(pd);
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    public ResponseEntity<ApiErrorDTO> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+    public ResponseEntity<ProblemDetail> handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
         String msg = "Violación de restricción de integridad de datos";
         if (ex.getMessage() != null && ex.getMessage().contains("duplicate key")) {
             msg = "El registro ya existe o viola una restricción de unicidad";
         }
-        ApiErrorDTO apiError = ApiErrorDTO.builder()
-                .status(HttpStatus.BAD_REQUEST.value())
-                .message(msg)
-                .errors(List.of(ex.getMostSpecificCause().getMessage()))
-                .build();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(apiError);
+        ProblemDetail pd = buildProblemDetail(
+                HttpStatus.BAD_REQUEST,
+                "Violación de integridad",
+                msg,
+                List.of()
+        );
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(pd);
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<ApiErrorDTO> handleGlobalException(Exception ex) {
-        ApiErrorDTO apiError = ApiErrorDTO.builder()
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .message("Error interno del servidor")
-                .errors(List.of(ex.getMessage() != null ? ex.getMessage() : "Error inesperado"))
-                .build();
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(apiError);
+    public ResponseEntity<ProblemDetail> handleGlobalException(Exception ex) {
+        String msg = ex.getMessage() != null ? ex.getMessage() : "Error interno del servidor";
+        ProblemDetail pd = buildProblemDetail(
+                HttpStatus.INTERNAL_SERVER_ERROR,
+                "Error interno",
+                msg,
+                List.of()
+        );
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(pd);
     }
 }
-

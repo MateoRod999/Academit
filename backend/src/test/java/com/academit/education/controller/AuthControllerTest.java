@@ -76,6 +76,9 @@ class AuthControllerTest {
                         .content(json))
                 .andExpect(status().isBadRequest())
                 .andExpect(jsonPath("$.status").value(400))
-                .andExpect(jsonPath("$.message").value("Error de validación en los datos enviados"));
+                .andExpect(jsonPath("$.message").value("Error de validación en los datos enviados"))
+                .andExpect(jsonPath("$.errors").isArray())
+                .andExpect(jsonPath("$.errors[0].campo").exists())
+                .andExpect(jsonPath("$.errors[0].mensaje").exists());
     }
 }
