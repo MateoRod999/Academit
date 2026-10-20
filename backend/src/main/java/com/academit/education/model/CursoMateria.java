@@ -29,4 +29,7 @@ public class CursoMateria {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_docente", nullable = false)
     private Docente docente;
+
+    @Column(name = "rol_docente", nullable = false, length = 20)
+    private String rolDocente = "TITULAR";
 }
