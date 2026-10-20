@@ -476,4 +476,104 @@ input:focus, select.c:focus, textarea:focus {
   .cab-fila {
     padding-block: 10px;
   }
+  .tabla-caja {
+    overflow: visible;
+    background: none;
+    border: 0;
+  }
+  table {
+    min-width: 0;
+  }
+  thead {
+    position: absolute;
+    left: -9999px;
+  }
+  table, tbody, tr, td, caption {
+    display: block;
+  }
+  caption {
+    padding: 0 0 10px;
+    border: 0;
+  }
+  tbody tr {
+    background: var(--papel);
+    border: 1px solid var(--linea);
+    border-radius: 3px;
+    margin-bottom: 10px;
+    padding: 6px 0;
+  }
+  tbody tr:first-child td, td {
+    border-top: 0;
+  }
+  td {
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 4px 14px;
+    text-align: right;
+  }
+  td::before {
+    content: attr(data-l);
+    color: var(--suave);
+    text-align: left;
+    flex: none;
+  }
+  td:empty {
+    display: none;
+  }
+  tbody tr td:first-child,
+  td[data-l="Concepto"],
+  td[data-l="Materia"],
+  td.titulo-ficha {
+    font-weight: 600;
+    text-align: left;
+    padding-bottom: 6px;
+    display: block;
+  }
+  tbody tr td:first-child::before,
+  td[data-l="Concepto"]::before,
+  td[data-l="Materia"]::before,
+  td.titulo-ficha::before {
+    content: none;
+  }
+  tr.det {
+    margin-top: -8px;
+    background: var(--fondo);
+  }
+  tr.det td {
+    text-align: left;
+    display: block;
+  }
+  tr.det td::before {
+    content: none;
+  }
+  .campo {
+    width: 100%;
+  }
+  input, select.c, textarea {
+    font-size: 16px;
+  }
+  .btn {
+    min-height: 44px;
+  }
+}
+
+/* Modo impresión */
+@media print {
+  .cabecera,
+  .submenu,
+  .menu,
+  .btn,
+  button,
+  .filtros,
+  .alert {
+    display: none !important;
+  }
+  body, .pagina, .contenedor {
+    background: #fff !important;
+    color: #000 !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    max-width: 100% !important;
+  }
 }

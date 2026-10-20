@@ -1,27 +1,32 @@
-import { Button } from 'react-bootstrap'
-
 export const EmptyState = ({
-  title = 'No hay datos para mostrar',
-  description = 'No se encontraron registros disponibles.',
+  title = 'No hay registros',
+  description = '',
   actionLabel,
   onAction,
 }) => {
   return (
     <div
-      className="p-3 text-center my-2"
       style={{
-        backgroundColor: 'var(--superficie-alt)',
-        border: '1px solid var(--borde)',
-        borderRadius: '2px',
+        padding: '20px 16px',
+        color: 'var(--suave)',
+        textAlign: 'center',
+        background: 'var(--papel)',
+        border: '1px solid var(--linea)',
+        borderRadius: '3px',
       }}
     >
-      <span className="small text-muted me-2">
+      <span>
         {title}{description ? ` — ${description}` : ''}
       </span>
       {actionLabel && onAction && (
-        <Button variant="outline-secondary" size="sm" onClick={onAction} className="ms-2 py-0 px-2 small">
+        <button
+          type="button"
+          className="btn lig chico"
+          onClick={onAction}
+          style={{ marginLeft: '12px' }}
+        >
           {actionLabel}
-        </Button>
+        </button>
       )}
     </div>
   )

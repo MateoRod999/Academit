@@ -3,11 +3,11 @@ export const StatusBadge = ({ status, className = '' }) => {
 
   const s = String(status).toUpperCase()
 
-  let badgeClass
-  let label
+  let variantClass = 'e-neu'
+  let label = status
 
   switch (s) {
-    // Aprobados / Éxitos / Pagados (#4F5E49)
+    // OK / Aprobados / Éxitos / Pagados
     case 'ACTIVO':
     case 'ACTIVA':
     case 'REGULAR':
@@ -19,19 +19,19 @@ export const StatusBadge = ({ status, className = '' }) => {
     case 'ACREDITADO':
     case 'ENTREGADO':
     case 'PRESENTE':
-      badgeClass = 'badge-estado-aprobado'
+      variantClass = 'e-ok'
       label = s === 'PRESENTE' ? 'Presente' : status
       break
 
-    // Pendientes (#864A2D)
+    // Pendientes
     case 'PENDIENTE':
     case 'EN_PROCESO':
     case 'TARDANZA':
-      badgeClass = 'badge-estado-pendiente'
+      variantClass = 'e-pend'
       label = s === 'EN_PROCESO' ? 'En proceso' : (s === 'TARDANZA' ? 'Tardanza' : 'Pendiente')
       break
 
-    // Vencida / Anulada / Error (#9C4940)
+    // Vencida / Anulada / Error
     case 'RECHAZADA':
     case 'RECHAZADO':
     case 'CANCELADA':
@@ -42,35 +42,23 @@ export const StatusBadge = ({ status, className = '' }) => {
     case 'VENCIDA':
     case 'VENCIDO':
     case 'AUSENTE':
-      badgeClass = 'badge-estado-vencida'
-      label = s === 'RECHAZADA' || s === 'RECHAZADO' ? 'Rechazada' : (s === 'VENCIDA' || s === 'VENCIDO' ? 'Vencida' : (s === 'AUSENTE' ? 'Ausente' : status))
+      variantClass = 'e-mal'
+      label = s === 'RECHAZADA' || s === 'RECHAZADO' ? 'Rechazada' : (s === 'VENCIDA' || s === 'VENCIDO' ? 'Vencida' : (s === 'AUSENTE' ? 'Ausente' : (s === 'ANULADA' ? 'Anulada' : status)))
       break
 
-    // Informativo / Neutro (#455860)
+    // Informativo / Neutro
     case 'ABIERTA':
     case 'CERRADA':
     case 'CERRADO':
     case 'JUSTIFICADO':
     default:
-      badgeClass = 'badge-estado-informativo'
+      variantClass = 'e-neu'
       label = s === 'JUSTIFICADO' ? 'Justificado' : (s === 'ABIERTA' ? 'Abierta' : (s === 'CERRADA' || s === 'CERRADO' ? 'Cerrada' : status))
       break
   }
 
   return (
-    <span
-      className={`badge ${badgeClass} ${className}`}
-      style={{
-        display: 'inline-block',
-        fontSize: '0.75rem',
-        padding: '2px 8px',
-        fontWeight: 500,
-        borderRadius: '2px',
-        borderWidth: '1px',
-        borderStyle: 'solid',
-        backgroundColor: 'var(--superficie)',
-      }}
-    >
+    <span className={`estado ${variantClass} ${className}`.trim()}>
       {label}
     </span>
   )
