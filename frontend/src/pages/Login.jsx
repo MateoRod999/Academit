@@ -73,7 +73,7 @@ export const Login = () => {
           Ingresá con el usuario que te dio la secretaría. Si olvidaste la contraseña, pedí el cambio en administración.
         </p>
         <div style={{ marginTop: 'auto', paddingTop: '24px' }}>
-          <small style={{ color: 'var(--cabecera-suave)', fontSize: '0.78rem' }}>
+          <small style={{ color: 'var(--lateral-suave)', fontSize: '0.78rem' }}>
             Este programa fue hecho como proyecto para Taller Integrador III y licenciado con BSD3.
           </small>
         </div>
