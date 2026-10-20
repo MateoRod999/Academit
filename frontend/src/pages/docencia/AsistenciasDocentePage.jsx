@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { Card, Table, Form, Button, Row, Col, ButtonGroup } from 'react-bootstrap'
 import PageHeader from '../../components/PageHeader'
 import StatusBadge from '../../components/StatusBadge'
 import { useToast } from '../../context/ToastContext'
@@ -27,7 +26,6 @@ export const AsistenciasDocentePage = () => {
   }, [])
 
   useEffect(() => {
-    // Cargar asistencias existentes para esa fecha y curso
     getAsistencias({ idCurso: selectedCurso, fecha: selectedFecha }).then((asists) => {
       const mapa = {}
       asists.forEach((a) => {
@@ -80,156 +78,180 @@ export const AsistenciasDocentePage = () => {
       <PageHeader
         title="Tomar Asistencia"
         subtitle="Control diario de presentismo por curso y fecha (PRESENTE, AUSENTE, TARDANZA, JUSTIFICADO)"
-        icon="bi-calendar-check"
         actions={
-          <Button
-            variant="primary"
-            size="sm"
+          <button
+            type="button"
+            className="btn"
             disabled={saving || alumnosDelCurso.length === 0}
             onClick={handleGuardar}
           >
             {saving ? 'Guardando…' : 'Guardar Presentismo'}
-          </Button>
+          </button>
         }
       />
 
       {/* Selectores de curso, materia y fecha */}
-      <Card className="border-0 shadow-sm mb-4" style={{ backgroundColor: 'var(--m-surface)' }}>
-        <Card.Body className="p-3">
-          <Row className="g-3 align-items-end">
-            <Col sm={6} md={4}>
-              <Form.Group controlId="asistCurso">
-                <Form.Label className="small fw-semibold">Curso / Comisión</Form.Label>
-                <Form.Select
-                  size="sm"
-                  value={selectedCurso}
-                  onChange={(e) => setSelectedCurso(Number(e.target.value))}
-                  style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
-                >
-                  {cursos.map((c) => (
-                    <option key={c.idCurso} value={c.idCurso}>
-                      {c.nombre}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
-
-            <Col sm={6} md={4}>
-              <Form.Group controlId="asistMateria">
-                <Form.Label className="small fw-semibold">Materia</Form.Label>
-                <Form.Select
-                  size="sm"
-                  value={selectedMateria}
-                  onChange={(e) => setSelectedMateria(Number(e.target.value))}
-                  style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
-                >
-                  {materias.map((m) => (
-                    <option key={m.idMateria} value={m.idMateria}>
-                      {m.nombre}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
-
-            <Col sm={6} md={4}>
-              <Form.Group controlId="asistFecha">
-                <Form.Label className="small fw-semibold">Fecha de Clase</Form.Label>
-                <Form.Control
-                  type="date"
-                  size="sm"
-                  value={selectedFecha}
-                  onChange={(e) => setSelectedFecha(e.target.value)}
-                  style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-
-          <div className="mt-3 pt-3 border-top border-secondary border-opacity-25 d-flex flex-wrap align-items-center gap-2">
-            <span className="small text-muted me-2">Acciones rápidas para todos:</span>
-            <Button variant="outline-success" size="sm" onClick={() => handleMarcarTodos('PRESENTE')}>
-              <i className="bi bi-check-all me-1" /> Todos Presentes
-            </Button>
-            <Button variant="outline-danger" size="sm" onClick={() => handleMarcarTodos('AUSENTE')}>
-              <i className="bi bi-x me-1" /> Todos Ausentes
-            </Button>
+      <div
+        className="bloque"
+        style={{
+          backgroundColor: 'var(--papel)',
+          border: '1px solid var(--linea)',
+          borderRadius: '3px',
+          padding: '16px',
+        }}
+      >
+        <div className="filtros" style={{ margin: 0 }}>
+          <div className="campo" style={{ flex: '1 1 200px' }}>
+            <label htmlFor="asistCurso">Curso / Comisión</label>
+            <select
+              id="asistCurso"
+              className="c"
+              value={selectedCurso}
+              onChange={(e) => setSelectedCurso(Number(e.target.value))}
+            >
+              {cursos.map((c) => (
+                <option key={c.idCurso} value={c.idCurso}>
+                  {c.nombre}
+                </option>
+              ))}
+            </select>
           </div>
-        </Card.Body>
-      </Card>
+
+          <div className="campo" style={{ flex: '1 1 200px' }}>
+            <label htmlFor="asistMateria">Materia</label>
+            <select
+              id="asistMateria"
+              className="c"
+              value={selectedMateria}
+              onChange={(e) => setSelectedMateria(Number(e.target.value))}
+            >
+              {materias.map((m) => (
+                <option key={m.idMateria} value={m.idMateria}>
+                  {m.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
+
+          <div className="campo" style={{ flex: '1 1 180px' }}>
+            <label htmlFor="asistFecha">Fecha de Clase</label>
+            <input
+              id="asistFecha"
+              type="date"
+              className="c"
+              value={selectedFecha}
+              onChange={(e) => setSelectedFecha(e.target.value)}
+            />
+          </div>
+        </div>
+
+        <div
+          style={{
+            marginTop: '14px',
+            paddingTop: '12px',
+            borderTop: '1px solid var(--linea)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '8px',
+            flexWrap: 'wrap',
+          }}
+        >
+          <span style={{ fontSize: '13.5px', color: 'var(--suave)' }}>Acciones rápidas para todos:</span>
+          <button
+            type="button"
+            className="btn lig chico"
+            onClick={() => handleMarcarTodos('PRESENTE')}
+          >
+            Todos Presentes
+          </button>
+          <button
+            type="button"
+            className="btn lig chico"
+            onClick={() => handleMarcarTodos('AUSENTE')}
+          >
+            Todos Ausentes
+          </button>
+        </div>
+      </div>
 
       {/* Lista de estudiantes y botones de estado */}
-      <Card className="border-0 shadow-sm" style={{ backgroundColor: 'var(--m-surface)' }}>
-        <div className="table-responsive">
-          <Table hover align="middle" className="mb-0">
-            <thead style={{ backgroundColor: 'var(--m-surfaceVariant)' }}>
+      <div className="tabla-caja">
+        <table>
+          <caption>Estudiantes convocados para la comisión y fecha seleccionada</caption>
+          <thead>
+            <tr>
+              <th scope="col">Legajo</th>
+              <th scope="col">Estudiante</th>
+              <th scope="col">DNI</th>
+              <th scope="col">Estado Seleccionado</th>
+              <th scope="col" className="d">Registrar Condición</th>
+            </tr>
+          </thead>
+          <tbody>
+            {alumnosDelCurso.length === 0 ? (
               <tr>
-                <th style={{ color: 'var(--m-primary)' }}>Legajo</th>
-                <th style={{ color: 'var(--m-primary)' }}>Estudiante</th>
-                <th style={{ color: 'var(--m-primary)' }}>DNI</th>
-                <th style={{ color: 'var(--m-primary)' }}>Estado Seleccionado</th>
-                <th style={{ color: 'var(--m-primary)', textAlign: 'right' }}>Registrar Condición</th>
+                <td colSpan={5} style={{ textAlign: 'center', padding: '24px', color: 'var(--suave)' }}>
+                  No hay estudiantes registrados en este curso.
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {alumnosDelCurso.length === 0 ? (
-                <tr>
-                  <td colSpan={5} className="text-center py-4 text-muted">
-                    No hay estudiantes registrados en este curso.
-                  </td>
-                </tr>
-              ) : (
-                alumnosDelCurso.map((alu) => {
-                  const est = estados[alu.idAlumno] || 'PRESENTE'
-                  return (
-                    <tr key={alu.idAlumno} style={{ borderBottom: '1px solid var(--m-outline)' }}>
-                      <td className="font-monospace small">{alu.legajo}</td>
-                      <td>
-                        <strong style={{ color: 'var(--m-onSurface)' }}>
-                          {alu.apellido}, {alu.nombre}
-                        </strong>
-                      </td>
-                      <td className="small text-muted">{alu.dni}</td>
-                      <td>
-                        <StatusBadge status={est} />
-                      </td>
-                      <td style={{ textAlign: 'right' }}>
-                        <ButtonGroup size="sm">
-                          <Button
-                            variant={est === 'PRESENTE' ? 'success' : 'outline-secondary'}
-                            onClick={() => handleSetEstado(alu.idAlumno, 'PRESENTE')}
-                          >
-                            P
-                          </Button>
-                          <Button
-                            variant={est === 'TARDANZA' ? 'warning' : 'outline-secondary'}
-                            onClick={() => handleSetEstado(alu.idAlumno, 'TARDANZA')}
-                          >
-                            T
-                          </Button>
-                          <Button
-                            variant={est === 'JUSTIFICADO' ? 'info' : 'outline-secondary'}
-                            onClick={() => handleSetEstado(alu.idAlumno, 'JUSTIFICADO')}
-                          >
-                            J
-                          </Button>
-                          <Button
-                            variant={est === 'AUSENTE' ? 'danger' : 'outline-secondary'}
-                            onClick={() => handleSetEstado(alu.idAlumno, 'AUSENTE')}
-                          >
-                            A
-                          </Button>
-                        </ButtonGroup>
-                      </td>
-                    </tr>
-                  )
-                })
-              )}
-            </tbody>
-          </Table>
-        </div>
-      </Card>
+            ) : (
+              alumnosDelCurso.map((alu) => {
+                const est = estados[alu.idAlumno] || 'PRESENTE'
+                return (
+                  <tr key={alu.idAlumno}>
+                    <td className="titulo-ficha font-monospace num" data-l="Legajo">{alu.legajo}</td>
+                    <td data-l="Estudiante">
+                      <strong>
+                        {alu.apellido}, {alu.nombre}
+                      </strong>
+                    </td>
+                    <td className="num" data-l="DNI">{alu.dni}</td>
+                    <td data-l="Estado Seleccionado">
+                      <StatusBadge status={est} />
+                    </td>
+                    <td className="d" data-l="Registrar Condición">
+                      <div className="confirma" style={{ justifyContent: 'flex-end' }}>
+                        <button
+                          type="button"
+                          className={`btn chico ${est === 'PRESENTE' ? '' : 'lig'}`}
+                          onClick={() => handleSetEstado(alu.idAlumno, 'PRESENTE')}
+                          aria-label="Presente"
+                        >
+                          P
+                        </button>
+                        <button
+                          type="button"
+                          className={`btn chico ${est === 'TARDANZA' ? '' : 'lig'}`}
+                          onClick={() => handleSetEstado(alu.idAlumno, 'TARDANZA')}
+                          aria-label="Tardanza"
+                        >
+                          T
+                        </button>
+                        <button
+                          type="button"
+                          className={`btn chico ${est === 'JUSTIFICADO' ? '' : 'lig'}`}
+                          onClick={() => handleSetEstado(alu.idAlumno, 'JUSTIFICADO')}
+                          aria-label="Justificado"
+                        >
+                          J
+                        </button>
+                        <button
+                          type="button"
+                          className={`btn chico ${est === 'AUSENTE' ? '' : 'lig'}`}
+                          onClick={() => handleSetEstado(alu.idAlumno, 'AUSENTE')}
+                          aria-label="Ausente"
+                        >
+                          A
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                )
+              })
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }
