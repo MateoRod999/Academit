@@ -274,6 +274,106 @@ dl.ficha dd {
   font-size: 14px;
 }
 
+/* Controles y formularios según referencia */
+.btn {
+  background: var(--primario);
+  color: var(--sobre-primario);
+  border: 1px solid var(--primario);
+  padding: 6px 14px;
+  border-radius: 3px;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn:hover {
+  background: var(--primario-hover);
+  border-color: var(--primario-hover);
+  color: var(--sobre-primario);
+}
+
+.btn.lig {
+  background: transparent;
+  color: var(--primario);
+  border-color: var(--linea-fuerte);
+}
+
+.btn.lig:hover {
+  background: var(--hover);
+  color: var(--primario);
+}
+
+.btn.chico {
+  padding: 2px 10px;
+  font-size: 14px;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--acento);
+  outline-offset: 2px;
+}
+
+.campo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.campo label {
+  font-size: 13.5px;
+  color: var(--suave);
+}
+
+input, select.c, textarea {
+  font: inherit;
+  background: var(--papel);
+  color: var(--texto);
+  border: 1px solid var(--linea-fuerte);
+  border-radius: 3px;
+  padding: 7px 10px;
+  min-width: 0;
+}
+
+input:focus, select.c:focus, textarea:focus {
+  outline: 2px solid var(--primario);
+  outline-offset: -2px;
+}
+
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 16px;
+  align-items: end;
+  margin: 14px 0;
+}
+
+.resumen {
+  margin-bottom: 4px;
+  max-width: 70ch;
+}
+
+.aviso {
+  margin: 8px 0 0;
+  color: var(--primario);
+  min-height: 1.5em;
+}
+
+.error-campo {
+  color: var(--error);
+  font-size: 13.5px;
+}
+
+.confirma {
+  display: inline-flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
 /* Pantalla de Ingreso / Login en dos paneles */
 .ingreso {
   display: grid;
