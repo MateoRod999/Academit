@@ -1,5 +1,6 @@
 package com.academit.education.service;
 
+import com.academit.education.dto.auth.AuthMeResponseDTO;
 import com.academit.education.dto.auth.CambiarPasswordDTO;
 import com.academit.education.dto.auth.LoginRequestDTO;
 import com.academit.education.dto.auth.LoginResponseDTO;
@@ -9,8 +10,9 @@ public interface AuthService {
 
     LoginResponseDTO login(LoginRequestDTO request);
 
-    ApiResponseDTO logout();
+    AuthMeResponseDTO getMe(String username);
+
+    void logout();
 
     ApiResponseDTO cambiarPassword(String username, CambiarPasswordDTO request);
 }
-

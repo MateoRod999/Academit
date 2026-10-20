@@ -1,5 +1,6 @@
 package com.academit.education.controller;
 
+import com.academit.education.dto.auth.AuthMeResponseDTO;
 import com.academit.education.dto.auth.CambiarPasswordDTO;
 import com.academit.education.dto.auth.LoginRequestDTO;
 import com.academit.education.dto.auth.LoginResponseDTO;
@@ -27,10 +28,17 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/logout")
-    public ResponseEntity<ApiResponseDTO> logout() {
-        ApiResponseDTO response = authService.logout();
+    @GetMapping("/me")
+    public ResponseEntity<AuthMeResponseDTO> me(@AuthenticationPrincipal UserDetails userDetails) {
+        String username = userDetails != null ? userDetails.getUsername() : "";
+        AuthMeResponseDTO response = authService.getMe(username);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout() {
+        authService.logout();
+        return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/cambiar-password")

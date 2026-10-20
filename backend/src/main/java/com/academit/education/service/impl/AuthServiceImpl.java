@@ -1,8 +1,10 @@
 package com.academit.education.service.impl;
 
+import com.academit.education.dto.auth.AuthMeResponseDTO;
 import com.academit.education.dto.auth.CambiarPasswordDTO;
 import com.academit.education.dto.auth.LoginRequestDTO;
 import com.academit.education.dto.auth.LoginResponseDTO;
+import com.academit.education.dto.auth.UsuarioSesionDTO;
 import com.academit.education.dto.common.ApiResponseDTO;
 import com.academit.education.exception.BusinessRuleException;
 import com.academit.education.exception.ResourceNotFoundException;
@@ -60,19 +62,40 @@ public class AuthServiceImpl implements AuthService {
         String rolNombre = usuario.getRol() != null ? usuario.getRol().getNombre() : "ALUMNO";
         String token = jwtUtil.generateToken(usuario.getUsername(), rolNombre, usuario.getId());
 
-        return LoginResponseDTO.builder()
+        UsuarioSesionDTO usuarioDto = UsuarioSesionDTO.builder()
                 .idUsuario(usuario.getId())
-                .usuario(usuario.getUsername())
+                .username(usuario.getUsername())
                 .nombre(resolveNombre(usuario))
                 .rol(rolNombre)
-                .email(resolveEmail(usuario))
+                .build();
+
+        return LoginResponseDTO.builder()
+                .usuario(usuarioDto)
                 .token(token)
                 .build();
     }
 
     @Override
-    public ApiResponseDTO logout() {
-        return ApiResponseDTO.ok("Sesión finalizada con éxito");
+    @Transactional(readOnly = true)
+    public AuthMeResponseDTO getMe(String username) {
+        Usuario usuario = usuarioRepository.findByUsername(username)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuario no encontrado"));
+
+        String rolNombre = usuario.getRol() != null ? usuario.getRol().getNombre() : "ALUMNO";
+
+        UsuarioSesionDTO usuarioDto = UsuarioSesionDTO.builder()
+                .idUsuario(usuario.getId())
+                .username(usuario.getUsername())
+                .nombre(resolveNombre(usuario))
+                .rol(rolNombre)
+                .build();
+
+        return new AuthMeResponseDTO(usuarioDto);
+    }
+
+    @Override
+    public void logout() {
+        // Con JWT sin estado alcanza con responder 204
     }
 
     @Override
