@@ -1,185 +1,379 @@
 /* ==========================================================================
-   ACADEMIT - ESTILOS ESTRUCTURALES Y MAQUETACIÓN
-   Complementa src/styles/theme.css con la disposición de Layout y Sidebar
+   ACADEMIT - ESTILOS COMPLEMENTARIOS DE MAQUETACIÓN
+   Complementa src/styles/theme.css con la disposición de Layout, Cabecera y Grillas
    ========================================================================== */
 
-/* --- Contenedor Principal --- */
+/* --- Layout Principal --- */
 .app-container {
-  display: flex;
   min-height: 100vh;
+  display: flex;
+  flex-direction: column;
   background-color: var(--fondo);
 }
 
-/* --- Barra Lateral Fija en Escritorio (>= lg) --- */
-.desktop-sidebar {
-  width: 260px;
-  min-width: 260px;
-  height: 100vh;
-  position: sticky;
-  top: 0;
-  background-color: var(--sidebar-fondo);
-  border-right: 1px solid var(--borde-fuerte);
-  display: flex;
-  flex-direction: column;
-  z-index: 1020;
+/* Cabecera superior */
+.cabecera {
+  background: var(--cabecera);
+  color: var(--sobre-cabecera);
 }
 
-/* Marca Institucional en Sidebar */
-.sidebar-brand {
-  font-family: var(--font-serif);
-  font-size: 1.35rem;
-  font-weight: 600;
-  color: var(--sidebar-texto) !important;
-  text-decoration: none !important;
-  letter-spacing: 0.5px;
-}
-
-.sidebar-brand-subtitle {
-  font-size: 0.72rem;
-  color: var(--sidebar-grupos);
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-/* Datos de usuario en sidebar */
-.sidebar-user-panel {
-  background-color: #1A1817;
-  border-bottom: 1px solid #36312F;
-  color: var(--sidebar-texto);
-  padding: 10px 14px;
-}
-
-/* Encabezados de grupo en el menú */
-.sidebar-section-title {
-  font-variant: small-caps;
-  text-transform: uppercase;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  color: var(--sidebar-grupos);
-  padding: 8px 12px 4px;
-}
-
-.sidebar-divider {
-  border-top: 1px solid #36312F;
-  margin: 6px 8px;
-  opacity: 0.5;
-}
-
-/* Enlaces de la barra lateral */
-.sidebar-link {
-  color: var(--sidebar-texto) !important;
-  text-decoration: none !important;
-  padding: 6px 12px;
-  font-size: 0.88rem;
+.cab-fila {
   display: flex;
   align-items: center;
-  gap: 10px;
-  border-radius: 0;
-  border-left: 3px solid transparent;
+  justify-content: space-between;
+  gap: 16px;
+  padding-block: 14px;
+  flex-wrap: wrap;
 }
 
-.sidebar-link:hover {
-  background-color: var(--sidebar-hover-bg) !important;
-  color: var(--sidebar-activo-texto) !important;
-}
-
-.sidebar-link.active {
-  border-left: 3px solid var(--sidebar-activo-borde) !important;
-  background-color: var(--sidebar-hover-bg) !important;
-  color: var(--sidebar-activo-texto) !important;
-  font-weight: 600;
-}
-
-.sidebar-link i {
-  font-size: 1rem;
-  width: 1.2rem;
-  text-align: center;
-  color: var(--sidebar-grupos);
-}
-
-.sidebar-link.active i {
-  color: var(--sidebar-activo-borde);
-}
-
-/* --- Área de Contenido --- */
-.content-wrapper {
-  flex: 1;
+.marca {
   display: flex;
-  flex-direction: column;
-  min-width: 0;
-  background-color: var(--fondo);
+  align-items: center;
+  gap: 12px;
+  text-decoration: none !important;
+  color: inherit !important;
 }
 
-/* Barra superior */
-.top-navbar {
-  background-color: var(--superficie) !important;
-  border-bottom: 1px solid var(--borde);
-  padding: 8px 16px;
-  z-index: 1010;
+.escudo {
+  flex: none;
 }
 
-/* Contenedor central del contenido */
-.content-container {
-  max-width: 1200px;
-  width: 100%;
-  margin: 0 auto;
-  padding: 1.5rem 1rem;
-  flex: 1;
+.marca b {
+  display: block;
+  font: 600 23px/1.1 var(--serif);
+  color: var(--sobre-cabecera);
 }
 
-/* Encabezado de página */
-.page-title-section {
-  border-bottom: 1px solid var(--borde);
-  padding-bottom: 10px;
-  margin-bottom: 1.25rem;
+.marca small {
+  color: var(--cabecera-suave);
+  font-size: 13px;
 }
 
-.page-title {
-  font-family: var(--font-serif) !important;
-  font-size: 1.65rem;
+.usuario {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  font-size: 14px;
+  flex-wrap: wrap;
+}
+
+.usuario span {
+  color: var(--cabecera-suave);
+}
+
+.usuario b {
+  color: var(--sobre-cabecera);
   font-weight: 600;
+}
+
+.salir {
+  background: none;
+  border: 1px solid var(--cabecera-suave);
+  color: var(--sobre-cabecera);
+  border-radius: 3px;
+  padding: 3px 12px;
+  font-size: 14px;
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+}
+.salir:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Menú de Grupos Horizontal */
+.menu {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 4px;
+  border-top: 1px solid rgba(255, 255, 255, 0.18);
+}
+
+.menu button {
+  background: none;
+  border: 0;
+  border-bottom: 3px solid transparent;
+  padding: 10px 14px;
+  color: var(--sobre-cabecera);
+  font-size: 14.5px;
+  font-weight: 500;
+}
+
+.menu button:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.menu button[aria-expanded="true"] {
+  background: var(--papel);
   color: var(--texto);
-  margin-bottom: 2px;
+  border-bottom-color: var(--papel);
 }
 
-.page-subtitle {
-  font-size: 0.88rem;
-  color: var(--texto-secundario);
-  margin-bottom: 0;
+.menu button.actual {
+  border-bottom-color: #E2AA82;
 }
 
-/* Migas de pan */
-.breadcrumb {
-  margin-bottom: 6px;
-  font-size: 0.8rem;
+/* Franja de Submenú */
+.submenu {
+  background: var(--papel);
+  border-bottom: 1px solid var(--linea-fuerte);
 }
 
-.breadcrumb-item a {
-  color: var(--texto-secundario);
-  text-decoration: none;
+.submenu ul {
+  list-style: none;
+  margin: 0;
+  padding: 10px 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 22px;
 }
 
-.breadcrumb-item a:hover {
+.submenu li {
+  display: block;
+  line-height: 1.5;
+}
+
+.submenu a,
+.submenu button {
+  background: none;
+  border: 0;
+  padding: 0;
+  color: var(--primario);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  font-size: 14.5px;
+}
+
+.submenu a.activo,
+.submenu a.active {
+  font-weight: 600;
   color: var(--acento);
 }
 
-.breadcrumb-item.active {
+.submenu .no {
+  color: var(--suave);
+}
+
+/* Página principal */
+.pagina {
+  padding-block: 28px 56px;
+  flex: 1;
+}
+
+.pagina h1 {
+  font: 600 28px/1.2 var(--serif);
+  margin-bottom: 4px;
   color: var(--texto);
 }
 
-/* Scrollbars sobrios */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
+.fecha {
+  color: var(--suave);
+  margin-bottom: 24px;
 }
-::-webkit-scrollbar-track {
+
+/* Grilla en dos columnas */
+.cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 300px;
+  gap: 40px;
+  align-items: start;
+}
+
+.bloque {
+  margin-bottom: 32px;
+}
+
+h2 {
+  font: 600 18px/1.3 var(--serif);
+  margin: 0 0 10px;
+  color: var(--texto);
+}
+
+/* Ficha de situación (dl) */
+dl.ficha {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  gap: 6px 24px;
+  margin: 0;
+}
+
+dl.ficha dt {
+  color: var(--suave);
+}
+
+dl.ficha dd {
+  margin: 0;
+  color: var(--texto);
+}
+
+/* Columna lateral */
+.lateral section {
+  border-top: 3px solid var(--primario);
+  padding-top: 10px;
+  margin-bottom: 28px;
+}
+
+.lateral h2 {
+  font-size: 16px;
+}
+
+.agenda {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.agenda li {
+  display: grid;
+  grid-template-columns: 46px 1fr;
+  gap: 12px;
+  padding: 9px 0;
+  border-top: 1px solid var(--linea);
+}
+
+.agenda li:first-child {
+  border-top: 0;
+}
+
+.dia {
+  text-align: center;
+  line-height: 1.1;
+  padding-top: 2px;
+}
+
+.dia b {
+  display: block;
+  font: 600 22px var(--serif);
+  color: var(--texto);
+}
+
+.dia small {
+  color: var(--suave);
+  font-size: 12px;
+}
+
+.agenda .cuando {
+  color: var(--acento);
+  font-size: 13px;
+}
+
+.agenda .quien {
+  color: var(--suave);
+  font-size: 13.5px;
+}
+
+.avisos {
+  margin: 0;
+  padding-left: 18px;
+  color: var(--texto);
+}
+
+.avisos li {
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+/* Pantalla de Ingreso / Login en dos paneles */
+.ingreso {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  min-height: 560px;
+  height: 100vh;
+}
+
+.ingreso .izq {
+  background: var(--cabecera);
+  color: var(--sobre-cabecera);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  gap: 14px;
+  padding-block: 48px;
+}
+
+.ingreso .izq b {
+  font: 600 38px/1.1 var(--serif);
+  color: var(--sobre-cabecera);
+}
+
+.ingreso .izq p {
+  color: var(--cabecera-suave);
+  max-width: 38ch;
+  font-size: 15px;
+}
+
+.ingreso .der {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-block: 48px;
   background: var(--fondo);
 }
-::-webkit-scrollbar-thumb {
-  background: var(--borde);
-  border-radius: 2px;
+
+.ingreso form {
+  width: min(100%, 360px);
+  display: grid;
+  gap: 16px;
 }
-::-webkit-scrollbar-thumb:hover {
-  background: var(--borde-fuerte);
+
+.ingreso form h1 {
+  font: 600 24px var(--serif);
+  color: var(--texto);
+}
+
+.ingreso .btn {
+  padding: 8px 14px;
+  min-height: 44px;
+}
+
+/* Responsive <= 900px */
+@media (max-width: 900px) {
+  .cols {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+  }
+  .ingreso {
+    grid-template-columns: minmax(0, 1fr);
+    height: auto;
+    min-height: 100vh;
+  }
+  .ingreso .izq {
+    padding-block: 32px;
+    justify-content: center;
+  }
+  dl.ficha {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0;
+  }
+  dl.ficha dd {
+    margin-bottom: 8px;
+  }
+}
+
+/* Responsive <= 700px */
+@media (max-width: 700px) {
+  .menu {
+    gap: 2px 4px;
+  }
+  .menu button {
+    padding: 8px 10px;
+    font-size: 13.5px;
+    min-height: 44px;
+  }
+  .submenu ul {
+    gap: 8px 16px;
+  }
+  .submenu a,
+  .submenu button {
+    display: inline-block;
+    padding: 4px 0;
+    min-height: 36px;
+  }
+  .pagina h1 {
+    font-size: 24px;
+  }
+  .cab-fila {
+    padding-block: 10px;
+  }
 }
