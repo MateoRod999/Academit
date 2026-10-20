@@ -3,8 +3,8 @@ export const StatusBadge = ({ status, className = '' }) => {
 
   const s = String(status).toUpperCase()
 
-  let variantClass = 'e-neu'
-  let label = status
+  let variantClass
+  let label
 
   switch (s) {
     // OK / Aprobados / Éxitos / Pagados

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Card, Row, Col, Badge, ListGroup } from 'react-bootstrap'
+import { Card, Row, Col, ListGroup } from 'react-bootstrap'
 import PageHeader from '../../components/PageHeader'
 import StatusBadge from '../../components/StatusBadge'
 import { getMateriasDePlan } from '../../api/planes'

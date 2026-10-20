@@ -53,12 +53,10 @@ export const DataTable = ({
       if (valA === null || valA === undefined) return 1
       if (valB === null || valB === undefined) return -1
 
-      let comp = 0
-      if (typeof valA === 'number' && typeof valB === 'number') {
-        comp = valA - valB
-      } else {
-        comp = String(valA).localeCompare(String(valB), 'es', { numeric: true })
-      }
+      const comp =
+        typeof valA === 'number' && typeof valB === 'number'
+          ? valA - valB
+          : String(valA).localeCompare(String(valB), 'es', { numeric: true })
       return sortConfig.asc ? comp : -comp
     })
   }, [filteredData, sortConfig])
