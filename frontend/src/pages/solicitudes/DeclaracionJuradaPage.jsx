@@ -104,7 +104,7 @@ export const DeclaracionJuradaPage = () => {
       </Alert>
 
       {/* Formulario de Presentación de DJ */}
-      <Card className="border-0 shadow-sm mb-4" style={{ backgroundColor: 'var(--m-surface)' }}>
+      <Card className="border-0  mb-4" style={{ backgroundColor: 'var(--m-surface)' }}>
         <Card.Header
           className="p-3 border-bottom border-secondary border-opacity-25 d-flex align-items-center gap-2"
           style={{ backgroundColor: 'var(--m-surfaceVariant)' }}

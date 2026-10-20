@@ -87,7 +87,7 @@ export const MisDatosPage = () => {
 
       <Row className="g-4">
         <Col lg={4}>
-          <Card className="border-0 shadow-sm text-center p-4" style={{ backgroundColor: 'var(--m-surface)' }}>
+          <Card className="border-0  text-center p-4" style={{ backgroundColor: 'var(--m-surface)' }}>
             <div
               className="rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3"
               style={{
@@ -126,7 +126,7 @@ export const MisDatosPage = () => {
         </Col>
 
         <Col lg={8}>
-          <Card className="border-0 shadow-sm" style={{ backgroundColor: 'var(--m-surface)' }}>
+          <Card className="border-0 " style={{ backgroundColor: 'var(--m-surface)' }}>
             <Card.Header
               className="p-3 border-bottom border-secondary border-opacity-25"
               style={{ backgroundColor: 'var(--m-surfaceVariant)' }}

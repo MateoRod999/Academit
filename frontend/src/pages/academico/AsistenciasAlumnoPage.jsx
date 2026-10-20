@@ -36,10 +36,10 @@ export const AsistenciasAlumnoPage = () => {
       key: 'detalle',
       label: 'Observación',
       render: (row) => {
-        if (row.estado === 'PRESENTE') return <span className="text-muted small">Puntual</span>
-        if (row.estado === 'TARDANZA') return <span className="text-warning small">Ingreso con 15 min de demora</span>
-        if (row.estado === 'JUSTIFICADO') return <span className="text-info small">Certificado médico presentado</span>
-        return <span className="text-danger small">Falta injustificada</span>
+        if (row.estado === 'PRESENTE') return <span style={{ color: 'var(--suave)', fontSize: '13.5px' }}>Puntual</span>
+        if (row.estado === 'TARDANZA') return <span style={{ color: 'var(--acento)', fontSize: '13.5px' }}>Demora de 15 min</span>
+        if (row.estado === 'JUSTIFICADO') return <span style={{ color: 'var(--suave)', fontSize: '13.5px' }}>Certificado médico</span>
+        return <span style={{ color: 'var(--error)', fontSize: '13.5px' }}>Falta injustificada</span>
       },
     },
   ]
@@ -49,56 +49,54 @@ export const AsistenciasAlumnoPage = () => {
       <PageHeader
         title="Historial de Asistencias"
         subtitle="Registro de presentismo en clases presenciales y porcentaje acumulado"
-        icon="bi-clock-history"
       />
 
       <Row className="g-3 mb-4">
         <Col md={6} lg={4}>
-          <Card className="border-0 shadow-sm h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
+          <Card className="h-100" style={{ backgroundColor: 'var(--papel)', border: '1px solid var(--linea)' }}>
             <Card.Body className="p-3">
-              <span className="text-muted small text-uppercase fw-semibold">Porcentaje de Asistencia</span>
+              <span style={{ color: 'var(--suave)', fontSize: '13px' }}>Porcentaje de Asistencia</span>
               <div className="d-flex align-items-baseline gap-2 mt-1 mb-2">
-                <h3 className="fw-bold mb-0" style={{ color: porcentaje >= 75 ? 'var(--m-secondary)' : 'var(--m-error)' }}>
+                <h3 className="fw-bold mb-0 num" style={{ color: porcentaje >= 75 ? 'var(--primario)' : 'var(--error)' }}>
                   {porcentaje}%
                 </h3>
-                <small className="text-muted">(Mínimo requerido: 75%)</small>
+                <small style={{ color: 'var(--suave)' }}>(Mínimo requerido: 75%)</small>
               </div>
               <ProgressBar
                 now={porcentaje}
-                variant={porcentaje >= 75 ? 'success' : 'danger'}
-                style={{ height: '8px' }}
+                style={{ height: '6px', backgroundColor: 'var(--linea)' }}
               />
             </Card.Body>
           </Card>
         </Col>
 
         <Col md={6} lg={8}>
-          <Card className="border-0 shadow-sm h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
+          <Card className="h-100" style={{ backgroundColor: 'var(--papel)', border: '1px solid var(--linea)' }}>
             <Card.Body className="p-3">
-              <span className="text-muted small text-uppercase fw-semibold">Desglose de Clases ({totalClases} registradas)</span>
+              <span style={{ color: 'var(--suave)', fontSize: '13px' }}>Desglose de Clases ({totalClases} registradas)</span>
               <Row className="mt-2 text-center g-2">
                 <Col xs={3}>
-                  <div className="p-2 rounded" style={{ backgroundColor: 'var(--m-surfaceVariant)' }}>
-                    <div className="fw-bold fs-5 text-success">{presentes}</div>
-                    <small className="text-muted">Presentes</small>
+                  <div className="p-2" style={{ backgroundColor: 'var(--hover)', border: '1px solid var(--linea)', borderRadius: '3px' }}>
+                    <div className="fw-bold fs-5 num" style={{ color: 'var(--primario)' }}>{presentes}</div>
+                    <small style={{ color: 'var(--suave)' }}>Presentes</small>
                   </div>
                 </Col>
                 <Col xs={3}>
-                  <div className="p-2 rounded" style={{ backgroundColor: 'var(--m-surfaceVariant)' }}>
-                    <div className="fw-bold fs-5 text-warning">{tardanzas}</div>
-                    <small className="text-muted">Tardanzas</small>
+                  <div className="p-2" style={{ backgroundColor: 'var(--hover)', border: '1px solid var(--linea)', borderRadius: '3px' }}>
+                    <div className="fw-bold fs-5 num" style={{ color: 'var(--acento)' }}>{tardanzas}</div>
+                    <small style={{ color: 'var(--suave)' }}>Tardanzas</small>
                   </div>
                 </Col>
                 <Col xs={3}>
-                  <div className="p-2 rounded" style={{ backgroundColor: 'var(--m-surfaceVariant)' }}>
-                    <div className="fw-bold fs-5 text-info">{justificados}</div>
-                    <small className="text-muted">Justificados</small>
+                  <div className="p-2" style={{ backgroundColor: 'var(--hover)', border: '1px solid var(--linea)', borderRadius: '3px' }}>
+                    <div className="fw-bold fs-5 num" style={{ color: 'var(--texto)' }}>{justificados}</div>
+                    <small style={{ color: 'var(--suave)' }}>Justificados</small>
                   </div>
                 </Col>
                 <Col xs={3}>
-                  <div className="p-2 rounded" style={{ backgroundColor: 'var(--m-surfaceVariant)' }}>
-                    <div className="fw-bold fs-5 text-danger">{ausentes}</div>
-                    <small className="text-muted">Ausentes</small>
+                  <div className="p-2" style={{ backgroundColor: 'var(--hover)', border: '1px solid var(--linea)', borderRadius: '3px' }}>
+                    <div className="fw-bold fs-5 num" style={{ color: 'var(--error)' }}>{ausentes}</div>
+                    <small style={{ color: 'var(--suave)' }}>Ausentes</small>
                   </div>
                 </Col>
               </Row>

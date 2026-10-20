@@ -116,7 +116,7 @@ export const GestionPlanEstudiosPage = () => {
       />
 
       {/* Selector de Carrera para filtrar el plan */}
-      <Card className="border-0 shadow-sm mb-4" style={{ backgroundColor: 'var(--m-surface)' }}>
+      <Card className="border-0  mb-4" style={{ backgroundColor: 'var(--m-surface)' }}>
         <Card.Body className="p-3">
           <Row className="align-items-center g-3">
             <Col md={5}>
@@ -165,7 +165,7 @@ export const GestionPlanEstudiosPage = () => {
           const mats = materiasPlan.filter((m) => m.anio === anio)
           return (
             <Col key={anio} lg={4}>
-              <Card className="border-0 shadow-sm h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
+              <Card className="border-0  h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
                 <Card.Header
                   className="p-3 border-bottom border-secondary border-opacity-25 d-flex justify-content-between align-items-center"
                   style={{ backgroundColor: 'var(--m-surfaceVariant)' }}

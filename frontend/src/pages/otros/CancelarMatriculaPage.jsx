@@ -63,7 +63,7 @@ export const CancelarMatriculaPage = () => {
         </div>
       </Alert>
 
-      <Card className="border-0 shadow-sm" style={{ backgroundColor: 'var(--m-surface)' }}>
+      <Card className="border-0 " style={{ backgroundColor: 'var(--m-surface)' }}>
         <Card.Header
           className="p-3 border-bottom border-secondary border-opacity-25 d-flex justify-content-between align-items-center"
           style={{ backgroundColor: 'var(--m-surfaceVariant)' }}

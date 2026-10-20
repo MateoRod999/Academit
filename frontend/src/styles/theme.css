@@ -30,6 +30,15 @@
   --texto-secundario: var(--suave);
   --peligro: var(--error);
 
+  --m-surface: var(--papel);
+  --m-surfaceVariant: var(--hover);
+  --m-onSurface: var(--texto);
+  --m-onSurfaceVariant: var(--suave);
+  --m-primary: var(--primario);
+  --m-secondary: var(--suave);
+  --m-error: var(--error);
+  --m-outline: var(--linea);
+
   /* Estados semánticos */
   --estado-aprobado: var(--primario);
   --estado-pendiente: var(--acento);

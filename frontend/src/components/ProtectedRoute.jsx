@@ -21,7 +21,7 @@ export const ProtectedRoute = ({ children, allowedRoles }) => {
   if (allowedRoles && !allowedRoles.includes(rol)) {
     return (
       <Container className="my-5">
-        <Alert variant="danger" className="p-4 shadow-sm">
+        <Alert variant="danger" className="p-4 ">
           <Alert.Heading className="h4">Acceso denegado</Alert.Heading>
           <p className="mb-3">
             No poseés los permisos necesarios para acceder a esta sección con el rol de{' '}
