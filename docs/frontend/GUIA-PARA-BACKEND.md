@@ -47,15 +47,15 @@ Ubicados en `docs/frontend/`:
 
 ## 4. Convenciones de Comunicación y API
 
-- **Formato de Errores:** Respuestas 4xx y 5xx deben devolver JSON con estructura:
-  `{ "status": 400, "message": "Mensaje legible", "errors": ["Detalle 1", "Detalle 2"] }`
+- **Formato de Errores:** Respuestas 4xx y 5xx usan ProblemDetail (RFC 7807) con `{ status, title, detail, message, errors }`, donde `message` coincide con `detail` y `errors` es `[{ campo, mensaje }]` (o `[]` si no aplica).
 - **Fechas:** Formato estándar ISO `YYYY-MM-DD` (ej. `2026-03-15`).
 - **Identificadores e Importes:** IDs numéricos enteros (`idAlumno`, `idCuota`) e importes en números con decimales (`monto`, `saldo`). No usar strings.
 - **Listados sin paginación:** La API debe retornar colecciones completas (`Array` JSON directo); filtrado y ordenamiento se resuelven en cliente.
 - **Flujo de Autenticación:**
-  - `POST /api/auth/login`: Recibe `{ username, password }`. Responde `{ usuario: { idUsuario, username, nombre, rol }, token }` (token opcional si usa cookies).
-  - `POST /api/auth/logout`: Invalida la sesión activa en el servidor.
-  - **Aislamiento de Sesión:** Centralizado exclusivamente en `frontend/src/context/AuthContext.jsx`. Ningún componente maneja almacenamiento de sesión fuera de este archivo.
+  - `POST /api/auth/login`: Recibe `{ username, password }` y responde `{ usuario: { idUsuario, username, nombre, rol }, token }`.
+  - `GET /api/auth/me`: Requiere Bearer token y responde `{ usuario: { idUsuario, username, nombre, rol } }`.
+  - `POST /api/auth/logout`: Responde `204 No Content` (JWT sin estado).
+  - **Mecanismo de Sesión:** `frontend/src/api/client.js` persiste el token JWT, lo envía como `Authorization: Bearer <token>` en cada pedido y procesa errores mediante `message` y `errors`.
 
 ---
 
