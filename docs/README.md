@@ -37,10 +37,11 @@
 ### Backend
 | Documento | Para qué sirve |
 | :--- | :--- |
-| [backend/GUIA-MODULOS.md](backend/GUIA-MODULOS.md) | Guía de módulos del backend: arquitectura en capas, entidades JPA, servicios, reglas de negocio y controllers. |
+| [backend/guia-de-modulos.md](backend/guia-de-modulos.md) | Guía de módulos del backend: arquitectura en capas, entidades JPA, servicios, reglas de negocio, orden por olas y fichas técnicas por módulo. |
 
 ### Referencias
 | Documento | Para qué sirve |
 | :--- | :--- |
+| [pendientes.md](pendientes.md) | Seguimiento de entregables y tareas pendientes no vinculadas a código (portada, modelos UML/DER y defensa oral). |
 | [estado/desajustes-db.md](estado/desajustes-db.md) | Informe comparativo y matriz de desajustes entre el esquema de base de datos (`01-schema.sql`) y el contrato del frontend. |
 | *Documento Colaborativo de Análisis* | Documento de trabajo compartido en Drive/Docs con el relevamiento inicial de requisitos institucionales (mencionado en el análisis del sistema). |
