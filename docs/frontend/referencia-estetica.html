@@ -1,0 +1,565 @@
+<title>Academit Estética</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+/* Concepto: barra lateral de color con navegación completa por grupos (en celular es un panel que se abre sobre el contenido) y página en dos columnas; datos calculados con la fecha de hoy. */
+:root {
+  --fondo: #F1EDE4;
+  --papel: #FAF8F2;
+  --linea: #D3CBBA;
+  --linea-fuerte: #9C9080;
+  --texto: #242120;
+  --suave: #6B5F50;
+  --lateral: #4F5E49;
+  --sobre-lateral: #F3EFE3;
+  --lateral-suave: #C9D2C0;
+  --lateral-marca: #E2AA82;
+  --primario: #4F5E49;
+  --primario-hover: #3F4C3A;
+  --sobre-primario: #FAF8F2;
+  --acento: #864A2D;
+  --error: #9C4940;
+  --hover: #E7E1D3;
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fondo: #1D1A19; --papel: #262321; --linea: #3F3936; --linea-fuerte: #665C58;
+    --texto: #E5DEC9; --suave: #A69680; --lateral: #2E3829; --sobre-lateral: #E5DEC9; --lateral-suave: #A9B79F;
+    --primario: #8BA37E; --primario-hover: #9CB793; --sobre-primario: #1D1A19; --acento: #CB9168; --error: #D07A6F; --hover: #312C29;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --fondo: #1D1A19; --papel: #262321; --linea: #3F3936; --linea-fuerte: #665C58;
+  --texto: #E5DEC9; --suave: #A69680; --lateral: #2E3829; --sobre-lateral: #E5DEC9; --lateral-suave: #A9B79F;
+  --primario: #8BA37E; --primario-hover: #9CB793; --sobre-primario: #1D1A19; --acento: #CB9168; --error: #D07A6F; --hover: #312C29;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; animation: none !important; transition: none !important; }
+[hidden] { display: none !important; }
+body { margin: 0; background: var(--fondo); color: var(--texto); font: 15px/1.55 var(--sans); }
+body.bloqueado { overflow: hidden; }
+h1, h2, h3, p, ul { margin: 0; }
+a, .enlace { color: var(--primario); }
+button { font: inherit; cursor: pointer; color: inherit; }
+:focus-visible { outline: 2px solid var(--acento); outline-offset: 2px; }
+.num { font-variant-numeric: tabular-nums; }
+.gutter { padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+/* barra de ejemplo */
+.demo { background: var(--hover); border-bottom: 1px solid var(--linea); display: flex; flex-wrap: wrap; gap: 6px 14px; align-items: center; font-size: 13.5px; padding-block: 7px; }
+.demo button { background: none; border: 0; border-bottom: 2px solid transparent; padding: 2px 4px; }
+.demo button[aria-pressed="true"] { border-bottom-color: var(--acento); font-weight: 600; }
+.demo label { color: var(--suave); }
+.demo select { font: inherit; background: var(--papel); color: var(--texto); border: 1px solid var(--linea-fuerte); border-radius: 3px; padding: 2px 6px; }
+.rolsel { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+
+/* estructura */
+.app { display: grid; grid-template-columns: 276px minmax(0, 1fr); align-items: start; }
+.lateral { background: var(--lateral); color: var(--sobre-lateral); position: sticky; top: 0; height: 100vh; height: 100dvh; overflow-y: auto; display: flex; flex-direction: column; }
+.marca { display: flex; align-items: center; gap: 12px; padding: 18px 20px 16px; border-bottom: 1px solid rgba(255,255,255,.18); }
+.marca b { display: block; font: 600 22px/1.1 var(--serif); }
+.marca small { color: var(--lateral-suave); font-size: 12.5px; line-height: 1.3; display: block; }
+.marca .cerrar { margin-left: auto; display: none; background: none; border: 1px solid var(--lateral-suave); color: var(--sobre-lateral); border-radius: 3px; width: 44px; height: 44px; font-size: 18px; }
+.nav { padding: 8px 0 16px; flex: 1; }
+.grupo { padding-top: 10px; }
+.grupo > button { display: flex; width: 100%; align-items: center; justify-content: space-between; background: none; border: 0; padding: 6px 20px; color: var(--lateral-suave); font-size: 13px; text-align: left; }
+.grupo > button:hover { color: var(--sobre-lateral); }
+.grupo > button span { font-size: 11px; }
+.grupo ul { list-style: none; padding: 0; }
+.item { display: block; width: 100%; text-align: left; background: none; border: 0; border-left: 3px solid transparent; padding: 7px 20px 7px 17px; color: var(--sobre-lateral); }
+.item:hover { background: rgba(255,255,255,.09); }
+.item.activo { border-left-color: var(--lateral-marca); background: rgba(255,255,255,.13); font-weight: 600; }
+.pie { position: sticky; bottom: 0; background: var(--lateral); border-top: 1px solid rgba(255,255,255,.18); padding: 14px 20px max(14px, env(safe-area-inset-bottom, 0px)); display: grid; gap: 8px; }
+.pie b { display: block; font-weight: 600; }
+.pie small { color: var(--lateral-suave); font-size: 13px; }
+.salir { background: none; border: 1px solid var(--lateral-suave); color: var(--sobre-lateral); border-radius: 3px; padding: 6px 12px; justify-self: start; }
+.salir:hover { background: rgba(255,255,255,.1); }
+.velo { position: fixed; inset: 0; background: rgba(20,18,17,.55); z-index: 20; }
+
+.principal { min-width: 0; }
+.superior { display: flex; align-items: center; gap: 14px; min-height: 52px; border-bottom: 1px solid var(--linea); padding-block: 6px; }
+.superior .abrir { display: none; align-items: center; gap: 8px; background: var(--papel); border: 1px solid var(--linea-fuerte); border-radius: 3px; min-height: 44px; padding: 0 14px; }
+.miga { color: var(--suave); font-size: 14px; min-width: 0; }
+.miga b { color: var(--texto); font-weight: 600; }
+.superior .quien { margin-left: auto; color: var(--suave); font-size: 14px; white-space: nowrap; }
+.superior .quien b { color: var(--texto); font-weight: 600; }
+.pagina { max-width: 1100px; padding-block: 28px 56px; }
+.pagina h1 { font: 600 28px/1.2 var(--serif); margin-bottom: 4px; }
+.fecha { color: var(--suave); margin-bottom: 24px; max-width: 70ch; }
+.cols { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 32px; align-items: start; }
+h2 { font: 600 18px/1.3 var(--serif); margin: 0 0 10px; }
+.bloque { margin-bottom: 32px; }
+
+dl.ficha { display: grid; grid-template-columns: max-content 1fr; gap: 6px 24px; margin: 0; }
+dl.ficha dt { color: var(--suave); }
+dl.ficha dd { margin: 0; }
+.accesos { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 20px 32px; }
+.accesos h3 { font: 600 14px var(--sans); color: var(--suave); margin-bottom: 6px; }
+.accesos ul { list-style: none; padding: 0; display: grid; gap: 4px; }
+.accesos button { background: none; border: 0; padding: 0; color: var(--primario); text-decoration: underline; text-underline-offset: 3px; text-align: left; }
+
+.tabla-caja { overflow-x: auto; background: var(--papel); border: 1px solid var(--linea); border-radius: 3px; }
+table { border-collapse: collapse; width: 100%; min-width: 600px; }
+caption { text-align: left; padding: 10px 14px; color: var(--suave); font-size: 13.5px; border-bottom: 1px solid var(--linea); }
+th { text-align: left; font-weight: 600; font-size: 13.5px; padding: 9px 14px; border-bottom: 1px solid var(--linea-fuerte); white-space: nowrap; background: var(--papel); }
+th button { background: none; border: 0; font-weight: 600; padding: 0; }
+th button:hover { text-decoration: underline; }
+th.d, td.d { text-align: right; }
+td { padding: 9px 14px; border-top: 1px solid var(--linea); vertical-align: top; }
+td.nw { white-space: nowrap; }
+tbody tr:first-child td { border-top: 0; }
+tbody tr:hover td { background: var(--hover); }
+tr.det td { background: var(--fondo); color: var(--suave); font-size: 14px; }
+.mas { background: none; border: 0; padding: 0 6px 0 0; color: var(--primario); }
+.estado::before { content: ""; display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 7px; background: currentColor; }
+.e-ok { color: var(--primario); } .e-pend { color: var(--acento); } .e-mal { color: var(--error); } .e-neu { color: var(--suave); }
+.clases span { display: inline-block; width: 11px; height: 11px; border-radius: 2px; margin-right: 3px; vertical-align: -1px; }
+.clases .p { background: var(--primario); } .clases .a { background: var(--error); }
+
+.lat section { border-top: 3px solid var(--primario); padding-top: 10px; margin-bottom: 28px; }
+.lat h2 { font-size: 16px; }
+.agenda { list-style: none; margin: 0; padding: 0; }
+.agenda li { display: grid; grid-template-columns: 46px 1fr; gap: 12px; padding: 9px 0; border-top: 1px solid var(--linea); }
+.agenda li:first-child { border-top: 0; }
+.dia { text-align: center; line-height: 1.1; padding-top: 2px; }
+.dia b { display: block; font: 600 22px var(--serif); }
+.dia small { color: var(--suave); font-size: 12px; }
+.agenda .cuando { color: var(--acento); font-size: 13px; }
+.agenda .quien2 { color: var(--suave); font-size: 13.5px; }
+.avisos { margin: 0; padding-left: 18px; }
+.avisos li { margin-bottom: 8px; }
+.vacio { border: 1px dashed var(--linea-fuerte); border-radius: 3px; padding: 28px 20px; color: var(--suave); max-width: 70ch; }
+
+.btn { background: var(--primario); color: var(--sobre-primario); border: 1px solid var(--primario); padding: 6px 14px; border-radius: 3px; }
+.btn:hover { background: var(--primario-hover); border-color: var(--primario-hover); }
+.btn.lig { background: transparent; color: var(--primario); }
+.btn.lig:hover { background: var(--hover); }
+.btn.chico { padding: 2px 10px; font-size: 14px; }
+.campo { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.campo label { font-size: 13.5px; color: var(--suave); }
+input, select.c { font: inherit; background: var(--papel); color: var(--texto); border: 1px solid var(--linea-fuerte); border-radius: 3px; padding: 7px 10px; min-width: 0; }
+input:focus, select.c:focus { outline: 2px solid var(--primario); outline-offset: -2px; }
+.filtros { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: end; margin: 14px 0; }
+.resumen { margin-bottom: 4px; max-width: 70ch; }
+.aviso { margin: 8px 0 0; color: var(--primario); min-height: 1.5em; }
+.error-campo { color: var(--error); font-size: 13.5px; }
+.confirma { display: inline-flex; gap: 6px; flex-wrap: wrap; align-items: center; }
+
+.ingreso { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); min-height: 560px; }
+.ingreso .izq { background: var(--lateral); color: var(--sobre-lateral); display: flex; flex-direction: column; justify-content: flex-end; gap: 14px; padding-block: 48px; }
+.ingreso .izq b { font: 600 38px/1.1 var(--serif); }
+.ingreso .izq p { color: var(--lateral-suave); max-width: 38ch; }
+.ingreso .der { display: flex; align-items: center; padding-block: 48px; }
+.ingreso form { width: min(100%, 360px); display: grid; gap: 16px; }
+.ingreso form h1 { font: 600 24px var(--serif); }
+.ingreso .btn { padding: 8px 14px; min-height: 44px; }
+
+@media (max-width: 1240px) {
+  .cols { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+}
+@media (max-width: 900px) {
+  .app { display: block; }
+  .lateral { display: none; position: fixed; top: 0; bottom: 0; left: 0; z-index: 30; width: min(88vw, 330px); height: auto; padding-left: env(safe-area-inset-left, 0px); }
+  .lateral.abierto { display: flex; }
+  .marca .cerrar { display: inline-flex; align-items: center; justify-content: center; }
+  .item { padding-block: 11px; }
+  .grupo > button { padding-block: 10px; }
+  .salir { min-height: 44px; }
+  .superior .abrir { display: inline-flex; }
+  .superior .quien { display: none; }
+  .cols { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+  .ingreso { grid-template-columns: minmax(0, 1fr); }
+  .ingreso .izq { padding-block: 32px; }
+  dl.ficha { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  dl.ficha dd { margin-bottom: 8px; }
+  .pagina h1 { font-size: 25px; }
+  input, select.c { font-size: 16px; min-height: 44px; }
+  .btn, .btn.chico { min-height: 44px; }
+  .filtros .campo { flex: 1 1 140px; }
+}
+@media (max-width: 700px) {
+  .tabla-caja { overflow: visible; background: none; border: 0; }
+  table { min-width: 0; }
+  thead { position: absolute; left: -9999px; }
+  table, tbody, tr, td, caption { display: block; }
+  caption { padding: 0 0 10px; border: 0; }
+  tbody tr { background: var(--papel); border: 1px solid var(--linea); border-radius: 3px; margin-bottom: 10px; padding: 6px 0; }
+  tbody tr:first-child td, td { border-top: 0; }
+  td { display: flex; justify-content: space-between; gap: 16px; padding: 4px 14px; text-align: right; }
+  td::before { content: attr(data-l); color: var(--suave); text-align: left; flex: none; }
+  td:empty { display: none; }
+  td[data-l="Concepto"], td[data-l="Materia"] { font-weight: 600; text-align: left; padding-bottom: 6px; }
+  td[data-l="Concepto"]::before, td[data-l="Materia"]::before { content: none; }
+  tr.det { margin-top: -8px; background: var(--fondo); }
+  tr.det td { text-align: left; display: block; }
+  tr.det td::before { content: none; }
+}
+</style>
+
+<div class="demo gutter" role="group" aria-label="Pantallas de ejemplo">
+  <span>Ejemplo:</span>
+  <button type="button" data-ir="ingreso" aria-pressed="false">Ingreso</button>
+  <button type="button" data-ir="inicio" aria-pressed="false">Inicio</button>
+  <button type="button" data-ir="cuotas" aria-pressed="false">Cuotas</button>
+  <span class="rolsel"><label for="rol">Ver como</label>
+  <select id="rol"><option value="alumna">Alumna</option><option value="docente">Docente</option><option value="administrativo">Administrativo</option><option value="administrador">Administrador</option></select></span>
+</div>
+
+<section id="v-ingreso" class="ingreso" hidden aria-label="Ingreso">
+  <div class="izq gutter">
+    <svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="26" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="28" cy="28" r="21" fill="none" stroke="currentColor" stroke-width=".8"/><text x="28" y="37" text-anchor="middle" font-family="Georgia, serif" font-size="27" font-weight="700" fill="currentColor">A</text></svg>
+    <b>Academit</b>
+    <p>Ingresá con el usuario que te dio la secretaría. Si olvidaste la contraseña, pedí el cambio en administración.</p>
+  </div>
+  <div class="der gutter">
+    <form id="f-ingreso" novalidate>
+      <h1>Ingresar</h1>
+      <div class="campo"><label for="usuario">Usuario</label><input id="usuario" autocomplete="username" value="lbenitez"></div>
+      <div class="campo"><label for="clave">Contraseña</label><input id="clave" type="password" autocomplete="current-password" aria-describedby="e-clave"><span class="error-campo" id="e-clave" role="alert" hidden>Ingresá tu contraseña.</span></div>
+      <button class="btn" type="submit">Ingresar</button>
+    </form>
+  </div>
+</section>
+
+<div id="v-app" class="app" hidden>
+  <div class="velo" id="velo" hidden></div>
+  <aside class="lateral" id="lateral" aria-label="Navegación">
+    <div class="marca">
+      <svg width="40" height="40" viewBox="0 0 56 56" aria-hidden="true"><circle cx="28" cy="28" r="26" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="28" cy="28" r="21" fill="none" stroke="currentColor" stroke-width=".8"/><text x="28" y="37" text-anchor="middle" font-family="Georgia, serif" font-size="27" font-weight="700" fill="currentColor">A</text></svg>
+      <div><b>Academit</b><small>Instituto de formación superior</small></div>
+      <button class="cerrar" type="button" id="cerrar" aria-label="Cerrar menú">✕</button>
+    </div>
+    <nav class="nav" id="nav" aria-label="Principal"></nav>
+    <div class="pie">
+      <div><b id="u-nombre">Lucía Benítez</b><small id="u-rol">Alumna</small></div>
+      <button class="salir" type="button" data-ir="ingreso">Salir</button>
+    </div>
+  </aside>
+
+  <div class="principal">
+    <div class="superior gutter">
+      <button class="abrir" type="button" id="abrir" aria-controls="lateral" aria-expanded="false">
+        <svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true"><path d="M0 1h18M0 7h18M0 13h18" stroke="currentColor" stroke-width="2"/></svg>Menú
+      </button>
+      <div class="miga" id="miga"></div>
+      <div class="quien"><b id="q-nombre"></b> · <span id="q-rol"></span></div>
+    </div>
+
+    <main class="pagina gutter">
+      <div id="v-inicio" hidden>
+        <h1 id="saludo">Buenas noches</h1>
+        <p class="fecha" id="hoy"></p>
+        <div class="cols">
+          <div>
+            <div id="blq-alumna">
+              <section class="bloque">
+                <h2>Tu situación</h2>
+                <dl class="ficha">
+                  <dt>Legajo</dt><dd class="num">2024-0318</dd>
+                  <dt>Carrera</dt><dd>Tecnicatura en Programación, plan 2022</dd>
+                  <dt>Ciclo lectivo</dt><dd class="num">2026, segundo cuatrimestre</dd>
+                  <dt>Promedio</dt><dd class="num" id="promedio"></dd>
+                  <dt>Cuotas</dt><dd id="ficha-cuotas"></dd>
+                </dl>
+              </section>
+              <section class="bloque">
+                <h2>Materias que cursás</h2>
+                <div class="tabla-caja">
+                  <table>
+                    <caption>Nota mínima para aprobar: 4. Asistencia mínima para regularizar: 75 %.</caption>
+                    <thead><tr>
+                      <th scope="col"><button type="button" data-ord="materia">Materia</button></th>
+                      <th scope="col">Docente</th>
+                      <th scope="col" class="d"><button type="button" data-ord="p1">Parcial 1</button></th>
+                      <th scope="col" class="d"><button type="button" data-ord="p2">Parcial 2</button></th>
+                      <th scope="col" class="d"><button type="button" data-ord="asis">Asistencia</button></th>
+                      <th scope="col">Condición</th>
+                    </tr></thead>
+                    <tbody id="materias"></tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+            <section class="bloque" id="blq-accesos" hidden>
+              <h2>Tus accesos</h2>
+              <div class="accesos" id="accesos"></div>
+            </section>
+          </div>
+          <aside class="lat">
+            <section><h2>Agenda</h2><ul class="agenda" id="agenda"></ul></section>
+            <section><h2>Avisos de secretaría</h2>
+              <ul class="avisos">
+                <li>La inscripción a mesas de examen cierra 48 horas antes de cada fecha.</li>
+                <li>Quien tenga cuotas vencidas debe regularizar su situación en administración antes de rendir.</li>
+                <li>La declaración jurada de materias del próximo ciclo se presenta hasta fin de noviembre.</li>
+              </ul>
+            </section>
+          </aside>
+        </div>
+      </div>
+
+      <div id="v-cuotas" hidden>
+        <h1 id="t-cuotas">Cuotas y pagos</h1>
+        <p class="fecha">Matrícula 2026: 12 cuotas mensuales y 3 seguros cuatrimestrales. Cada pago cubre el importe completo de la cuota.</p>
+        <p class="resumen" id="resumen"></p>
+        <div class="filtros">
+          <div class="campo"><label for="f-estado">Estado</label>
+            <select class="c" id="f-estado"><option value="">Todos</option><option>Pagada</option><option>Pendiente</option><option>Vencida</option></select></div>
+          <div class="campo"><label for="f-tipo">Concepto</label>
+            <select class="c" id="f-tipo"><option value="">Todos</option><option>Cuota mensual</option><option>Seguro cuatrimestral</option></select></div>
+        </div>
+        <div class="tabla-caja">
+          <table>
+            <thead><tr><th scope="col">Concepto</th><th scope="col">Vence</th><th scope="col" class="d">Importe</th><th scope="col">Estado</th><th scope="col">Pagada el</th><th scope="col"><span id="th-acc">Acción</span></th></tr></thead>
+            <tbody id="cuerpo"></tbody>
+          </table>
+        </div>
+        <p class="aviso" id="aviso" role="status"></p>
+      </div>
+
+      <div id="v-generica" hidden>
+        <h1 id="t-gen"></h1>
+        <p class="fecha">Esta pantalla usa el mismo diseño de tablas, filtros y formularios que las anteriores.</p>
+        <div class="vacio">Pantalla no incluida en el ejemplo.</div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script>
+var hoy = new Date(); hoy.setHours(0,0,0,0);
+var DIA = 86400000;
+function sumar(d, n){ return new Date(d.getTime() + n*DIA); }
+function fFecha(d, o){ return d.toLocaleDateString('es-AR', o || {day:'2-digit', month:'2-digit', year:'numeric'}); }
+function cuando(d){
+  var n = Math.round((d - hoy)/DIA);
+  if (n === 0) return 'hoy'; if (n === 1) return 'mañana'; if (n < 0) return 'hace ' + (-n) + ' días';
+  return 'en ' + n + ' días';
+}
+var peso = new Intl.NumberFormat('es-AR', {style:'currency', currency:'ARS'});
+function $(id){ return document.getElementById(id); }
+
+/* ---- menú por rol (en el sistema real sale de src/config/menu.js) ---- */
+var I = function(id, l){ return {id:id, l:l}; };
+var menus = {
+  alumna: [
+    {n:'Académico', items:[I('inicio','Inicio'),I('mesas','Mesas de examen'),I('parciales','Parciales y TPs'),I('asistencias','Asistencias'),I('situacion','Situación académica'),I('cuotas','Situación arancelaria'),I('plan','Plan de estudios y correlativas')]},
+    {n:'Solicitudes', items:[I('constancias','Constancias'),I('ddjj','Declaración jurada'),I('pasantias','Inscripción a pasantías'),I('titulo','Solicitud de título'),I('sol-acad','Solicitudes académicas')]},
+    {n:'Otros', items:[I('documentacion','Documentación académica'),I('cambio-carrera','Cambio de carrera'),I('reincorporacion','Reincorporación'),I('cancelar-mat','Cancelar matrícula'),I('clave','Modificar contraseña')]}
+  ],
+  docente: [
+    {n:'Mi cátedra', items:[I('inicio','Inicio'),I('mis-cursos','Cursos asignados'),I('evaluaciones','Evaluaciones'),I('calificaciones','Calificaciones'),I('asistencia','Asistencia')]},
+    {n:'Otros', items:[I('plan','Plan de estudios'),I('clave','Modificar contraseña')]}
+  ],
+  administrativo: [
+    {n:'Gestión', items:[I('inicio','Inicio'),I('alumnos','Alumnos'),I('docentes','Docentes (consulta)'),I('asignaciones','Asignaciones (consulta)'),I('inscripciones','Inscripciones'),I('matriculas','Matrículas')]},
+    {n:'Cuotas y pagos', items:[I('cuotas','Cuotas'),I('pagos','Pagos')]},
+    {n:'Solicitudes', items:[I('bandeja','Bandeja de solicitudes'),I('documentacion','Documentación')]},
+    {n:'Otros', items:[I('clave','Modificar contraseña')]}
+  ],
+  administrador: [
+    {n:'Gestión académica', items:[I('inicio','Inicio'),I('alumnos','Alumnos'),I('docentes','Docentes'),I('carreras','Carreras'),I('materias','Materias'),I('planes','Planes de estudio'),I('cursos','Cursos'),I('ciclos','Ciclos lectivos'),I('asignaciones','Asignaciones'),I('inscripciones','Inscripciones'),I('mesas','Mesas de examen')]},
+    {n:'Administración', items:[I('matriculas','Matrículas'),I('cuotas','Cuotas'),I('pagos','Pagos'),I('usuarios','Usuarios y roles')]},
+    {n:'Solicitudes', items:[I('bandeja','Bandeja de solicitudes'),I('documentacion','Documentación')]},
+    {n:'Otros', items:[I('clave','Modificar contraseña')]}
+  ]
+};
+var personas = {
+  alumna:['Lucía Benítez','Alumna','Lucía'], docente:['Paula Sosa','Docente','Paula'],
+  administrativo:['Marcos Ferreyra','Administrativo','Marcos'], administrador:['Julián Acosta','Administrador','Julián']
+};
+function rol(){ return $('rol').value; }
+function admite(r){ return r === 'administrativo' || r === 'administrador'; }
+function buscar(id){
+  var m = menus[rol()];
+  for (var g = 0; g < m.length; g++) for (var i = 0; i < m[g].items.length; i++) if (m[g].items[i].id === id) return {g:m[g].n, it:m[g].items[i]};
+  return null;
+}
+
+var vistaActual = 'inicio', cerrados = {};
+function pintarNav(){
+  var m = menus[rol()];
+  $('nav').innerHTML = m.map(function(g, gi){
+    var abierto = !cerrados[g.n];
+    return '<div class="grupo"><button type="button" data-g="'+gi+'" aria-expanded="'+abierto+'">'+g.n+'<span aria-hidden="true">'+(abierto?'▾':'▸')+'</span></button>'+
+      (abierto ? '<ul>'+g.items.map(function(it){
+        return '<li><button type="button" class="item'+(it.id===vistaActual?' activo':'')+'" data-ir="'+it.id+'"'+(it.id===vistaActual?' aria-current="page"':'')+'>'+it.l+'</button></li>';
+      }).join('')+'</ul>' : '')+'</div>';
+  }).join('');
+}
+function abrirMenu(v){
+  $('lateral').classList.toggle('abierto', v);
+  $('velo').hidden = !v;
+  $('abrir').setAttribute('aria-expanded', v ? 'true' : 'false');
+  document.body.classList.toggle('bloqueado', v);
+  if (v) $('cerrar').focus(); else if (document.activeElement && $('lateral').contains(document.activeElement)) $('abrir').focus();
+}
+
+/* ---- datos de ejemplo ---- */
+var materias = [
+  {materia:'Análisis de Sistemas', docente:'Paz, Marta', p1:9, p2:8, asis:95, clases:'ppppp'},
+  {materia:'Base de Datos II', docente:'Aguirre, Hernán', p1:8, p2:null, asis:88, clases:'pppap'},
+  {materia:'Programación III', docente:'Roldán, Esteban', p1:7, p2:6, asis:91, clases:'ppppa'},
+  {materia:'Inglés Técnico', docente:'Medina, Carla', p1:3, p2:null, asis:72, clases:'apaap'}
+];
+function condicion(m){
+  if (m.asis < 75) return ['En riesgo de quedar libre', 'e-mal'];
+  if ((m.p1 !== null && m.p1 < 4) || (m.p2 !== null && m.p2 < 4)) return ['Debe recuperar un parcial', 'e-pend'];
+  return ['Regular', 'e-ok'];
+}
+var cuotas = [];
+(function(){
+  for (var i = 0; i < 12; i++) {
+    cuotas.push({id:'c'+(i+1), concepto:'Cuota mensual ' + (i+1) + ' de 12', tipo:'Cuota mensual', vence:new Date(2026, 2 + i, 10), importe:48500, pago: i < 7 ? new Date(2026, 2 + i, 6 + (i%4)) : null});
+  }
+  [[2,15],[6,15],[10,15]].forEach(function(p, k){
+    cuotas.push({id:'s'+(k+1), concepto:'Seguro cuatrimestral ' + (k+1) + ' de 3', tipo:'Seguro cuatrimestral', vence:new Date(2026, p[0], p[1]), importe:12000, pago: k < 2 ? new Date(2026, p[0], 12) : null});
+  });
+  cuotas.sort(function(a,b){ return a.vence - b.vence; });
+})();
+function estadoCuota(c){ return c.pago ? 'Pagada' : (c.vence < hoy ? 'Vencida' : 'Pendiente'); }
+var claseEstado = {Pagada:'e-ok', Pendiente:'e-neu', Vencida:'e-mal'};
+
+/* ---- inicio ---- */
+var orden = {campo:'materia', asc:true}, abiertas = {};
+function pintarMaterias(){
+  var f = materias.slice().sort(function(a,b){
+    var x = a[orden.campo], y = b[orden.campo];
+    if (x === null) return 1; if (y === null) return -1;
+    var r = typeof x === 'string' ? x.localeCompare(y, 'es') : x - y;
+    return orden.asc ? r : -r;
+  });
+  $('materias').innerHTML = f.map(function(m){
+    var c = condicion(m), ab = abiertas[m.materia];
+    var fila = '<tr><td class="nw" data-l="Materia"><button class="mas" type="button" data-det="'+m.materia+'" aria-expanded="'+!!ab+'" aria-label="Ver clases de '+m.materia+'">'+(ab?'−':'+')+'</button>'+m.materia+'</td><td class="nw" data-l="Docente">'+m.docente+'</td><td class="d num" data-l="Parcial 1">'+(m.p1===null?'–':m.p1)+'</td><td class="d num" data-l="Parcial 2">'+(m.p2===null?'–':m.p2)+'</td><td class="d num" data-l="Asistencia">'+m.asis+' %</td><td data-l="Condición"><span class="estado '+c[1]+'">'+c[0]+'</span></td></tr>';
+    if (ab) {
+      var cl = m.clases.split('').map(function(x){ return '<span class="'+x+'" title="'+(x==='p'?'Presente':'Ausente')+'"></span>'; }).join('');
+      fila += '<tr class="det"><td colspan="6">Últimas cinco clases: <span class="clases">'+cl+'</span> (verde presente, rojo ausente)</td></tr>';
+    }
+    return fila;
+  }).join('');
+  var notas = []; materias.forEach(function(m){ [m.p1, m.p2].forEach(function(n){ if (n !== null) notas.push(n); }); });
+  var prom = notas.reduce(function(a,b){return a+b;},0) / notas.length;
+  $('promedio').textContent = prom.toFixed(2).replace('.', ',') + ' sobre ' + notas.length + ' notas cargadas';
+}
+function pintarAgenda(){
+  var ev = [
+    [3, 'Parcial 2 de Base de Datos II', 'Aula 4, 19:00'],
+    [9, 'Mesa de examen: Programación II', 'Tribunal Roldán, Ibarra · 18:30'],
+    [16, 'Mesa de examen: Base de Datos I', 'Tribunal Aguirre, Paz · 18:30'],
+    [25, 'Cierre de inscripción a mesas de diciembre', 'Sistema de alumnos']
+  ];
+  $('agenda').innerHTML = ev.map(function(e){
+    var d = sumar(hoy, e[0]);
+    return '<li><div class="dia"><b class="num">'+d.getDate()+'</b><small>'+fFecha(d,{month:'short'}).replace('.','')+'</small></div><div><div>'+e[1]+'</div><div class="cuando">'+cuando(d)+'</div><div class="quien2">'+e[2]+'</div></div></li>';
+  }).join('');
+}
+function pintarFichaCuotas(){
+  var venc = cuotas.filter(function(c){ return estadoCuota(c) === 'Vencida'; });
+  $('ficha-cuotas').innerHTML = venc.length
+    ? '<span class="estado e-mal">'+venc.length+(venc.length===1?' vencida':' vencidas')+'</span> · <button class="mas enlace" type="button" data-ir="cuotas" style="padding:0">ver detalle</button>'
+    : '<span class="estado e-ok">Al día</span>';
+}
+function pintarInicio(){
+  var h = new Date().getHours(), r = rol();
+  var s = h < 6 ? 'Buenas noches' : h < 13 ? 'Buenos días' : h < 20 ? 'Buenas tardes' : 'Buenas noches';
+  $('saludo').textContent = s + ', ' + personas[r][2];
+  var t = fFecha(new Date(), {weekday:'long', day:'numeric', month:'long'});
+  $('hoy').textContent = t.charAt(0).toUpperCase() + t.slice(1) + '.';
+  $('blq-alumna').hidden = r !== 'alumna';
+  $('blq-accesos').hidden = r === 'alumna';
+  if (r === 'alumna') { pintarMaterias(); pintarFichaCuotas(); }
+  else {
+    $('accesos').innerHTML = menus[r].map(function(g){
+      var its = g.items.filter(function(it){ return it.id !== 'inicio'; });
+      return its.length ? '<div><h3>'+g.n+'</h3><ul>'+its.map(function(it){ return '<li><button type="button" data-ir="'+it.id+'">'+it.l+'</button></li>'; }).join('')+'</ul></div>' : '';
+    }).join('');
+  }
+  pintarAgenda();
+}
+
+/* ---- cuotas ---- */
+var pagando = null;
+function pintarCuotas(){
+  var e = $('f-estado').value, t = $('f-tipo').value, puede = admite(rol());
+  var filas = cuotas.filter(function(c){ var s = estadoCuota(c); return (!e || s === e) && (!t || c.tipo === t); });
+  $('th-acc').textContent = puede ? 'Acción' : '';
+  $('cuerpo').innerHTML = filas.map(function(c){
+    var s = estadoCuota(c), acc = '';
+    if (puede && s !== 'Pagada') {
+      acc = pagando === c.id
+        ? '<span class="confirma"><span class="num">'+peso.format(c.importe)+'</span><button class="btn chico" type="button" data-conf="'+c.id+'">Confirmar</button><button class="btn lig chico" type="button" data-cancel="1">Cancelar</button></span>'
+        : '<button class="btn lig chico" type="button" data-pagar="'+c.id+'">Registrar pago</button>';
+    }
+    return '<tr><td class="nw" data-l="Concepto">'+c.concepto+'</td><td class="num" data-l="Vence">'+fFecha(c.vence)+'</td><td class="d num" data-l="Importe">'+peso.format(c.importe)+'</td><td data-l="Estado"><span class="estado '+claseEstado[s]+'">'+s+'</span></td><td class="num" data-l="Pagada el">'+(c.pago ? fFecha(c.pago) : '–')+'</td><td>'+acc+'</td></tr>';
+  }).join('');
+  var venc = cuotas.filter(function(c){ return estadoCuota(c) === 'Vencida'; });
+  var pend = cuotas.filter(function(c){ return estadoCuota(c) === 'Pendiente'; });
+  var adeuda = venc.reduce(function(a,c){return a+c.importe;},0);
+  var txt = venc.length ? 'Hay ' + venc.length + (venc.length===1?' cuota vencida':' cuotas vencidas') + ' por ' + peso.format(adeuda) + '.' : 'No hay cuotas vencidas.';
+  if (pend[0]) txt += ' La próxima vence el ' + fFecha(pend[0].vence) + ' (' + cuando(pend[0].vence) + ').';
+  $('resumen').textContent = txt;
+}
+
+/* ---- navegación ---- */
+function mostrar(v){
+  abrirMenu(false);
+  if (v === 'ingreso') {
+    $('v-ingreso').hidden = false; $('v-app').hidden = true; marcarDemo('ingreso'); return;
+  }
+  var r = rol(), enc = buscar(v);
+  if (!enc) { v = 'inicio'; enc = buscar('inicio'); }
+  vistaActual = v;
+  $('v-ingreso').hidden = true; $('v-app').hidden = false;
+  var tipo = v === 'inicio' ? 'inicio' : v === 'cuotas' ? 'cuotas' : 'generica';
+  $('v-inicio').hidden = tipo !== 'inicio';
+  $('v-cuotas').hidden = tipo !== 'cuotas';
+  $('v-generica').hidden = tipo !== 'generica';
+  $('u-nombre').textContent = personas[r][0]; $('u-rol').textContent = personas[r][1];
+  $('q-nombre').textContent = personas[r][0]; $('q-rol').textContent = personas[r][1];
+  $('miga').innerHTML = enc.g + ' / <b>' + enc.it.l + '</b>';
+  $('t-gen').textContent = enc.it.l;
+  $('t-cuotas').textContent = r === 'alumna' ? 'Situación arancelaria' : 'Cuotas y pagos';
+  marcarDemo(tipo === 'generica' ? '' : v);
+  pintarNav(); pintarInicio(); pintarCuotas();
+  window.scrollTo(0, 0);
+  try { history.replaceState(null, '', '#' + v); } catch (e) {}
+}
+function marcarDemo(v){
+  document.querySelectorAll('.demo button').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.ir === v ? 'true' : 'false'); });
+}
+document.addEventListener('click', function(ev){
+  var t = ev.target;
+  var ir = t.closest('[data-ir]'); if (ir) { mostrar(ir.dataset.ir); return; }
+  var g = t.closest('[data-g]'); if (g) { var n = menus[rol()][+g.dataset.g].n; cerrados[n] = !cerrados[n]; pintarNav(); return; }
+  var o = t.closest('[data-ord]');
+  if (o) { var c = o.dataset.ord; orden = {campo:c, asc: orden.campo === c ? !orden.asc : true}; pintarMaterias(); return; }
+  var d = t.closest('[data-det]'); if (d) { abiertas[d.dataset.det] = !abiertas[d.dataset.det]; pintarMaterias(); return; }
+  var p = t.closest('[data-pagar]'); if (p) { pagando = p.dataset.pagar; $('aviso').textContent = ''; pintarCuotas(); return; }
+  if (t.closest('[data-cancel]')) { pagando = null; pintarCuotas(); return; }
+  var cf = t.closest('[data-conf]');
+  if (cf) {
+    var cu = cuotas.filter(function(x){ return x.id === cf.dataset.conf; })[0];
+    cu.pago = new Date(); pagando = null;
+    $('aviso').textContent = 'Pago registrado: ' + cu.concepto + ', ' + peso.format(cu.importe) + '.';
+    pintarCuotas(); pintarFichaCuotas();
+  }
+});
+$('abrir').addEventListener('click', function(){ abrirMenu(true); });
+$('cerrar').addEventListener('click', function(){ abrirMenu(false); });
+$('velo').addEventListener('click', function(){ abrirMenu(false); });
+document.addEventListener('keydown', function(ev){ if (ev.key === 'Escape') abrirMenu(false); });
+window.matchMedia('(min-width: 901px)').addEventListener('change', function(m){ if (m.matches) abrirMenu(false); });
+$('f-ingreso').addEventListener('submit', function(ev){
+  ev.preventDefault();
+  var vacia = !$('clave').value;
+  $('e-clave').hidden = !vacia;
+  if (!vacia) mostrar('inicio');
+});
+['f-estado','f-tipo'].forEach(function(id){ $(id).addEventListener('change', pintarCuotas); });
+$('rol').addEventListener('change', function(){ pagando = null; mostrar(vistaActual === 'ingreso' ? 'inicio' : vistaActual); });
+mostrar((location.hash || '#inicio').slice(1));
+</script>
