@@ -139,7 +139,7 @@ export const SituacionAcademicaArancelariaPage = () => {
                     </h4>
                     <div className="d-flex align-items-center gap-2 mt-2">
                       <StatusBadge status={matricula?.estado || 'ACTIVA'} />
-                      <StatusBadge status={matricula?.estadoPago || 'PAGADA'} />
+                      <StatusBadge status={matricula?.estadoPago || 'AL_DIA'} />
                     </div>
                   </Card.Body>
                 </Card>

@@ -22,11 +22,11 @@ Academit/
 ├── backend/            # API REST desarrollada en Spring Boot + Gradle
 ├── frontend/           # Aplicación cliente SPA en React + Vite
 ├── database/           # Scripts SQL (01-schema.sql, 02-datos-iniciales.sql)
-├── docs/               # Documentación general, análisis, UML y frontend
+├── docs/               # Documentación general, entregables y frontend
 │   ├── README.md       # Índice central de documentación
 │   ├── flujo-de-trabajo.md # Reglas de Git, ramas y commits
-│   ├── analisis/       # Requisitos y análisis del sistema (Entregable 1)
-│   ├── uml/            # Diagramas PlantUML (.puml)
+│   ├── entregables/    # Entregables 1 (análisis) y 2 (modelos UML y DER)
+│   ├── estado/         # Diagnósticos y desajustes de base de datos
 │   └── frontend/       # Documentación técnica y contratos del frontend
 ├── .github/            # Plantillas de GitHub (pull_request_template.md)
 ├── .editorconfig       # Configuración estándar de formato de código

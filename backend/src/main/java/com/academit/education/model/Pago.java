@@ -37,4 +37,7 @@ public class Pago {
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "id_medio_pago", nullable = false)
     private MedioPago medioPago;
+
+    @Column(name = "comprobante", nullable = false, length = 11, unique = true)
+    private String comprobante;
 }

@@ -37,7 +37,7 @@ paths:
         - name: estado
           in: query
           required: false
-          description: "Filtro por condición académica (REGULAR, ACTIVO, INACTIVO)"
+          description: "Filtro por condición institucional (ACTIVO, INACTIVO)"
           schema:
             type: string
       responses:
@@ -3143,7 +3143,6 @@ components:
         estado:
           type: string
           enum:
-            - REGULAR
             - ACTIVO
             - INACTIVO
         estadoMatricula:
@@ -3200,7 +3199,6 @@ components:
         estado:
           type: string
           enum:
-            - REGULAR
             - ACTIVO
             - INACTIVO
         idPlan:
@@ -3738,7 +3736,6 @@ components:
         - cicloLectivo
         - fecha
         - estado
-        - estadoPago
       properties:
         idMatricula:
           type: integer
@@ -3767,11 +3764,11 @@ components:
             - CANCELADA
         estadoPago:
           type: string
-          description: "Pendiente de definir por backend: ningún flujo lo actualiza"
+          description: "Estado financiero calculado a partir de las cuotas asociadas (solo lectura)."
           enum:
             - AL_DIA
-            - CON_DEUDA
-            - EXENTO
+            - EN_MORA
+            - PENDIENTE
     MatriculaUpdateDTO:
       type: object
       required:
@@ -3863,6 +3860,7 @@ components:
           $ref: '#/components/schemas/MedioPagoEnum'
         comprobante:
           type: string
+          description: "Número de comprobante oficial AAAA-NNNNNN generado por el backend (solo lectura)."
         estado:
           type: string
           enum:

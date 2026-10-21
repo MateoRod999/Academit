@@ -7,7 +7,7 @@
 -- - Valores booleanos nativos (BOOLEAN).
 -- - Restricciones CHECK y UNIQUE explicitas en el esquema.
 --
--- Fuente: docs/Entregables/entregable 2/der.md (30 tablas: 23 del DER + 7 catalogos).
+-- Fuente: docs/entregables/entregable-2/der.md y docs/frontend/entidades.json (32 tablas: 25 del modelo + 7 catalogos).
 
 DROP SCHEMA IF EXISTS public CASCADE;
 CREATE SCHEMA public;
@@ -182,6 +182,7 @@ CREATE TABLE ciclo_lectivo (
 CREATE TABLE curso (
     id_curso         INTEGER GENERATED ALWAYS AS IDENTITY,
     nombre           VARCHAR(30) NOT NULL,
+    turno            VARCHAR(10) NOT NULL DEFAULT 'MANANA',
     capacidad_maxima INTEGER     NOT NULL,   -- RN03
     id_ciclo         INTEGER     NOT NULL,
     id_carrera       INTEGER     NOT NULL,
@@ -189,7 +190,8 @@ CREATE TABLE curso (
     CONSTRAINT fk_curso_ciclo FOREIGN KEY (id_ciclo) REFERENCES ciclo_lectivo (id_ciclo),
     CONSTRAINT fk_curso_carrera FOREIGN KEY (id_carrera) REFERENCES carrera (id_carrera),
     CONSTRAINT uk_curso_nombre UNIQUE (nombre, id_ciclo, id_carrera),
-    CONSTRAINT ck_curso_capacidad CHECK (capacidad_maxima > 0)
+    CONSTRAINT ck_curso_capacidad CHECK (capacidad_maxima > 0),
+    CONSTRAINT ck_curso_turno CHECK (turno IN ('MANANA', 'TARDE', 'NOCHE'))
 );
 
 CREATE TABLE materia (
@@ -228,11 +230,13 @@ CREATE TABLE curso_materia (
     id_curso         INTEGER NOT NULL,
     id_materia       INTEGER NOT NULL,
     id_docente       INTEGER NOT NULL,
+    rol_docente      VARCHAR(20) NOT NULL DEFAULT 'TITULAR',
     CONSTRAINT pk_curso_materia PRIMARY KEY (id_curso_materia),
     CONSTRAINT fk_curso_materia_curso FOREIGN KEY (id_curso) REFERENCES curso (id_curso),
     CONSTRAINT fk_curso_materia_materia FOREIGN KEY (id_materia) REFERENCES materia (id_materia),
     CONSTRAINT fk_curso_materia_docente FOREIGN KEY (id_docente) REFERENCES docente (id_docente),
-    CONSTRAINT uk_curso_materia UNIQUE (id_curso, id_materia)
+    CONSTRAINT uk_curso_materia_docente UNIQUE (id_curso, id_materia, id_docente),
+    CONSTRAINT ck_curso_materia_rol CHECK (rol_docente IN ('TITULAR', 'ADJUNTO', 'JTP'))
 );
 
 -- ============================================================
@@ -289,11 +293,10 @@ CREATE TABLE cuota (
     CONSTRAINT fk_cuota_matricula FOREIGN KEY (id_matricula) REFERENCES matricula (id_matricula),
     CONSTRAINT uk_cuota UNIQUE (id_matricula, numero, id_tipo_cuota),
     CONSTRAINT ck_cuota_importe CHECK (importe > 0),
-    CONSTRAINT ck_cuota_numero CHECK (numero > 0),
+    CONSTRAINT ck_cuota_numero CHECK (numero BETWEEN 1 AND 12),
     CONSTRAINT fk_cuota_tipo FOREIGN KEY (id_tipo_cuota) REFERENCES tipo_cuota (id_tipo_cuota),
     CONSTRAINT fk_cuota_estado FOREIGN KEY (id_estado_cuota) REFERENCES estado_cuota (id_estado_cuota)
-    -- RN18 (12 cuotas MENSUAL y 3 SEGURO por matricula) se valida en el Service,
-    -- porque el tipo ahora es un catalogo y no un valor fijo del esquema.
+    -- RN18 (12 cuotas CUOTA_MENSUAL y 3 SEGURO_CUATRIMESTRAL por matricula): validado en el Service.
 );
 
 CREATE TABLE pago (
@@ -303,8 +306,10 @@ CREATE TABLE pago (
     fecha      DATE          NOT NULL DEFAULT CURRENT_DATE,
     importe    NUMERIC(10,2) NOT NULL,
     id_medio_pago INTEGER    NOT NULL,
+    comprobante VARCHAR(11)  NOT NULL,
     CONSTRAINT pk_pago PRIMARY KEY (id_pago),
     CONSTRAINT uk_pago_cuota UNIQUE (id_cuota),   -- RN08: una cuota, un unico pago
+    CONSTRAINT uk_pago_comprobante UNIQUE (comprobante),
     CONSTRAINT fk_pago_cuota FOREIGN KEY (id_cuota) REFERENCES cuota (id_cuota),
     CONSTRAINT fk_pago_usuario FOREIGN KEY (id_usuario) REFERENCES usuario (id_usuario),
     CONSTRAINT ck_pago_importe CHECK (importe > 0),
@@ -343,12 +348,14 @@ CREATE TABLE asistencia (
     id_asistencia INTEGER GENERATED ALWAYS AS IDENTITY,
     id_alumno     INTEGER     NOT NULL,
     id_curso      INTEGER     NOT NULL,
+    id_materia    INTEGER     NOT NULL,
     fecha         DATE        NOT NULL,
     id_estado_asistencia INTEGER NOT NULL,
     CONSTRAINT pk_asistencia PRIMARY KEY (id_asistencia),
     CONSTRAINT fk_asistencia_alumno FOREIGN KEY (id_alumno) REFERENCES alumno (id_alumno),
     CONSTRAINT fk_asistencia_curso FOREIGN KEY (id_curso) REFERENCES curso (id_curso),
-    CONSTRAINT uk_asistencia UNIQUE (id_alumno, id_curso, fecha),   -- RN15
+    CONSTRAINT fk_asistencia_materia FOREIGN KEY (id_materia) REFERENCES materia (id_materia),
+    CONSTRAINT uk_asistencia UNIQUE (id_alumno, id_curso, id_materia, fecha),   -- RN15
     CONSTRAINT fk_asistencia_estado FOREIGN KEY (id_estado_asistencia) REFERENCES estado_asistencia (id_estado_asistencia)
 );
 
@@ -362,10 +369,13 @@ CREATE TABLE mesa_examen (
     id_docente INTEGER NOT NULL,
     fecha      DATE    NOT NULL,
     cupo       INTEGER NOT NULL,
+    tribunal   VARCHAR(150),
+    turno      VARCHAR(10) DEFAULT 'MANANA',
     CONSTRAINT pk_mesa_examen PRIMARY KEY (id_mesa),
     CONSTRAINT fk_mesa_materia FOREIGN KEY (id_materia) REFERENCES materia (id_materia),
     CONSTRAINT fk_mesa_docente FOREIGN KEY (id_docente) REFERENCES docente (id_docente),
-    CONSTRAINT ck_mesa_cupo CHECK (cupo > 0)
+    CONSTRAINT ck_mesa_cupo CHECK (cupo > 0),
+    CONSTRAINT ck_mesa_turno CHECK (turno IS NULL OR turno IN ('MANANA', 'TARDE', 'NOCHE'))
 );
 
 CREATE TABLE inscripcion_mesa (
@@ -402,6 +412,40 @@ CREATE TABLE declaracion_materia (
 );
 
 -- ============================================================
+-- Solicitudes y documentacion de alumnos
+-- ============================================================
+
+CREATE TABLE solicitud (
+    id_solicitud     INTEGER GENERATED ALWAYS AS IDENTITY,
+    id_alumno        INTEGER      NOT NULL,
+    tipo             VARCHAR(30)  NOT NULL,
+    fecha_solicitud  DATE         NOT NULL DEFAULT CURRENT_DATE,
+    motivo           VARCHAR(255) NOT NULL,
+    observaciones    VARCHAR(255),
+    estado           VARCHAR(20)  NOT NULL DEFAULT 'PENDIENTE',
+    fecha_resolucion DATE,
+    respuesta        VARCHAR(255),
+    CONSTRAINT pk_solicitud PRIMARY KEY (id_solicitud),
+    CONSTRAINT fk_solicitud_alumno FOREIGN KEY (id_alumno) REFERENCES alumno (id_alumno),
+    CONSTRAINT ck_solicitud_tipo CHECK (tipo IN ('CONSTANCIA', 'PASANTIA', 'TITULO_INTERMEDIO', 'ACADEMICA', 'CAMBIO_CARRERA', 'REINCORPORACION')),
+    CONSTRAINT ck_solicitud_estado CHECK (estado IN ('PENDIENTE', 'EN_PROCESO', 'APROBADA', 'RECHAZADA'))
+);
+
+CREATE TABLE documentacion (
+    id_documento  INTEGER GENERATED ALWAYS AS IDENTITY,
+    id_alumno     INTEGER      NOT NULL,
+    tipo          VARCHAR(30)  NOT NULL,
+    obligatorio   BOOLEAN      NOT NULL DEFAULT TRUE,
+    estado        VARCHAR(20)  NOT NULL DEFAULT 'PENDIENTE',
+    fecha_entrega DATE,
+    observaciones VARCHAR(255),
+    CONSTRAINT pk_documentacion PRIMARY KEY (id_documento),
+    CONSTRAINT fk_documentacion_alumno FOREIGN KEY (id_alumno) REFERENCES alumno (id_alumno),
+    CONSTRAINT ck_documentacion_tipo CHECK (tipo IN ('DNI', 'TITULO_SECUNDARIO', 'APTO_MEDICO', 'FOTOS')),
+    CONSTRAINT ck_documentacion_estado CHECK (estado IN ('ENTREGADO', 'PENDIENTE', 'RECHAZADO'))
+);
+
+-- ============================================================
 -- Indices para las claves foraneas mas consultadas (RNF06)
 -- (PostgreSQL no los crea solo; las UNIQUE ya tienen el suyo)
 -- ============================================================
@@ -420,4 +464,7 @@ CREATE INDEX ix_pago_fecha ON pago (fecha);
 CREATE INDEX ix_evaluacion_curso_materia ON evaluacion (id_curso_materia);
 CREATE INDEX ix_calificacion_alumno ON calificacion (id_alumno);
 CREATE INDEX ix_asistencia_curso ON asistencia (id_curso, fecha);
+CREATE INDEX ix_asistencia_materia ON asistencia (id_materia);
 CREATE INDEX ix_mesa_materia ON mesa_examen (id_materia);
+CREATE INDEX ix_solicitud_alumno ON solicitud (id_alumno);
+CREATE INDEX ix_documentacion_alumno ON documentacion (id_alumno);

@@ -51,7 +51,7 @@ const ENDPOINTS_META = [
     queryParams: [
       { name: 'search', type: 'string', desc: 'Búsqueda por nombre, apellido o DNI' },
       { name: 'idCarrera', type: 'integer', desc: 'Filtro por ID de carrera' },
-      { name: 'estado', type: 'string', desc: 'Filtro por condición académica (REGULAR, ACTIVO, INACTIVO)' }
+      { name: 'estado', type: 'string', desc: 'Filtro por condición institucional (ACTIVO, INACTIVO)' }
     ],
     pathParams: [],
     requestBody: null,
@@ -1244,7 +1244,7 @@ const ENTIDADES = [
       { nombre: 'idPlan', tipo: 'number (Integer)', obligatorio: true, enums: null, descripcion: 'FK al Plan de Estudio asignado.' },
       { nombre: 'idCurso', tipo: 'number (Integer)', obligatorio: false, enums: null, descripcion: 'FK al curso/comisión principal asignada.' },
       { nombre: 'cicloLectivo', tipo: 'number (Integer)', obligatorio: true, enums: null, descripcion: 'Año lectivo de ingreso o cursada activa.' },
-      { nombre: 'estado', tipo: 'string (Enum)', obligatorio: true, enums: ['REGULAR', 'ACTIVO', 'INACTIVO'], descripcion: 'Condición académica institucional.' },
+      { nombre: 'estado', tipo: 'string (Enum)', obligatorio: true, enums: ['ACTIVO', 'INACTIVO'], descripcion: 'Condición institucional activa o inactiva.' },
       { nombre: 'estadoMatricula', tipo: 'string (Enum)', obligatorio: true, enums: ['ACTIVA', 'PENDIENTE', 'CANCELADA'], descripcion: 'Estado de la matrícula para el ciclo lectivo actual.' },
       { nombre: 'idMatricula', tipo: 'number (Integer)', obligatorio: false, enums: null, descripcion: 'FK a la matrícula del ciclo actual.' }
     ],
@@ -1441,13 +1441,13 @@ const ENTIDADES = [
       { nombre: 'idCiclo', tipo: 'number (Integer)', obligatorio: true, enums: null, descripcion: 'FK al Ciclo Lectivo correspondiente.' },
       { nombre: 'cicloLectivo', tipo: 'number (Integer)', obligatorio: true, enums: null, descripcion: 'Año lectivo de la matrícula.' },
       { nombre: 'fecha', tipo: 'string (YYYY-MM-DD)', obligatorio: true, enums: null, descripcion: 'Fecha de emisión de la matrícula.' },
-      { nombre: 'estado', tipo: 'string (Enum)', obligatorio: true, enums: ['ACTIVA', 'PENDIENTE', 'CANCELADA'], descripcion: 'Estado académico de la matrícula.' },
-      { nombre: 'estadoPago', tipo: 'string (Enum)', obligatorio: true, enums: ['AL_DIA', 'CON_DEUDA', 'EXENTO'], descripcion: 'Estado de regularidad financiera (pendiente de definir por backend: ningún flujo lo actualiza).' }
+      { nombre: 'estado', tipo: 'string (Enum)', obligatorio: true, enums: ['ACTIVA', 'PENDIENTE', 'CANCELADA'], descripcion: 'Estado académico de la matrícula.' }
     ],
     camposCalculados: [
       { nombre: 'alumnoNombre', tipo: 'string', obligatorio: false, enums: null, descripcion: 'Nombre completo del alumno.' },
       { nombre: 'carreraNombre', tipo: 'string', obligatorio: false, enums: null, descripcion: 'Nombre de la carrera matriculada.' },
-      { nombre: 'cicloLectivoNombre', tipo: 'string', obligatorio: false, enums: null, descripcion: 'Nombre del ciclo lectivo.' }
+      { nombre: 'cicloLectivoNombre', tipo: 'string', obligatorio: false, enums: null, descripcion: 'Nombre del ciclo lectivo.' },
+      { nombre: 'estadoPago', tipo: 'string (Enum)', obligatorio: false, enums: ['AL_DIA', 'EN_MORA', 'PENDIENTE'], descripcion: 'Estado financiero calculado a partir de las cuotas asociadas (EN_MORA si hay cuota vencida, AL_DIA si están pagadas, PENDIENTE en el resto). Solo lectura.' }
     ],
     relaciones: [
       { campo: 'idAlumno', entidadDestino: 'Alumno', campoDestino: 'idAlumno', tipo: 'M:1' },
@@ -1491,7 +1491,7 @@ const ENTIDADES = [
       { nombre: 'importe', tipo: 'number (Float)', obligatorio: true, enums: null, descripcion: 'Monto total cancelado (exacto según RN09).' },
       { nombre: 'fechaPago', tipo: 'string (YYYY-MM-DD)', obligatorio: true, enums: null, descripcion: 'Fecha de recepción del pago.' },
       { nombre: 'medioPago', tipo: 'string (Enum)', obligatorio: true, enums: ['EFECTIVO', 'TRANSFERENCIA', 'TARJETA_CREDITO', 'TARJETA_DEBITO', 'OTRO'], descripcion: 'Canal de cobranza utilizado.' },
-      { nombre: 'comprobante', tipo: 'string', obligatorio: true, enums: null, descripcion: 'Número de recibo o comprobante fiscal.' },
+      { nombre: 'comprobante', tipo: 'string', obligatorio: true, enums: null, descripcion: 'Número de comprobante oficial AAAA-NNNNNN generado por el backend al registrar el pago (solo lectura).' },
       { nombre: 'estado', tipo: 'string (Enum)', obligatorio: true, enums: ['ACREDITADO', 'PENDIENTE', 'RECHAZADO'], descripcion: 'Estado contable de acreditación.' }
     ],
     camposCalculados: [
@@ -1826,7 +1826,7 @@ function generarEntidadesYEndpointsMD() {
       lines.push('');
     }
     if (e.nombre === 'Matricula') {
-      lines.push('> **Nota de Dominio:** Matricula.estadoPago está pendiente de definir por backend: ningún flujo lo actualiza.');
+      lines.push('> **Nota de Dominio:** Matricula.estadoPago no se guarda: es un campo calculado de solo lectura que el backend genera a partir de las cuotas asociadas (EN_MORA, AL_DIA, PENDIENTE).');
       lines.push('');
     }
     if (e.nombre === 'Cuota') {
@@ -2144,7 +2144,7 @@ function generarOpenAPIYaml() {
         idCurso: { type: 'integer' },
         cursoNombre: { type: 'string' },
         cicloLectivo: { type: 'integer' },
-        estado: { type: 'string', enum: ['REGULAR', 'ACTIVO', 'INACTIVO'] },
+        estado: { type: 'string', enum: ['ACTIVO', 'INACTIVO'] },
         estadoMatricula: { type: 'string', enum: ['ACTIVA', 'PENDIENTE', 'CANCELADA'] },
         idMatricula: { type: 'integer' }
       }
@@ -2173,7 +2173,7 @@ function generarOpenAPIYaml() {
         email: { type: 'string' },
         telefono: { type: 'string' },
         domicilio: { type: 'string' },
-        estado: { type: 'string', enum: ['REGULAR', 'ACTIVO', 'INACTIVO'] },
+        estado: { type: 'string', enum: ['ACTIVO', 'INACTIVO'] },
         idPlan: { type: 'integer' }
       }
     },
@@ -2453,7 +2453,7 @@ function generarOpenAPIYaml() {
     },
     {
       name: 'MatriculaDTO',
-      required: ['idMatricula', 'idAlumno', 'idCarrera', 'idCiclo', 'cicloLectivo', 'fecha', 'estado', 'estadoPago'],
+      required: ['idMatricula', 'idAlumno', 'idCarrera', 'idCiclo', 'cicloLectivo', 'fecha', 'estado'],
       properties: {
         idMatricula: { type: 'integer' },
         idAlumno: { type: 'integer' },
@@ -2465,7 +2465,7 @@ function generarOpenAPIYaml() {
         cicloLectivo: { type: 'integer' },
         fecha: { type: 'string', format: 'date' },
         estado: { type: 'string', enum: ['ACTIVA', 'PENDIENTE', 'CANCELADA'] },
-        estadoPago: { type: 'string', enum: ['AL_DIA', 'CON_DEUDA', 'EXENTO'], description: 'Pendiente de definir por backend: ningún flujo lo actualiza' }
+        estadoPago: { type: 'string', enum: ['AL_DIA', 'EN_MORA', 'PENDIENTE'], readOnly: true, description: 'Estado financiero calculado a partir de las cuotas asociadas (solo lectura).' }
       }
     },
     {
@@ -2512,7 +2512,7 @@ function generarOpenAPIYaml() {
         importe: { type: 'number' },
         fechaPago: { type: 'string', format: 'date' },
         medioPago: { $ref: '#/components/schemas/MedioPagoEnum' },
-        comprobante: { type: 'string' },
+        comprobante: { type: 'string', readOnly: true, description: 'Número de comprobante oficial AAAA-NNNNNN generado por el backend (solo lectura).' },
         estado: { type: 'string', enum: ['ACREDITADO', 'PENDIENTE', 'RECHAZADO'] }
       }
     },

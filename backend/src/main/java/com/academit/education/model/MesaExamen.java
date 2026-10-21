@@ -32,4 +32,10 @@ public class MesaExamen {
 
     @Column(name = "cupo", nullable = false)
     private Integer cupo;
+
+    @Column(name = "tribunal", length = 150)
+    private String tribunal;
+
+    @Column(name = "turno", length = 10)
+    private String turno = "MANANA";
 }

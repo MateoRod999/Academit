@@ -21,6 +21,9 @@ public class Curso {
     @Column(name = "nombre", nullable = false, length = 30)
     private String nombre;
 
+    @Column(name = "turno", nullable = false, length = 10)
+    private String turno = "MANANA";
+
     @Column(name = "capacidad_maxima", nullable = false)
     private Integer capacidadMaxima;
 
