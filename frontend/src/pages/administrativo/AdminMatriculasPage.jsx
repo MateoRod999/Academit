@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Button, Form, Badge } from 'react-bootstrap'
+import { Button, Form } from 'react-bootstrap'
 import PageHeader from '../../components/PageHeader'
 import DataTable from '../../components/DataTable'
 import StatusBadge from '../../components/StatusBadge'
@@ -82,11 +82,7 @@ export const AdminMatriculasPage = () => {
     {
       key: 'estadoPago',
       label: 'Estado Pago',
-      render: (row) => (
-        <Badge bg={row.estadoPago === 'PAGADA' ? 'success' : row.estadoPago === 'ANULADA' ? 'secondary' : 'warning'}>
-          {row.estadoPago}
-        </Badge>
-      ),
+      render: (row) => <StatusBadge status={row.estadoPago} />,
     },
     {
       key: 'estado',

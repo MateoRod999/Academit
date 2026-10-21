@@ -119,7 +119,7 @@ export const mockDb = {
       idMatricula: 3,
       estadoMatricula: 'PENDIENTE',
       cicloLectivo: 2026,
-      estado: 'REGULAR',
+      estado: 'ACTIVO',
     },
     {
       idAlumno: 4,
@@ -418,7 +418,7 @@ export const mockDb = {
       importe: 35000,
       fechaAlta: '2026-02-10',
       estado: 'ACTIVA',
-      estadoPago: 'PAGADA',
+      estadoPago: 'AL_DIA',
     },
     {
       idMatricula: 2,
@@ -428,7 +428,7 @@ export const mockDb = {
       importe: 35000,
       fechaAlta: '2026-02-12',
       estado: 'ACTIVA',
-      estadoPago: 'PAGADA',
+      estadoPago: 'AL_DIA',
     },
     {
       idMatricula: 3,
@@ -448,16 +448,16 @@ export const mockDb = {
       importe: 35000,
       fechaAlta: '2026-02-01',
       estado: 'CANCELADA',
-      estadoPago: 'ANULADA',
+      estadoPago: 'PENDIENTE',
     },
   ],
 
   // 13. Cuotas y Seguros (12 cuotas mensuales + 3 seguros cuatrimestrales para Lucía Benítez)
   cuotas: [
     // Cuotas mensuales de Lucía Benítez (idAlumno: 1, idMatricula: 1)
-    { idCuota: 1, idMatricula: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 1 - Enero 2026', tipo: 'MENSUAL', periodo: 'Enero 2026', numero: 1, importe: 28000, fechaVencimiento: '2026-01-10', estado: 'PAGADA', fechaPago: '2026-01-08', comprobante: 'REC-2026-0112' },
-    { idCuota: 2, idMatricula: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 2 - Febrero 2026', tipo: 'MENSUAL', periodo: 'Febrero 2026', numero: 2, importe: 28000, fechaVencimiento: '2026-02-10', estado: 'PAGADA', fechaPago: '2026-02-09', comprobante: 'REC-2026-0225' },
-    { idCuota: 3, idMatricula: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 3 - Marzo 2026', tipo: 'MENSUAL', periodo: 'Marzo 2026', numero: 3, importe: 28000, fechaVencimiento: '2026-03-10', estado: 'PAGADA', fechaPago: '2026-03-05', comprobante: 'REC-2026-0341' },
+    { idCuota: 1, idMatricula: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 1 - Enero 2026', tipo: 'MENSUAL', periodo: 'Enero 2026', numero: 1, importe: 28000, fechaVencimiento: '2026-01-10', estado: 'PAGADA', fechaPago: '2026-01-08', comprobante: '2026-000002' },
+    { idCuota: 2, idMatricula: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 2 - Febrero 2026', tipo: 'MENSUAL', periodo: 'Febrero 2026', numero: 2, importe: 28000, fechaVencimiento: '2026-02-10', estado: 'PAGADA', fechaPago: '2026-02-09', comprobante: '2026-000003' },
+    { idCuota: 3, idMatricula: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 3 - Marzo 2026', tipo: 'MENSUAL', periodo: 'Marzo 2026', numero: 3, importe: 28000, fechaVencimiento: '2026-03-10', estado: 'PAGADA', fechaPago: '2026-03-05', comprobante: '2026-000004' },
     { idCuota: 4, idMatricula: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 4 - Abril 2026', tipo: 'MENSUAL', periodo: 'Abril 2026', numero: 4, importe: 28000, fechaVencimiento: '2026-04-10', estado: 'VENCIDA', fechaPago: null, comprobante: null },
     { idCuota: 5, idMatricula: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 5 - Mayo 2026', tipo: 'MENSUAL', periodo: 'Mayo 2026', numero: 5, importe: 28000, fechaVencimiento: '2026-05-10', estado: 'PENDIENTE', fechaPago: null, comprobante: null },
     { idCuota: 6, idMatricula: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 6 - Junio 2026', tipo: 'MENSUAL', periodo: 'Junio 2026', numero: 6, importe: 28000, fechaVencimiento: '2026-06-10', estado: 'PENDIENTE', fechaPago: null, comprobante: null },
@@ -468,23 +468,23 @@ export const mockDb = {
     { idCuota: 11, idMatricula: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 11 - Noviembre 2026', tipo: 'MENSUAL', periodo: 'Noviembre 2026', numero: 11, importe: 28000, fechaVencimiento: '2026-11-10', estado: 'PENDIENTE', fechaPago: null, comprobante: null },
     { idCuota: 12, idMatricula: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 12 - Diciembre 2026', tipo: 'MENSUAL', periodo: 'Diciembre 2026', numero: 12, importe: 28000, fechaVencimiento: '2026-12-10', estado: 'PENDIENTE', fechaPago: null, comprobante: null },
     // 3 Seguros cuatrimestrales de Lucía Benítez (idAlumno: 1, idMatricula: 1)
-    { idCuota: 13, idMatricula: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Seguro Cuatrimestral 1/3', tipo: 'SEGURO_CUATRIMESTRAL', periodo: '1° Cuatrimestre 2026', numero: 1, importe: 8000, fechaVencimiento: '2026-03-10', estado: 'PAGADA', fechaPago: '2026-03-05', comprobante: 'REC-2026-0342' },
+    { idCuota: 13, idMatricula: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Seguro Cuatrimestral 1/3', tipo: 'SEGURO_CUATRIMESTRAL', periodo: '1° Cuatrimestre 2026', numero: 1, importe: 8000, fechaVencimiento: '2026-03-10', estado: 'PAGADA', fechaPago: '2026-03-05', comprobante: '2026-000005' },
     { idCuota: 14, idMatricula: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Seguro Cuatrimestral 2/3', tipo: 'SEGURO_CUATRIMESTRAL', periodo: '2° Cuatrimestre 2026', numero: 2, importe: 8000, fechaVencimiento: '2026-07-10', estado: 'PENDIENTE', fechaPago: null, comprobante: null },
     { idCuota: 15, idMatricula: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Seguro Cuatrimestral 3/3', tipo: 'SEGURO_CUATRIMESTRAL', periodo: '3° Cuatrimestre 2026', numero: 3, importe: 8000, fechaVencimiento: '2026-11-10', estado: 'PENDIENTE', fechaPago: null, comprobante: null },
     // Cuotas de otros alumnos
-    { idCuota: 16, idMatricula: 2, concepto: 'Cuota 4 - Abril 2026', tipo: 'MENSUAL', periodo: 'Abril 2026', numero: 4, importe: 28000, fechaVencimiento: '2026-04-10', estado: 'PAGADA', fechaPago: '2026-04-02', comprobante: 'REC-2026-0410' },
+    { idCuota: 16, idMatricula: 2, concepto: 'Cuota 4 - Abril 2026', tipo: 'MENSUAL', periodo: 'Abril 2026', numero: 4, importe: 28000, fechaVencimiento: '2026-04-10', estado: 'PAGADA', fechaPago: '2026-04-02', comprobante: '2026-000006' },
     { idCuota: 17, idMatricula: 2, concepto: 'Cuota 3 - Marzo 2026', tipo: 'MENSUAL', periodo: 'Marzo 2026', numero: 3, importe: 28000, fechaVencimiento: '2026-03-10', estado: 'ANULADA', fechaPago: null, comprobante: null },
   ],
 
   // 14. Registro de Pagos
   pagos: [
-    { idPago: 1, idCuota: null, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Matrícula Anual 2026', importe: 35000, fechaPago: '2026-02-15', medioPago: 'TRANSFERENCIA', comprobante: 'REC-2026-0001', estado: 'ACREDITADO' },
-    { idPago: 2, idCuota: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 1 - Enero 2026', importe: 28000, fechaPago: '2026-01-08', medioPago: 'TRANSFERENCIA', comprobante: 'REC-2026-0112', estado: 'ACREDITADO' },
-    { idPago: 3, idCuota: 2, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 2 - Febrero 2026', importe: 28000, fechaPago: '2026-02-09', medioPago: 'TARJETA', comprobante: 'REC-2026-0225', estado: 'ACREDITADO' },
-    { idPago: 4, idCuota: 3, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 3 - Marzo 2026', importe: 28000, fechaPago: '2026-03-05', medioPago: 'EFECTIVO', comprobante: 'REC-2026-0341', estado: 'ACREDITADO' },
-    { idPago: 5, idCuota: 13, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Seguro Cuatrimestral 1/3', importe: 8000, fechaPago: '2026-03-05', medioPago: 'EFECTIVO', comprobante: 'REC-2026-0342', estado: 'ACREDITADO' },
-    { idPago: 6, idCuota: 16, idAlumno: 2, alumnoNombre: 'Martín Rodríguez', concepto: 'Cuota 4 - Abril 2026', importe: 28000, fechaPago: '2026-04-02', medioPago: 'TRANSFERENCIA', comprobante: 'REC-2026-0410', estado: 'ACREDITADO' },
-    { idPago: 7, idCuota: null, idAlumno: 2, alumnoNombre: 'Martín Rodríguez', concepto: 'Matrícula Anual 2026', importe: 35000, fechaPago: '2026-03-01', medioPago: 'OTRO', comprobante: 'REC-2026-0002', estado: 'ACREDITADO' },
+    { idPago: 1, idCuota: null, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Matrícula Anual 2026', importe: 35000, fechaPago: '2026-02-15', medioPago: 'TRANSFERENCIA', comprobante: '2026-000001', estado: 'ACREDITADO' },
+    { idPago: 2, idCuota: 1, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 1 - Enero 2026', importe: 28000, fechaPago: '2026-01-08', medioPago: 'TRANSFERENCIA', comprobante: '2026-000002', estado: 'ACREDITADO' },
+    { idPago: 3, idCuota: 2, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 2 - Febrero 2026', importe: 28000, fechaPago: '2026-02-09', medioPago: 'TARJETA', comprobante: '2026-000003', estado: 'ACREDITADO' },
+    { idPago: 4, idCuota: 3, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Cuota 3 - Marzo 2026', importe: 28000, fechaPago: '2026-03-05', medioPago: 'EFECTIVO', comprobante: '2026-000004', estado: 'ACREDITADO' },
+    { idPago: 5, idCuota: 13, idAlumno: 1, alumnoNombre: 'Lucía Benítez', concepto: 'Seguro Cuatrimestral 1/3', importe: 8000, fechaPago: '2026-03-05', medioPago: 'EFECTIVO', comprobante: '2026-000005', estado: 'ACREDITADO' },
+    { idPago: 6, idCuota: 16, idAlumno: 2, alumnoNombre: 'Martín Rodríguez', concepto: 'Cuota 4 - Abril 2026', importe: 28000, fechaPago: '2026-04-02', medioPago: 'TRANSFERENCIA', comprobante: '2026-000006', estado: 'ACREDITADO' },
+    { idPago: 7, idCuota: null, idAlumno: 2, alumnoNombre: 'Martín Rodríguez', concepto: 'Matrícula Anual 2026', importe: 35000, fechaPago: '2026-03-01', medioPago: 'OTRO', comprobante: '2026-000007', estado: 'ACREDITADO' },
   ],
 
   // 15. Solicitudes de Alumnos

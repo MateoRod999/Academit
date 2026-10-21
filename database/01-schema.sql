@@ -306,8 +306,10 @@ CREATE TABLE pago (
     fecha      DATE          NOT NULL DEFAULT CURRENT_DATE,
     importe    NUMERIC(10,2) NOT NULL,
     id_medio_pago INTEGER    NOT NULL,
+    comprobante VARCHAR(11)  NOT NULL,
     CONSTRAINT pk_pago PRIMARY KEY (id_pago),
     CONSTRAINT uk_pago_cuota UNIQUE (id_cuota),   -- RN08: una cuota, un unico pago
+    CONSTRAINT uk_pago_comprobante UNIQUE (comprobante),
     CONSTRAINT fk_pago_cuota FOREIGN KEY (id_cuota) REFERENCES cuota (id_cuota),
     CONSTRAINT fk_pago_usuario FOREIGN KEY (id_usuario) REFERENCES usuario (id_usuario),
     CONSTRAINT ck_pago_importe CHECK (importe > 0),

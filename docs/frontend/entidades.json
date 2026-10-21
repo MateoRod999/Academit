@@ -118,11 +118,10 @@
           "tipo": "string (Enum)",
           "obligatorio": true,
           "enums": [
-            "REGULAR",
             "ACTIVO",
             "INACTIVO"
           ],
-          "descripcion": "Condición académica institucional.",
+          "descripcion": "Condición institucional activa o inactiva.",
           "categoria": "PERSISTIDO"
         },
         {
@@ -282,11 +281,10 @@
           "tipo": "string (Enum)",
           "obligatorio": true,
           "enums": [
-            "REGULAR",
             "ACTIVO",
             "INACTIVO"
           ],
-          "descripcion": "Condición académica institucional.",
+          "descripcion": "Condición institucional activa o inactiva.",
           "categoria": "PERSISTIDO"
         },
         {
@@ -1816,18 +1814,6 @@
           ],
           "descripcion": "Estado académico de la matrícula.",
           "categoria": "PERSISTIDO"
-        },
-        {
-          "nombre": "estadoPago",
-          "tipo": "string (Enum)",
-          "obligatorio": true,
-          "enums": [
-            "AL_DIA",
-            "CON_DEUDA",
-            "EXENTO"
-          ],
-          "descripcion": "Estado de regularidad financiera (pendiente de definir por backend: ningún flujo lo actualiza).",
-          "categoria": "PERSISTIDO"
         }
       ],
       "camposCalculados": [
@@ -1853,6 +1839,18 @@
           "obligatorio": false,
           "enums": null,
           "descripcion": "Nombre del ciclo lectivo.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "estadoPago",
+          "tipo": "string (Enum)",
+          "obligatorio": false,
+          "enums": [
+            "AL_DIA",
+            "EN_MORA",
+            "PENDIENTE"
+          ],
+          "descripcion": "Estado financiero calculado a partir de las cuotas asociadas (EN_MORA si hay cuota vencida, AL_DIA si están pagadas, PENDIENTE en el resto). Solo lectura.",
           "categoria": "CALCULADO"
         }
       ],
@@ -1918,18 +1916,6 @@
           "categoria": "PERSISTIDO"
         },
         {
-          "nombre": "estadoPago",
-          "tipo": "string (Enum)",
-          "obligatorio": true,
-          "enums": [
-            "AL_DIA",
-            "CON_DEUDA",
-            "EXENTO"
-          ],
-          "descripcion": "Estado de regularidad financiera (pendiente de definir por backend: ningún flujo lo actualiza).",
-          "categoria": "PERSISTIDO"
-        },
-        {
           "nombre": "alumnoNombre",
           "tipo": "string",
           "obligatorio": false,
@@ -1951,6 +1937,18 @@
           "obligatorio": false,
           "enums": null,
           "descripcion": "Nombre del ciclo lectivo.",
+          "categoria": "CALCULADO"
+        },
+        {
+          "nombre": "estadoPago",
+          "tipo": "string (Enum)",
+          "obligatorio": false,
+          "enums": [
+            "AL_DIA",
+            "EN_MORA",
+            "PENDIENTE"
+          ],
+          "descripcion": "Estado financiero calculado a partir de las cuotas asociadas (EN_MORA si hay cuota vencida, AL_DIA si están pagadas, PENDIENTE en el resto). Solo lectura.",
           "categoria": "CALCULADO"
         }
       ],
@@ -2280,7 +2278,7 @@
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Número de recibo o comprobante fiscal.",
+          "descripcion": "Número de comprobante oficial AAAA-NNNNNN generado por el backend al registrar el pago (solo lectura).",
           "categoria": "PERSISTIDO"
         },
         {
@@ -2382,7 +2380,7 @@
           "tipo": "string",
           "obligatorio": true,
           "enums": null,
-          "descripcion": "Número de recibo o comprobante fiscal.",
+          "descripcion": "Número de comprobante oficial AAAA-NNNNNN generado por el backend al registrar el pago (solo lectura).",
           "categoria": "PERSISTIDO"
         },
         {

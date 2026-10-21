@@ -19,6 +19,11 @@ export const StatusBadge = ({ status, className = '' }) => {
       icon = 'bi-check-circle'
       label = status
       break
+    case 'AL_DIA':
+      bg = 'success'
+      icon = 'bi-check-circle'
+      label = 'Al día'
+      break
     case 'APROBADA':
     case 'APROBADO':
     case 'PAGADA':
@@ -40,6 +45,11 @@ export const StatusBadge = ({ status, className = '' }) => {
       bg = 'warning'
       icon = 'bi-clock-history'
       label = 'Pendiente'
+      break
+    case 'EN_MORA':
+      bg = 'danger'
+      icon = 'bi-exclamation-octagon'
+      label = 'En mora'
       break
     case 'EN_PROCESO':
       bg = 'info'

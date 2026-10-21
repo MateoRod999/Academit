@@ -139,8 +139,9 @@ JOIN estado_cuota e ON e.nombre = CASE WHEN n = 1 THEN 'PAGADA' ELSE 'PENDIENTE'
 WHERE a.dni = '44111222';
 
 -- Pagos de las cuotas pagadas (RF32, RN08-RN10)
-INSERT INTO pago (id_cuota, id_usuario, fecha, importe, id_medio_pago)
-SELECT c.id_cuota, u.id_usuario, c.fecha_vencimiento, c.importe, mp.id_medio_pago
+INSERT INTO pago (id_cuota, id_usuario, fecha, importe, id_medio_pago, comprobante)
+SELECT c.id_cuota, u.id_usuario, c.fecha_vencimiento, c.importe, mp.id_medio_pago,
+       '2026-' || LPAD((ROW_NUMBER() OVER (ORDER BY c.id_cuota))::text, 6, '0')
 FROM cuota c
 JOIN estado_cuota e ON e.id_estado_cuota = c.id_estado_cuota AND e.nombre = 'PAGADA'
 JOIN usuario u ON u.username = 'administrativo'

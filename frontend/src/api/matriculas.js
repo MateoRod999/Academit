@@ -3,6 +3,29 @@ import { mockDb } from './mocks/data'
 import { createApiError } from './errors'
 
 /**
+ * Calcula el estado de pago dinámico de una matrícula según sus cuotas:
+ * EN_MORA si hay alguna cuota VENCIDA;
+ * AL_DIA si todas las cuotas vencidas (o todas) están PAGADA;
+ * PENDIENTE en el resto.
+ * @param {number|string} idMatricula
+ * @returns {'AL_DIA' | 'EN_MORA' | 'PENDIENTE'}
+ */
+export const calcularEstadoPago = (idMatricula) => {
+  const cuotasMat = mockDb.cuotas.filter(
+    (c) => c.idMatricula === Number(idMatricula) && c.estado !== 'ANULADA'
+  )
+  if (cuotasMat.length === 0) return 'PENDIENTE'
+  if (cuotasMat.some((c) => c.estado === 'VENCIDA')) return 'EN_MORA'
+
+  const hoy = new Date().toISOString().split('T')[0]
+  const vencidas = cuotasMat.filter((c) => c.fechaVencimiento && c.fechaVencimiento <= hoy)
+  if (vencidas.length > 0 && vencidas.every((c) => c.estado === 'PAGADA')) return 'AL_DIA'
+  if (cuotasMat.every((c) => c.estado === 'PAGADA')) return 'AL_DIA'
+
+  return 'PENDIENTE'
+}
+
+/**
  * Obtiene el padrón de matrículas anuales registradas.
  * REST: GET /api/matriculas
  * @returns {Promise<Array<Object>>}
@@ -10,7 +33,10 @@ import { createApiError } from './errors'
 export const getMatriculas = async () => {
   if (isMock) {
     await new Promise((resolve) => setTimeout(resolve, 150))
-    return [...mockDb.matriculas]
+    return mockDb.matriculas.map((m) => ({
+      ...m,
+      estadoPago: calcularEstadoPago(m.idMatricula),
+    }))
   }
   const response = await apiClient.get('/matriculas')
   return response.data
@@ -54,6 +80,11 @@ export const cancelarMatricula = async (idMatricula = 1, motivo = '') => {
     const matricula = mockDb.matriculas.find((m) => m.idMatricula === idNum || m.idAlumno === idNum)
     if (matricula) {
       matricula.estado = 'CANCELADA'
+      mockDb.cuotas.forEach((c) => {
+        if (c.idMatricula === matricula.idMatricula && c.estado === 'PENDIENTE') {
+          c.estado = 'ANULADA'
+        }
+      })
     }
 
     const idAlumno = matricula ? matricula.idAlumno : idNum

@@ -65,14 +65,15 @@ export const registrarPago = async ({ idCuota, importe, medioPago = 'EFECTIVO' }
     }
 
     const hoy = new Date().toISOString().split('T')[0]
-    const comprobante = `REC-2026-${String(Math.floor(Math.random() * 9000) + 1000)}`
+    const nuevoId = Math.max(...mockDb.pagos.map((p) => p.idPago), 0) + 1
+    const anio = new Date().getFullYear()
+    const comprobante = `${anio}-${String(nuevoId).padStart(6, '0')}`
 
     // Al pagar con éxito, el mock pasa la cuota a PAGADA
     cuota.estado = 'PAGADA'
     cuota.fechaPago = hoy
     cuota.comprobante = comprobante
 
-    const nuevoId = Math.max(...mockDb.pagos.map((p) => p.idPago), 0) + 1
     const nuevoPago = {
       idPago: nuevoId,
       idCuota: cuota.idCuota,

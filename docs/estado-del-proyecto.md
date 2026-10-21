@@ -81,16 +81,11 @@
    - *Motivo:* Garantiza numeración oficial única, auditable y correlativa administrada exclusivamente por el servidor.
 
 ### Estado de Aplicación de Decisiones
-- **Ya aplicado:**
-  - 4a: Base de datos (`estado_persona` solo tiene ACTIVO/INACTIVO) y entidades JPA (`model/Alumno`, `model/Docente`).
-  - 4b: Base de datos y JPA (`matricula` no posee columna `estado_pago`; `estado_matricula` tiene PENDIENTE, ACTIVA, CANCELADA).
-  - 4c: `UsuarioController` devuelve `List<UsuarioResponseDTO>` directo; frontend configurado para arrays completos.
-  - 4d: Frontend y contrato contemplan campo `comprobante` en pantallas y DTOs.
-- **Falta aplicar:**
-  - 4a: Contrato (`entidades.json`, `openapi.yaml`) y mocks (`mocks/data.js` aún usa `REGULAR` en alumnos).
-  - 4b: `MatriculaResponseDTO` y Service deben calcular dinámicamente `estadoPago` y anular cuotas al cancelar matrícula.
-  - 4c: Mantener convención de listas completas en los 16 controllers pendientes.
-  - 4d: Base de datos (`columna comprobante en pago`) y backend (`Pago.comprobante` y generador AAAA-NNNNNN).
+- **Ya aplicado (en Base, Backend, Contrato y Frontend):**
+  - **4a (Estado personas):** Base de datos (`database/01-schema.sql` y `02-datos-iniciales.sql`), entidades JPA (`Alumno`, `Docente`, `EstadoPersonaEnum`), contrato (`entidades.json`, `openapi.yaml`) y frontend (mocks, vistas y `etiquetas.js`) alineados estrictamente a `ACTIVO` e `INACTIVO`.
+  - **4b (Matricula.estadoPago calculado):** BD y JPA sin columna persistida; `MatriculaResponseDTO`, `MatriculaService`, frontend API (`matriculas.js`), mocks y vistas (`AdminMatriculasPage`, `StatusBadge`) calculan dinámicamente `AL_DIA`, `EN_MORA`, `PENDIENTE` a partir de sus cuotas, y anulan cuotas pendientes al cancelar matrícula.
+  - **4c (Sin paginación en servidor):** Endpoints y mocks devuelven arrays completos directamente; convenios respetados en controllers existentes y documentados para los restantes.
+  - **4d (Pago.comprobante AAAA-NNNNNN):** Columna única `comprobante VARCHAR(11) NOT NULL UNIQUE` en base de datos, mapeada en `Pago.java`, generada por `PagoService` y en mocks con formato `AAAA-NNNNNN` (ej. `2026-000001`), documentada como read-only en contrato API y reflejada en vistas de pagos.
 
 ### Otras Decisiones Abiertas (de `docs/estado/desajustes-db.md`)
 
