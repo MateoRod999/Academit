@@ -144,9 +144,11 @@
 
 ## 7. Documentación Pendiente de la Entrega
 
+> La lista de control con casillas de verificación para todas las áreas se gestiona en [docs/pendientes.md](pendientes.md).
+
 1. **Portada Institucional:** Integrantes del grupo, profesor/a, ayudante, asignatura y fecha de entrega.
-2. **Análisis de Requisitos (`docs/analisis/`):** Incorporar RF y RN formalizados para Solicitudes y Documentación.
-3. **Diagramas UML y DER (`docs/Entregables/`):**
+2. **Análisis de Requisitos (`docs/entregables/entregable-1-analisis.md`):** Incorporar RF y RN formalizados para Solicitudes y Documentación.
+3. **Diagramas UML y DER (`docs/entregables/entregable-2/`):**
    - DER actualizado: incorporar tablas `solicitud`, `documentacion`, `rol_docente`, `asistencia.id_materia`, `turno` y `pago.comprobante`.
    - Diagrama de Clases: actualizar con nuevas entidades y estado INACTIVO.
    - Diagramas de Secuencia: actualizar inscripción, pago con comprobante, calificación y asistencia.

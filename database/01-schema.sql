@@ -7,7 +7,7 @@
 -- - Valores booleanos nativos (BOOLEAN).
 -- - Restricciones CHECK y UNIQUE explicitas en el esquema.
 --
--- Fuente: docs/Entregables/entregable 2/der.md y docs/frontend/entidades.json (32 tablas: 25 del modelo + 7 catalogos).
+-- Fuente: docs/entregables/entregable-2/der.md y docs/frontend/entidades.json (32 tablas: 25 del modelo + 7 catalogos).
 
 DROP SCHEMA IF EXISTS public CASCADE;
 CREATE SCHEMA public;
