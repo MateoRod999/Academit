@@ -39,7 +39,7 @@ A continuación se presentan las entidades del frontend categorizando sus campos
 | `idPlan` | **PERSISTIDO** | number (Integer) | Sí | - | FK al Plan de Estudio asignado. |
 | `idCurso` | **PERSISTIDO** | number (Integer) | No | - | FK al curso/comisión principal asignada. |
 | `cicloLectivo` | **PERSISTIDO** | number (Integer) | Sí | - | Año lectivo de ingreso o cursada activa. |
-| `estado` | **PERSISTIDO** | string (Enum) | Sí | REGULAR, ACTIVO, INACTIVO | Condición académica institucional. |
+| `estado` | **PERSISTIDO** | string (Enum) | Sí | ACTIVO, INACTIVO | Condición institucional activa o inactiva. |
 | `estadoMatricula` | **PERSISTIDO** | string (Enum) | Sí | ACTIVA, PENDIENTE, CANCELADA | Estado de la matrícula para el ciclo lectivo actual. |
 | `idMatricula` | **PERSISTIDO** | number (Integer) | No | - | FK a la matrícula del ciclo actual. |
 | `carrera` | *CALCULADO* | string | No | - | Nombre desnormalizado de la carrera. |
@@ -240,7 +240,7 @@ A continuación se presentan las entidades del frontend categorizando sus campos
 ### 1.10 Entidad: `Matricula`
 **Descripción:** Matrícula anual institucional habilitante de cursada.
 
-> **Nota de Dominio:** Matricula.estadoPago está pendiente de definir por backend: ningún flujo lo actualiza.
+> **Nota de Dominio:** Matricula.estadoPago no se guarda: es un campo calculado de solo lectura que el backend genera a partir de las cuotas asociadas (EN_MORA, AL_DIA, PENDIENTE).
 
 | Campo | Categoría | Tipo de Dato | Requerido | Valores Permitidos (Enum) | Descripción |
 | :--- | :---: | :--- | :---: | :--- | :--- |
@@ -251,10 +251,10 @@ A continuación se presentan las entidades del frontend categorizando sus campos
 | `cicloLectivo` | **PERSISTIDO** | number (Integer) | Sí | - | Año lectivo de la matrícula. |
 | `fecha` | **PERSISTIDO** | string (YYYY-MM-DD) | Sí | - | Fecha de emisión de la matrícula. |
 | `estado` | **PERSISTIDO** | string (Enum) | Sí | ACTIVA, PENDIENTE, CANCELADA | Estado académico de la matrícula. |
-| `estadoPago` | **PERSISTIDO** | string (Enum) | Sí | AL_DIA, CON_DEUDA, EXENTO | Estado de regularidad financiera (pendiente de definir por backend: ningún flujo lo actualiza). |
 | `alumnoNombre` | *CALCULADO* | string | No | - | Nombre completo del alumno. |
 | `carreraNombre` | *CALCULADO* | string | No | - | Nombre de la carrera matriculada. |
 | `cicloLectivoNombre` | *CALCULADO* | string | No | - | Nombre del ciclo lectivo. |
+| `estadoPago` | *CALCULADO* | string (Enum) | No | AL_DIA, EN_MORA, PENDIENTE | Estado financiero calculado a partir de las cuotas asociadas (EN_MORA si hay cuota vencida, AL_DIA si están pagadas, PENDIENTE en el resto). Solo lectura. |
 
 **Relaciones:**
 - Con `Alumno` (M:1): `idAlumno` -> `idAlumno`
@@ -304,7 +304,7 @@ A continuación se presentan las entidades del frontend categorizando sus campos
 | `importe` | **PERSISTIDO** | number (Float) | Sí | - | Monto total cancelado (exacto según RN09). |
 | `fechaPago` | **PERSISTIDO** | string (YYYY-MM-DD) | Sí | - | Fecha de recepción del pago. |
 | `medioPago` | **PERSISTIDO** | string (Enum) | Sí | EFECTIVO, TRANSFERENCIA, TARJETA_CREDITO, TARJETA_DEBITO, OTRO | Canal de cobranza utilizado. |
-| `comprobante` | **PERSISTIDO** | string | Sí | - | Número de recibo o comprobante fiscal. |
+| `comprobante` | **PERSISTIDO** | string | Sí | - | Número de comprobante oficial AAAA-NNNNNN generado por el backend al registrar el pago (solo lectura). |
 | `estado` | **PERSISTIDO** | string (Enum) | Sí | ACREDITADO, PENDIENTE, RECHAZADO | Estado contable de acreditación. |
 | `alumnoNombre` | *CALCULADO* | string | No | - | Nombre completo del alumno pagador. |
 | `cuotaConcepto` | *CALCULADO* | string | No | - | Detalle de la cuota cancelada. |
