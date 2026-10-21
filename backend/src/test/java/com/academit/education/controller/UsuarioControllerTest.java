@@ -31,7 +31,9 @@ class UsuarioControllerTest {
     @Test
     void testGetUsuariosUnauthenticatedReturns403Or401() throws Exception {
         mockMvc.perform(get("/api/usuarios"))
-                .andExpect(status().isForbidden());
+                .andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.status").value(401))
+                .andExpect(jsonPath("$.message").value("Credenciales no provistas o inválidas"));
     }
 
     @Test

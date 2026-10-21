@@ -65,8 +65,10 @@ class AuthServiceTest {
         LoginResponseDTO response = authService.login(request);
 
         assertNotNull(response);
-        assertEquals("admin", response.getUsuario());
-        assertEquals("ADMINISTRADOR", response.getRol());
+        assertNotNull(response.getUsuario());
+        assertEquals(1, response.getUsuario().getIdUsuario());
+        assertEquals("admin", response.getUsuario().getUsername());
+        assertEquals("ADMINISTRADOR", response.getUsuario().getRol());
         assertEquals("fake-jwt-token", response.getToken());
     }
 
@@ -97,9 +99,29 @@ class AuthServiceTest {
     }
 
     @Test
-    void testLogoutReturnsSuccess() {
-        ApiResponseDTO response = authService.logout();
-        assertTrue(response.isSuccess());
+    void testLogoutSuccess() {
+        assertDoesNotThrow(() -> authService.logout());
+    }
+
+    @Test
+    void testMeSuccess() {
+        Rol rol = new Rol();
+        rol.setId(1);
+        rol.setNombre("ADMINISTRADOR");
+
+        Usuario usuario = new Usuario();
+        usuario.setId(1);
+        usuario.setUsername("admin");
+        usuario.setRol(rol);
+
+        when(usuarioRepository.findByUsername("admin")).thenReturn(Optional.of(usuario));
+
+        com.academit.education.dto.auth.AuthMeResponseDTO me = authService.getMe("admin");
+        assertNotNull(me);
+        assertNotNull(me.getUsuario());
+        assertEquals(1, me.getUsuario().getIdUsuario());
+        assertEquals("admin", me.getUsuario().getUsername());
+        assertEquals("ADMINISTRADOR", me.getUsuario().getRol());
     }
 
     @Test
