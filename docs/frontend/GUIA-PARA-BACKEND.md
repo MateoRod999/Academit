@@ -129,8 +129,8 @@ Tabla generada a partir de `endpoints.csv` para auditar la integración:
 
 ## 8. Preguntas Abiertas y Definiciones Pendientes
 
-1. **`Matricula.estadoPago`:** Campo actualmente estático en mocks (`AL_DIA`, `CON_DEUDA`, `EXENTO`). Pendiente de definir cómo el backend recalcula este estado según cuotas vencidas e impagas.
-2. **Estrategia de Sesión (Cookie vs Token):** Definir si se usará Bearer Token JWT en cabecera `Authorization` o cookies de sesión HttpOnly gestionadas por el navegador.
+1. **`Matricula.estadoPago`:** Decidido y aplicado: campo calculado dinámicamente (`AL_DIA`, `EN_MORA`, `PENDIENTE`) según las cuotas asociadas. No se persiste como columna en la tabla `matricula`.
+2. **Estrategia de Sesión (Cookie vs Token):** Resuelto: uso de Bearer Token JWT en cabecera `Authorization`.
 3. **Paginación en Endpoints Masivos:** Evaluar si `/api/alumnos`, `/api/pagos` y `/api/cuotas` mantendrán colecciones completas o requerirán parámetros `page` y `size`.
-4. **Numeración de Comprobantes:** Confirmar si el número de comprobante (`REC-YYYY-XXXX`) se genera de forma secuencial en base de datos al confirmar el pago.
+4. **Numeración de Comprobantes:** Decidido y aplicado: formato anual secuencial `AAAA-NNNNNN` persistido en `pago.comprobante`.
 5. **Políticas de Baja:** Determinar si los endpoints `DELETE` ejecutan baja lógica (`activo = false`) o eliminación física.
