@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { Card, Table, Form, Button, Row, Col, Badge, Spinner } from 'react-bootstrap'
 import PageHeader from '../../components/PageHeader'
 import StatusBadge from '../../components/StatusBadge'
 import { useToast } from '../../context/ToastContext'
@@ -46,7 +45,6 @@ export const CalificacionesDocentePage = () => {
   }, [selectedMateria, selectedCurso, evaluaciones])
 
   useEffect(() => {
-    // Cargar notas preexistentes para la materia e instancia elegida
     setLoading(true)
     getCalificaciones({ idMateria: selectedMateria, tipo, idEvaluacion: selectedEvaluacion })
       .then((cals) => {
@@ -111,7 +109,7 @@ export const CalificacionesDocentePage = () => {
       }
 
       await guardarCalificaciones(selectedEvaluacion, lista)
-      showToast('Calificaciones guardadas y consolidadas exitosamente', 'success')
+      showToast('Calificaciones guardadas exitosamente', 'success')
       setErroresPorAlumno({})
     } catch (err) {
       if (err.errores) {
@@ -123,201 +121,191 @@ export const CalificacionesDocentePage = () => {
     }
   }
 
-  // Filtrar alumnos asignados al curso seleccionado
   const alumnosDelCurso = alumnos.filter((a) => a.idCurso === Number(selectedCurso))
-
 
   return (
     <div>
       <PageHeader
         title="Carga de Calificaciones"
         subtitle="Grilla de alumnos con validación de notas (escala numérica oficial de 1 a 10)"
-        icon="bi-award-fill"
         actions={
-          <Button
-            variant="primary"
-            size="sm"
-            disabled={saving || loading}
+          <button
+            type="button"
+            className="btn"
+            disabled={saving || loading || alumnosDelCurso.length === 0}
             onClick={handleGuardarTodas}
-            className="d-flex align-items-center gap-1"
           >
-            {saving ? <Spinner size="sm" animation="border" /> : <i className="bi bi-save" />}
-            <span>Guardar Calificaciones</span>
-          </Button>
+            {saving ? 'Guardando…' : 'Guardar Calificaciones'}
+          </button>
         }
       />
 
       {/* Selectores de contexto */}
-      <Card className="border-0 shadow-sm mb-4" style={{ backgroundColor: 'var(--m-surface)' }}>
-        <Card.Body className="p-3">
-          <Row className="g-3">
-            <Col sm={6} md={3}>
-              <Form.Group controlId="selMateria">
-                <Form.Label className="small fw-semibold">Materia</Form.Label>
-                <Form.Select
-                  size="sm"
-                  value={selectedMateria}
-                  onChange={(e) => setSelectedMateria(Number(e.target.value))}
-                  style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
-                >
-                  {materias.map((m) => (
-                    <option key={m.idMateria} value={m.idMateria}>
-                      {m.nombre}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
+      <div
+        className="bloque"
+        style={{
+          backgroundColor: 'var(--papel)',
+          border: '1px solid var(--linea)',
+          borderRadius: '3px',
+          padding: '16px',
+        }}
+      >
+        <div className="filtros" style={{ margin: 0 }}>
+          <div className="campo" style={{ flex: '1 1 180px' }}>
+            <label htmlFor="selMateria">Materia</label>
+            <select
+              id="selMateria"
+              className="c"
+              value={selectedMateria}
+              onChange={(e) => setSelectedMateria(Number(e.target.value))}
+            >
+              {materias.map((m) => (
+                <option key={m.idMateria} value={m.idMateria}>
+                  {m.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
 
-            <Col sm={6} md={3}>
-              <Form.Group controlId="selCurso">
-                <Form.Label className="small fw-semibold">Curso / Comisión</Form.Label>
-                <Form.Select
-                  size="sm"
-                  value={selectedCurso}
-                  onChange={(e) => setSelectedCurso(Number(e.target.value))}
-                  style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
-                >
-                  {cursos.map((c) => (
-                    <option key={c.idCurso} value={c.idCurso}>
-                      {c.nombre}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
+          <div className="campo" style={{ flex: '1 1 180px' }}>
+            <label htmlFor="selCurso">Curso / Comisión</label>
+            <select
+              id="selCurso"
+              className="c"
+              value={selectedCurso}
+              onChange={(e) => setSelectedCurso(Number(e.target.value))}
+            >
+              {cursos.map((c) => (
+                <option key={c.idCurso} value={c.idCurso}>
+                  {c.nombre}
+                </option>
+              ))}
+            </select>
+          </div>
 
-            <Col sm={6} md={3}>
-              <Form.Group controlId="selEvaluacion">
-                <Form.Label className="small fw-semibold">Evaluación Planificada</Form.Label>
-                <Form.Select
-                  size="sm"
-                  value={selectedEvaluacion}
-                  onChange={(e) => {
-                    const id = Number(e.target.value)
-                    setSelectedEvaluacion(id)
-                    const ev = evaluaciones.find((item) => item.idEvaluacion === id)
-                    if (ev) {
-                      setEvaluacionNombre(ev.descripcion)
-                      setTipo(ev.tipo)
-                    }
-                  }}
-                  style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
-                >
-                  {evaluaciones.map((ev) => (
-                    <option key={ev.idEvaluacion} value={ev.idEvaluacion}>
-                      #{ev.idEvaluacion} - {ev.tipo}: {ev.descripcion}
-                    </option>
-                  ))}
-                </Form.Select>
-              </Form.Group>
-            </Col>
+          <div className="campo" style={{ flex: '1 1 220px' }}>
+            <label htmlFor="selEvaluacion">Evaluación Planificada</label>
+            <select
+              id="selEvaluacion"
+              className="c"
+              value={selectedEvaluacion}
+              onChange={(e) => {
+                const id = Number(e.target.value)
+                setSelectedEvaluacion(id)
+                const ev = evaluaciones.find((item) => item.idEvaluacion === id)
+                if (ev) {
+                  setEvaluacionNombre(ev.descripcion)
+                  setTipo(ev.tipo)
+                }
+              }}
+            >
+              {evaluaciones.map((ev) => (
+                <option key={ev.idEvaluacion} value={ev.idEvaluacion}>
+                  #{ev.idEvaluacion} - {ev.tipo}: {ev.descripcion}
+                </option>
+              ))}
+            </select>
+          </div>
 
-            <Col sm={6} md={3}>
-              <Form.Group controlId="selInstancia">
-                <Form.Label className="small fw-semibold">Instancia / Detalle</Form.Label>
-                <Form.Control
-                  size="sm"
-                  value={evaluacionNombre}
-                  onChange={(e) => setEvaluacionNombre(e.target.value)}
-                  placeholder="Ej. Primer Parcial"
-                  style={{ backgroundColor: 'var(--m-surfaceVariant)', color: 'var(--m-onSurface)' }}
-                />
-              </Form.Group>
-            </Col>
-          </Row>
-        </Card.Body>
-      </Card>
+          <div className="campo" style={{ flex: '1 1 180px' }}>
+            <label htmlFor="selInstancia">Instancia / Detalle</label>
+            <input
+              id="selInstancia"
+              type="text"
+              className="c"
+              value={evaluacionNombre}
+              onChange={(e) => setEvaluacionNombre(e.target.value)}
+              placeholder="Ej. Primer Parcial"
+            />
+          </div>
+        </div>
+      </div>
 
       {/* Grilla de carga de notas */}
-      <Card className="border-0 shadow-sm" style={{ backgroundColor: 'var(--m-surface)' }}>
-        <div className="table-responsive">
-          <Table hover align="middle" className="mb-0">
-            <thead style={{ backgroundColor: 'var(--m-surfaceVariant)' }}>
+      <div className="tabla-caja">
+        <table>
+          <caption>Escala 1 a 10 · Aprobación con 4 o más puntos</caption>
+          <thead>
+            <tr>
+              <th scope="col">Legajo</th>
+              <th scope="col">Estudiante</th>
+              <th scope="col">DNI</th>
+              <th scope="col" className="d" style={{ width: '130px' }}>Nota (1-10)</th>
+              <th scope="col">Condición</th>
+              <th scope="col">Observación</th>
+            </tr>
+          </thead>
+          <tbody>
+            {alumnosDelCurso.length === 0 ? (
               <tr>
-                <th style={{ color: 'var(--m-primary)' }}>Legajo</th>
-                <th style={{ color: 'var(--m-primary)' }}>Estudiante</th>
-                <th style={{ color: 'var(--m-primary)' }}>DNI</th>
-                <th style={{ color: 'var(--m-primary)', width: '150px' }}>Nota (1-10)</th>
-                <th style={{ color: 'var(--m-primary)', width: '140px' }}>Condición</th>
-                <th style={{ color: 'var(--m-primary)' }}>Devolución u Observación</th>
+                <td colSpan={6} style={{ textAlign: 'center', padding: '24px', color: 'var(--suave)' }}>
+                  No hay estudiantes registrados en este curso.
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {alumnosDelCurso.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="text-center py-4 text-muted">
-                    No hay estudiantes registrados en este curso.
-                  </td>
-                </tr>
-              ) : (
-                alumnosDelCurso.map((alu) => {
-                  const valorNota = notas[alu.idAlumno]?.nota ?? ''
-                  const valorObs = notas[alu.idAlumno]?.observacion ?? ''
-                  const tieneError = Boolean(erroresPorAlumno[alu.idAlumno])
-                  const condicion = valorNota === '' ? null : Number(valorNota) >= 4 ? 'APROBADO' : 'DESAPROBADO'
+            ) : (
+              alumnosDelCurso.map((alu) => {
+                const valorNota = notas[alu.idAlumno]?.nota ?? ''
+                const valorObs = notas[alu.idAlumno]?.observacion ?? ''
+                const errorItem = erroresPorAlumno[alu.idAlumno]
+                const condicion = valorNota === '' ? null : Number(valorNota) >= 4 ? 'APROBADO' : 'DESAPROBADO'
 
-                  return (
-                    <tr key={alu.idAlumno} style={{ borderBottom: '1px solid var(--m-outline)' }}>
-                      <td className="font-monospace small">{alu.legajo}</td>
-                      <td>
-                        <strong style={{ color: 'var(--m-onSurface)' }}>
-                          {alu.apellido}, {alu.nombre}
-                        </strong>
-                      </td>
-                      <td className="small text-muted">{alu.dni}</td>
-                      <td>
-                        <Form.Control
-                          type="number"
-                          min="1"
-                          max="10"
-                          step="1"
-                          size="sm"
-                          value={valorNota}
-                          isInvalid={tieneError}
-                          onChange={(e) => handleNotaChange(alu.idAlumno, e.target.value)}
-                          className="fw-bold text-center"
-                          style={{
-                            backgroundColor: 'var(--m-surfaceVariant)',
-                            color: 'var(--m-onSurface)',
-                            maxWidth: '90px',
-                          }}
-                        />
-                        {tieneError && (
-                          <div className="text-danger small mt-1" style={{ fontSize: '0.75rem', maxWidth: '180px' }}>
-                            <i className="bi bi-exclamation-circle me-1" />
-                            {erroresPorAlumno[alu.idAlumno]}
-                          </div>
-                        )}
-                      </td>
-                      <td>
-                        {condicion ? (
-                          <StatusBadge status={condicion} />
-                        ) : (
-                          <Badge bg="secondary">Sin calificar</Badge>
-                        )}
-                      </td>
-                      <td>
-                        <Form.Control
-                          type="text"
-                          size="sm"
-                          placeholder="Observación opcional..."
-                          value={valorObs}
-                          onChange={(e) => handleObsChange(alu.idAlumno, e.target.value)}
-                          style={{
-                            backgroundColor: 'var(--m-surfaceVariant)',
-                            color: 'var(--m-onSurface)',
-                          }}
-                        />
-                      </td>
-                    </tr>
-                  )
-                })
-              )}
-            </tbody>
-          </Table>
-        </div>
-      </Card>
+                return (
+                  <tr key={alu.idAlumno}>
+                    <td className="titulo-ficha font-monospace num" data-l="Legajo">{alu.legajo}</td>
+                    <td data-l="Estudiante">
+                      <strong>
+                        {alu.apellido}, {alu.nombre}
+                      </strong>
+                    </td>
+                    <td className="num" data-l="DNI">{alu.dni}</td>
+                    <td className="d" data-l="Nota (1-10)">
+                      <input
+                        type="number"
+                        min="1"
+                        max="10"
+                        step="0.5"
+                        className="c num"
+                        style={{
+                          width: '80px',
+                          textAlign: 'right',
+                          borderColor: errorItem ? 'var(--error)' : 'var(--linea-fuerte)',
+                        }}
+                        value={valorNota}
+                        onChange={(e) => handleNotaChange(alu.idAlumno, e.target.value)}
+                        placeholder="–"
+                        aria-label={`Nota de ${alu.nombre} ${alu.apellido}`}
+                      />
+                      {errorItem && (
+                        <div className="error-campo" style={{ fontSize: '12px' }}>
+                          {errorItem}
+                        </div>
+                      )}
+                    </td>
+                    <td data-l="Condición">
+                      {condicion ? (
+                        <StatusBadge status={condicion} />
+                      ) : (
+                        <span style={{ color: 'var(--suave)' }}>Sin calificar</span>
+                      )}
+                    </td>
+                    <td data-l="Observación">
+                      <input
+                        type="text"
+                        className="c"
+                        style={{ width: '100%', minWidth: '160px' }}
+                        value={valorObs}
+                        onChange={(e) => handleObsChange(alu.idAlumno, e.target.value)}
+                        placeholder="Comentario opcional..."
+                        aria-label={`Observación de ${alu.nombre} ${alu.apellido}`}
+                      />
+                    </td>
+                  </tr>
+                )
+              })
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   )
 }

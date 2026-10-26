@@ -5,9 +5,10 @@
 ## 1. Base de Datos
 | [ ] | Tarea | Depende de | Dueño | Referencia |
 | :---: | :--- | :--- | :--- | :--- |
-| [ ] | Crear tablas `solicitud` y `documentacion` con claves foráneas e índices | Ninguna | | [desajustes-db.md](estado/desajustes-db.md) |
-| [ ] | Incorporar `rol_docente` en `curso_materia`, `asistencia.id_materia` y `turno` en curso/mesa | Ninguna | | [desajustes-db.md](estado/desajustes-db.md) |
-| [ ] | Cargar datos de prueba consistentes para nuevas tablas en `database/02-datos-iniciales.sql` | Tablas nuevas | | [02-datos-iniciales.sql](../database/02-datos-iniciales.sql) |
+| [x] | Crear tablas `solicitud` y `documentacion` con claves foráneas e índices | Ninguna | | [desajustes-db.md](estado/desajustes-db.md) |
+| [x] | Incorporar `rol_docente` en `curso_materia`, `asistencia.id_materia` y `turno` en curso/mesa | Ninguna | | [desajustes-db.md](estado/desajustes-db.md) |
+| [x] | Cargar datos de prueba consistentes para nuevas tablas en `database/02-datos-iniciales.sql` | Tablas nuevas | | [02-datos-iniciales.sql](../database/02-datos-iniciales.sql) |
+| [x] | Incorporar columna `pago.comprobante` (AAAA-NNNNNN) y estados de persona `ACTIVO`/`INACTIVO` | Esquema base | | [01-schema.sql](../database/01-schema.sql) |
 
 ## 2. Backend
 | [ ] | Tarea | Depende de | Dueño | Referencia |
@@ -45,7 +46,7 @@
 | [ ] | Probar pantallas de grupo Solicitudes con API real | `solicitudes`, `declaraciones-juradas` | | [menu.js](../frontend/src/config/menu.js) |
 | [ ] | Probar pantallas de grupo Otros y Perfil con API real | `auth`, `usuarios`, `documentacion` | | [menu.js](../frontend/src/config/menu.js) |
 | [ ] | Comparar schemas de `openapi.yaml` con payloads implementados | Endpoints backend | | [openapi.yaml](frontend/openapi.yaml) |
-| [ ] | Incorporar endpoints extra del backend al contrato (`/api/auth/me`, `/api/usuarios/me`) | Controllers implementados | | [contrato-api.md](frontend/contrato-api.md) |
+| [x] | Incorporar endpoints extra del backend al contrato (`/api/auth/me`, `/api/usuarios/me`) | Controllers implementados | | [contrato-api.md](frontend/contrato-api.md) |
 
 ## 4. Documentación de la Entrega
 | [ ] | Tarea | Depende de | Dueño | Referencia |

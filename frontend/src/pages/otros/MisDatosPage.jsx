@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Card, Form, Button, Row, Col, Spinner } from 'react-bootstrap'
+import { Card, Form, Button, Row, Col } from 'react-bootstrap'
 import PageHeader from '../../components/PageHeader'
 import StatusBadge from '../../components/StatusBadge'
 import { useAuth } from '../../context/AuthContext'
@@ -60,9 +60,8 @@ export const MisDatosPage = () => {
 
   if (loading) {
     return (
-      <div className="text-center py-5">
-        <Spinner animation="border" variant="primary" />
-        <div className="mt-2 text-muted small">Cargando datos personales...</div>
+      <div className="text-center py-5 small text-muted">
+        Cargando…
       </div>
     )
   }
@@ -88,7 +87,7 @@ export const MisDatosPage = () => {
 
       <Row className="g-4">
         <Col lg={4}>
-          <Card className="border-0 shadow-sm text-center p-4" style={{ backgroundColor: 'var(--m-surface)' }}>
+          <Card className="border-0  text-center p-4" style={{ backgroundColor: 'var(--m-surface)' }}>
             <div
               className="rounded-circle mx-auto d-flex align-items-center justify-content-center mb-3"
               style={{
@@ -127,7 +126,7 @@ export const MisDatosPage = () => {
         </Col>
 
         <Col lg={8}>
-          <Card className="border-0 shadow-sm" style={{ backgroundColor: 'var(--m-surface)' }}>
+          <Card className="border-0 " style={{ backgroundColor: 'var(--m-surface)' }}>
             <Card.Header
               className="p-3 border-bottom border-secondary border-opacity-25"
               style={{ backgroundColor: 'var(--m-surfaceVariant)' }}
@@ -200,7 +199,7 @@ export const MisDatosPage = () => {
                     {isEditing && (
                       <Col md={12} className="d-flex justify-content-end mt-4">
                         <Button variant="primary" type="submit" size="sm" className="px-4" disabled={saving}>
-                          {saving ? <Spinner size="sm" animation="border" className="me-1" /> : <i className="bi bi-save me-1" />} Guardar Modificaciones
+                          {saving ? 'Guardando…' : 'Guardar Modificaciones'}
                         </Button>
                       </Col>
                     )}

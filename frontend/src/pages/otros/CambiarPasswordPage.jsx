@@ -55,7 +55,7 @@ export const CambiarPasswordPage = () => {
 
       <Row className="justify-content-center">
         <Col md={8} lg={6}>
-          <Card className="border-0 shadow-sm" style={{ backgroundColor: 'var(--m-surface)' }}>
+          <Card className="border-0 " style={{ backgroundColor: 'var(--m-surface)' }}>
             <Card.Header
               className="p-3 border-bottom border-secondary border-opacity-25"
               style={{ backgroundColor: 'var(--m-surfaceVariant)' }}

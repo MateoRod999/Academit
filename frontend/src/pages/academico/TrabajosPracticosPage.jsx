@@ -50,7 +50,7 @@ export const TrabajosPracticosPage = () => {
 
       <Row className="g-3 mb-4">
         <Col sm={6} md={4}>
-          <Card className="border-0 shadow-sm" style={{ backgroundColor: 'var(--m-surface)' }}>
+          <Card className="border-0 " style={{ backgroundColor: 'var(--m-surface)' }}>
             <Card.Body className="p-3">
               <span className="text-muted small text-uppercase fw-semibold">Promedio Trabajos Prácticos</span>
               <h3 className="fw-bold mt-1 mb-0" style={{ color: 'var(--m-primary)' }}>
@@ -60,7 +60,7 @@ export const TrabajosPracticosPage = () => {
           </Card>
         </Col>
         <Col sm={6} md={4}>
-          <Card className="border-0 shadow-sm" style={{ backgroundColor: 'var(--m-surface)' }}>
+          <Card className="border-0 " style={{ backgroundColor: 'var(--m-surface)' }}>
             <Card.Body className="p-3">
               <span className="text-muted small text-uppercase fw-semibold">TPs Presentados</span>
               <h3 className="fw-bold mt-1 mb-0" style={{ color: 'var(--m-onSurface)' }}>
@@ -70,7 +70,7 @@ export const TrabajosPracticosPage = () => {
           </Card>
         </Col>
         <Col sm={6} md={4}>
-          <Card className="border-0 shadow-sm" style={{ backgroundColor: 'var(--m-surface)' }}>
+          <Card className="border-0 " style={{ backgroundColor: 'var(--m-surface)' }}>
             <Card.Body className="p-3">
               <span className="text-muted small text-uppercase fw-semibold">Cumplimiento</span>
               <h3 className="fw-bold mt-1 mb-0 text-success">

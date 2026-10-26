@@ -75,7 +75,7 @@ export const AdminSituacionAlumnoPage = () => {
       />
 
       {/* Selector / Buscador de Alumno */}
-      <Card className="border-0 shadow-sm mb-4" style={{ backgroundColor: 'var(--m-surface)' }}>
+      <Card className="border-0  mb-4" style={{ backgroundColor: 'var(--m-surface)' }}>
         <Card.Body className="p-3">
           <Row className="align-items-center g-3">
             <Col md={6}>
@@ -109,7 +109,7 @@ export const AdminSituacionAlumnoPage = () => {
       {/* Resumen Financiero del Alumno */}
       <Row className="g-3 mb-4">
         <Col sm={6} md={3}>
-          <Card className="border-0 shadow-sm h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
+          <Card className="border-0  h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
             <Card.Body className="p-3">
               <span className="text-muted small text-uppercase fw-semibold">Matrícula 2026</span>
               <h5 className="fw-bold mt-2 mb-1" style={{ color: 'var(--m-onSurface)' }}>
@@ -123,7 +123,7 @@ export const AdminSituacionAlumnoPage = () => {
         </Col>
 
         <Col sm={6} md={3}>
-          <Card className="border-0 shadow-sm h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
+          <Card className="border-0  h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
             <Card.Body className="p-3">
               <span className="text-muted small text-uppercase fw-semibold">Total Adeudado</span>
               <h4 className="fw-bold mt-2 mb-1 text-danger">
@@ -137,7 +137,7 @@ export const AdminSituacionAlumnoPage = () => {
         </Col>
 
         <Col sm={6} md={3}>
-          <Card className="border-0 shadow-sm h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
+          <Card className="border-0  h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
             <Card.Body className="p-3">
               <span className="text-muted small text-uppercase fw-semibold">Total Abonado</span>
               <h4 className="fw-bold mt-2 mb-1 text-success">
@@ -151,7 +151,7 @@ export const AdminSituacionAlumnoPage = () => {
         </Col>
 
         <Col sm={6} md={3}>
-          <Card className="border-0 shadow-sm h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
+          <Card className="border-0  h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
             <Card.Body className="p-3">
               <span className="text-muted small text-uppercase fw-semibold">Estado Arancelario</span>
               <div className="mt-2 mb-1">

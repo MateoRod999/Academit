@@ -1,125 +1,67 @@
-import { Badge } from 'react-bootstrap'
-
 export const StatusBadge = ({ status, className = '' }) => {
   if (!status) return null
 
   const s = String(status).toUpperCase()
 
-  let bg
-  let icon = null
+  let variantClass
   let label
 
   switch (s) {
-    // Activos / Éxitos
+    // OK / Aprobados / Éxitos / Pagados / Al día
     case 'ACTIVO':
     case 'ACTIVA':
-    case 'REGULAR':
     case 'CONFIRMADA':
-      bg = 'success'
-      icon = 'bi-check-circle'
-      label = status
-      break
     case 'AL_DIA':
-      bg = 'success'
-      icon = 'bi-check-circle'
-      label = 'Al día'
-      break
     case 'APROBADA':
     case 'APROBADO':
     case 'PAGADA':
     case 'PAGADO':
     case 'ACREDITADO':
     case 'ENTREGADO':
-      bg = 'success'
-      icon = 'bi-check2'
-      label = status
-      break
     case 'PRESENTE':
-      bg = 'success'
-      icon = 'bi-check-lg'
-      label = 'Presente'
+      variantClass = 'e-ok'
+      label = s === 'AL_DIA' ? 'Al día' : (s === 'PRESENTE' ? 'Presente' : status)
       break
 
-    // En proceso / Pendientes / Avisos
+    // Pendientes / En proceso
     case 'PENDIENTE':
-      bg = 'warning'
-      icon = 'bi-clock-history'
-      label = 'Pendiente'
-      break
-    case 'EN_MORA':
-      bg = 'danger'
-      icon = 'bi-exclamation-octagon'
-      label = 'En mora'
-      break
     case 'EN_PROCESO':
-      bg = 'info'
-      icon = 'bi-arrow-repeat'
-      label = 'En proceso'
-      break
     case 'TARDANZA':
-      bg = 'warning'
-      icon = 'bi-hourglass-split'
-      label = 'Tardanza'
-      break
-    case 'JUSTIFICADO':
-      bg = 'info'
-      icon = 'bi-file-earmark-medical'
-      label = 'Justificado'
-      break
-    case 'ABIERTA':
-      bg = 'primary'
-      icon = 'bi-door-open'
-      label = 'Abierta'
+      variantClass = 'e-pend'
+      label = s === 'EN_PROCESO' ? 'En proceso' : (s === 'TARDANZA' ? 'Tardanza' : 'Pendiente')
       break
 
-    // Errores / Bajas / Rechazos / Deudas
+    // Vencida / Mora / Anulada / Inactivo / Error
+    case 'EN_MORA':
     case 'RECHAZADA':
     case 'RECHAZADO':
-      bg = 'danger'
-      icon = 'bi-x-circle'
-      label = 'Rechazada'
-      break
     case 'CANCELADA':
     case 'CANCELADO':
     case 'INACTIVO':
     case 'INACTIVA':
     case 'ANULADA':
-      bg = 'secondary'
-      icon = 'bi-slash-circle'
-      label = status
-      break
     case 'VENCIDA':
     case 'VENCIDO':
-      bg = 'danger'
-      icon = 'bi-exclamation-octagon'
-      label = 'Vencida'
-      break
     case 'AUSENTE':
-      bg = 'danger'
-      icon = 'bi-x-lg'
-      label = 'Ausente'
-      break
-    case 'CERRADO':
-    case 'CERRADA':
-      bg = 'secondary'
-      icon = 'bi-lock'
-      label = status
+      variantClass = 'e-mal'
+      label = s === 'EN_MORA' ? 'En mora' : (s === 'RECHAZADA' || s === 'RECHAZADO' ? 'Rechazada' : (s === 'VENCIDA' || s === 'VENCIDO' ? 'Vencida' : (s === 'AUSENTE' ? 'Ausente' : (s === 'ANULADA' ? 'Anulada' : status))))
       break
 
+    // Informativo / Neutro
+    case 'ABIERTA':
+    case 'CERRADA':
+    case 'CERRADO':
+    case 'JUSTIFICADO':
     default:
-      bg = 'secondary'
-      label = status
+      variantClass = 'e-neu'
+      label = s === 'JUSTIFICADO' ? 'Justificado' : (s === 'ABIERTA' ? 'Abierta' : (s === 'CERRADA' || s === 'CERRADO' ? 'Cerrada' : status))
+      break
   }
 
   return (
-    <Badge
-      bg={bg}
-      className={`d-inline-flex align-items-center gap-1 px-2 py-1 fw-medium ${className}`}
-      style={{ fontSize: '0.78rem' }}
-    >
-      {icon && <i className={`bi ${icon}`} />}
-      <span>{label}</span>
-    </Badge>
+    <span className={`estado ${variantClass} ${className}`.trim()}>
+      {label}
+    </span>
   )
 }
 

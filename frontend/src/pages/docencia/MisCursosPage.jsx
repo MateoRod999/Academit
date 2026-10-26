@@ -61,7 +61,7 @@ export const MisCursosPage = () => {
           const cursoInfo = cursos.find((c) => c.idCurso === asig.idCurso)
           return (
             <Col key={asig.idAsignacion} md={6}>
-              <Card className="border-0 shadow-sm h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
+              <Card className="border-0  h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
                 <Card.Header
                   className="p-3 border-bottom border-secondary border-opacity-25 d-flex justify-content-between align-items-center"
                   style={{ backgroundColor: 'var(--m-surfaceVariant)' }}

@@ -1,4 +1,4 @@
-import { Modal, Button, Form, Spinner } from 'react-bootstrap'
+import { Modal, Button, Form } from 'react-bootstrap'
 
 export const FormModal = ({
   show,
@@ -12,36 +12,18 @@ export const FormModal = ({
   size = 'lg',
 }) => {
   return (
-    <Modal show={show} onHide={onHide} size={size} centered backdrop="static">
+    <Modal show={show} onHide={onHide} size={size} centered backdrop="static" animation={false}>
       <Form onSubmit={onSubmit} noValidate>
-        <Modal.Header
-          closeButton
-          style={{
-            backgroundColor: 'var(--m-surface)',
-            borderBottom: '1px solid var(--m-outline)',
-          }}
-        >
-          <Modal.Title className="fs-6 fw-bold" style={{ color: 'var(--m-onSurface)' }}>
+        <Modal.Header closeButton>
+          <Modal.Title className="fs-6 fw-bold">
             {title}
           </Modal.Title>
         </Modal.Header>
-        <Modal.Body
-          style={{
-            backgroundColor: 'var(--m-surfaceVariant)',
-            color: 'var(--m-onSurfaceVariant)',
-            maxHeight: '75vh',
-            overflowY: 'auto',
-          }}
-        >
+        <Modal.Body style={{ maxHeight: '75vh', overflowY: 'auto' }}>
           {children}
         </Modal.Body>
-        <Modal.Footer
-          style={{
-            backgroundColor: 'var(--m-surface)',
-            borderTop: '1px solid var(--m-outline)',
-          }}
-        >
-          <Button variant="secondary" size="sm" onClick={onHide} disabled={loading}>
+        <Modal.Footer>
+          <Button variant="outline-secondary" size="sm" onClick={onHide} disabled={loading}>
             {cancelText}
           </Button>
           <Button
@@ -49,10 +31,8 @@ export const FormModal = ({
             type="submit"
             size="sm"
             disabled={loading}
-            className="d-flex align-items-center gap-1"
           >
-            {loading && <Spinner size="sm" animation="border" className="me-1" />}
-            {submitText}
+            {loading ? 'Cargando…' : submitText}
           </Button>
         </Modal.Footer>
       </Form>
