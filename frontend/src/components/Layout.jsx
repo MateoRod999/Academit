@@ -137,7 +137,7 @@ export const Layout = ({ children }) => {
             />
             <div>
               <b>Academit</b>
-              <small>Instituto de formación superior</small>
+              <small>Gestión académica — Taller Integrador III</small>
             </div>
           </Link>
 
