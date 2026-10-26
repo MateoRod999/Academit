@@ -136,27 +136,14 @@ export const Layout = ({ children }) => {
             style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', color: 'inherit' }}
             onClick={cerrarMenu}
           >
-            <svg
+            <img
+              src="/academit.svg"
+              alt="Logo Academit"
               className="escudo"
               width="40"
-              height="40"
-              viewBox="0 0 56 56"
-              aria-hidden="true"
-            >
-              <circle cx="28" cy="28" r="26" fill="none" stroke="currentColor" strokeWidth="1.5" />
-              <circle cx="28" cy="28" r="21" fill="none" stroke="currentColor" strokeWidth=".8" />
-              <text
-                x="28"
-                y="37"
-                textAnchor="middle"
-                fontFamily="Georgia, serif"
-                fontSize="27"
-                fontWeight="700"
-                fill="currentColor"
-              >
-                A
-              </text>
-            </svg>
+              height="43"
+              style={{ objectFit: 'contain', flexShrink: 0 }}
+            />
             <div>
               <b>Academit</b>
               <small>Instituto de formación superior</small>
