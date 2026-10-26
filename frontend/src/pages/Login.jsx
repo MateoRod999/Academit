@@ -47,27 +47,14 @@ export const Login = () => {
   return (
     <section className="ingreso" aria-label="Ingreso">
       <div className="izq gutter">
-        <svg
+        <img
+          src="/academit.svg"
+          alt="Logo Academit"
           className="escudo"
           width="56"
-          height="56"
-          viewBox="0 0 56 56"
-          aria-hidden="true"
-        >
-          <circle cx="28" cy="28" r="26" fill="none" stroke="currentColor" strokeWidth="1.5" />
-          <circle cx="28" cy="28" r="21" fill="none" stroke="currentColor" strokeWidth=".8" />
-          <text
-            x="28"
-            y="37"
-            textAnchor="middle"
-            fontFamily="Georgia, serif"
-            fontSize="27"
-            fontWeight="700"
-            fill="currentColor"
-          >
-            A
-          </text>
-        </svg>
+          height="60"
+          style={{ objectFit: 'contain' }}
+        />
         <b>Academit</b>
         <p>
           Ingresá con el usuario que te dio la secretaría. Si olvidaste la contraseña, pedí el cambio en administración.
