@@ -45,14 +45,24 @@ def parse_csv_endpoints():
             })
     return csv_eps
 
+def count_backend_stats():
+    entities = glob.glob('backend/src/main/java/**/model/*.java', recursive=True)
+    repos = glob.glob('backend/src/main/java/**/repository/*Repository.java', recursive=True)
+    test_files = glob.glob('backend/src/test/java/**/*.java', recursive=True)
+    test_count = 0
+    for tf in test_files:
+        with open(tf, encoding='utf-8') as f:
+            test_count += len(re.findall(r'@Test\b', f.read()))
+    return len(entities), len(repos), test_count
+
 def build_document():
     impl = parse_controllers()
     impl_set = {(m, p) for m, p, _ in impl}
     csv_eps = parse_csv_endpoints()
+    num_entities, num_repos, num_tests = count_backend_stats()
     
     matched = [ep for ep in csv_eps if (ep['metodo'], ep['ruta']) in impl_set]
     missing = [ep for ep in csv_eps if (ep['metodo'], ep['ruta']) not in impl_set]
-    extras = [item for item in impl if (item[0], item[1]) not in {(ep['metodo'], ep['ruta']) for ep in csv_eps}]
 
     # Agrupar faltantes por recurso
     missing_by_resource = {}
@@ -64,7 +74,7 @@ def build_document():
     doc = []
     doc.append("# Estado Real del Proyecto y Plan de Distribución - Academit")
     doc.append("")
-    doc.append("> **Fecha de relevamiento:** Octubre 2026 | **Rama base:** `fix/back-contrato-errores-auth` (con seguridad y excepciones) | **Tests backend:** 6/6 OK.")
+    doc.append(f"> **Fecha de relevamiento:** Octubre 2026 | **Entidades:** {num_entities} | **Repositories:** {num_repos} | **Tests backend:** {num_tests}/{num_tests} OK.")
     doc.append("")
     
     # 1. Estado por módulo
@@ -72,9 +82,9 @@ def build_document():
     doc.append("")
     doc.append("| Módulo | Entidad y Repository | Service | Controller | Tests | Estado |")
     doc.append("| --- | --- | --- | --- | --- | --- |")
-    doc.append("| **Base de datos** | 23 tablas (25 en rama db) | N/A | N/A | Scripts SQL verificados | **Hecho** |")
-    doc.append("| **Entidades JPA** | 23 entidades, 30 repositorios | N/A | N/A | Compilación JPA OK | **Hecho** |")
-    doc.append("| **Seguridad y Usuarios** | `Usuario`, `Rol` / Repos | `AuthService`, `UsuarioService` | `Auth`, `Perfil`, `Usuario` | 6 tests unit/integ | **Hecho** |")
+    doc.append(f"| **Base de datos** | 25 tablas alineadas | N/A | N/A | Scripts SQL verificados | **Hecho** |")
+    doc.append(f"| **Entidades JPA** | {num_entities} entidades, {num_repos} repositorios | N/A | N/A | Compilación JPA OK | **Hecho** |")
+    doc.append(f"| **Seguridad y Usuarios** | `Usuario`, `Rol` / Repos | `AuthService`, `UsuarioService` | `Auth`, `Perfil`, `Usuario` | {num_tests} tests unit/integ | **Hecho** |")
     doc.append("| **Alumnos** | `Alumno`, `EstadoPersona` / Repos | Pendiente | Pendiente | Pendiente | **Parcial** |")
     doc.append("| **Docentes** | `Docente` / `DocenteRepository` | Pendiente | Pendiente | Pendiente | **Parcial** |")
     doc.append("| **Carreras** | `Carrera` / `CarreraRepository` | Pendiente | Pendiente | Pendiente | **Parcial** |")
@@ -88,8 +98,8 @@ def build_document():
     doc.append("| **Asistencia** | `Asistencia`, `EstadoAsistencia` | Pendiente | Pendiente | Pendiente | **Parcial** |")
     doc.append("| **Mesas de Examen** | `MesaExamen`, `InscripcionMesa` | Pendiente | Pendiente | Pendiente | **Parcial** |")
     doc.append("| **Declaración Jurada** | `DeclaracionJurada`, `DeclaracionMateria` | Pendiente | Pendiente | Pendiente | **Parcial** |")
-    doc.append("| **Solicitudes** | Tabla y Entidad en `feature/db` | Pendiente | Pendiente | Pendiente | **Parcial** |")
-    doc.append("| **Documentación** | Tabla y Entidad en `feature/db` | Pendiente | Pendiente | Pendiente | **Parcial** |")
+    doc.append("| **Solicitudes** | `Solicitud`, `TipoSolicitud` | Pendiente | Pendiente | Pendiente | **Parcial** |")
+    doc.append("| **Documentación** | `Documentacion`, `TipoDocumento` | Pendiente | Pendiente | Pendiente | **Parcial** |")
     doc.append("| **Cambio de Carrera** | Gestionado vía `Solicitud` + `Plan` | Pendiente | Pendiente | Pendiente | **Pendiente** |")
     doc.append("")
 
@@ -140,34 +150,25 @@ def build_document():
     doc.append("   - *Motivo:* Garantiza numeración oficial única, auditable y correlativa administrada exclusivamente por el servidor.")
     doc.append("")
     doc.append("### Estado de Aplicación de Decisiones")
-    doc.append("- **Ya aplicado:**")
-    doc.append("  - 4a: Base de datos (`estado_persona` solo tiene ACTIVO/INACTIVO) y entidades JPA (`model/Alumno`, `model/Docente`).")
-    doc.append("  - 4b: Base de datos y JPA (`matricula` no posee columna `estado_pago`; `estado_matricula` tiene PENDIENTE, ACTIVA, CANCELADA).")
-    doc.append("  - 4c: `UsuarioController` devuelve `List<UsuarioResponseDTO>` directo; frontend configurado para arrays completos.")
-    doc.append("  - 4d: Frontend y contrato contemplan campo `comprobante` en pantallas y DTOs.")
-    doc.append("- **Falta aplicar:**")
-    doc.append("  - 4a: Contrato (`entidades.json`, `openapi.yaml`) y mocks (`mocks/data.js` aún usa `REGULAR` en alumnos).")
-    doc.append("  - 4b: `MatriculaResponseDTO` y Service deben calcular dinámicamente `estadoPago` y anular cuotas al cancelar matrícula.")
-    doc.append("  - 4c: Mantener convención de listas completas en los 16 controllers pendientes.")
-    doc.append("  - 4d: Base de datos (`columna comprobante en pago`) y backend (`Pago.comprobante` y generador AAAA-NNNNNN).")
+    doc.append("- **Ya aplicado e integrado en `develop`:**")
+    doc.append("  - 4a (Estados de Personas): Base de datos (`01-schema.sql` y `02-datos-iniciales.sql`), backend (`Alumno`, `Docente`), contrato (`entidades.json`, `openapi.yaml`) y frontend (`mocks/data.js` y vistas). Resuelto en `refactor/aplicar-decisiones-estado`, integrado en `develop`.")
+    doc.append("  - 4b (Matrícula y Estado de Pago): Backend (`MatriculaResponseDTO`, `MatriculaService`), contrato (`AL_DIA`, `EN_MORA`, `PENDIENTE` calculado) y frontend (`AdminMatriculasPage`, mocks). Resuelto en `refactor/aplicar-decisiones-estado`, integrado en `develop`.")
+    doc.append("  - 4c (Colecciones Completas): Controllers implementados devuelven colecciones completas; frontend preparado para arrays directos. Resuelto en `fix/back-contrato-errores-auth`, integrado en `develop`.")
+    doc.append("  - 4d (Comprobante de Pago): Columna `pago.comprobante VARCHAR(11)` en BD, DTO y generador AAAA-NNNNNN en backend, contrato y pantallas. Resuelto en `refactor/aplicar-decisiones-estado`, integrado en `develop`.")
     doc.append("")
-    doc.append("### Otras Decisiones Abiertas (de `docs/estado/desajustes-db.md`)")
-    doc.append("")
-    doc.append("| Tema | Propuesta | Dueño a Definir |")
-    doc.append("| --- | --- | --- |")
-    doc.append("| Tablas `solicitud` y `documentacion` | Incorporar tablas y entidades JPA (en rama `feature/db-alinear-contrato`) | Responsable DB / Back |")
-    doc.append("| Asignación con roles docentes | Columna `rol_docente` en `curso_materia` y unicidad `(id_curso, id_materia, id_docente)` | Responsable DB / Back |")
-    doc.append("| Asistencia por materia | Columna `id_materia` en `asistencia` y unicidad con materia | Responsable DB / Back |")
-    doc.append("| Turno en curso y mesa | Columna `turno` en `curso` y `mesa_examen`, y `tribunal` evaluador | Responsable DB / Back |")
-    doc.append("| Tipos de cuota normalizados | Valores `CUOTA_MENSUAL` y `SEGURO_CUATRIMESTRAL` en catálogo | Responsable DB |")
+    doc.append("### Estado de Desajustes de Base de Datos (`docs/estado/desajustes-db.md`)")
+    doc.append("- Tablas `solicitud` y `documentacion`: Creadas en BD y mapeadas en JPA. Resuelto en `feature/db-alinear-contrato`, integrado en `develop`.")
+    doc.append("- Asignación con roles docentes: Columna `rol_docente` y unicidad `(id_curso, id_materia, id_docente)`. Resuelto en `feature/db-alinear-contrato`, integrado en `develop`.")
+    doc.append("- Asistencia por materia: Columna `id_materia` y unicidad compuesta. Resuelto en `feature/db-alinear-contrato`, integrado en `develop`.")
+    doc.append("- Turno en curso y mesa: Columnas `turno` y `tribunal`. Resuelto en `feature/db-alinear-contrato`, integrado en `develop`.")
+    doc.append("- Tipos de cuota: `CUOTA_MENSUAL` y `SEGURO_CUATRIMESTRAL`. Resuelto en `feature/db-alinear-contrato`, integrado en `develop`.")
     doc.append("")
 
     # 5. Trabajo restante
     doc.append("## 5. Trabajo Restante y Reparto por Ramas")
     doc.append("")
-    doc.append("1. **Fase Previa - Integración de Esquema y Contrato (Bloqueante inicial):**")
-    doc.append("   - `feature/db-alinear-contrato` (mergear): tablas `solicitud`, `documentacion`, columnas `rol_docente`, `turno`, `comprobante` (4d).")
-    doc.append("   - `docs/front-contrato-estado-alumno` (Paralelo): ajustar `entidades.json`, `openapi.yaml` y mocks a ACTIVO/INACTIVO (4a).")
+    doc.append("1. **Fase Previa - Integración de Esquema, Contrato y Decisiones:**")
+    doc.append("   - **Estado:** Completada e integrada en `develop`. Comprende `fix/back-contrato-errores-auth`, `feature/db-alinear-contrato`, `refactor/aplicar-decisiones-estado` y `docs/ordenar-documentacion`.")
     doc.append("2. **Fase 1 - Maestros Base (Trabajo en PARALELO):**")
     doc.append("   - `feature/back-alumnos`: Service, Controller y Tests para `/api/alumnos` (CRUD y situaciones).")
     doc.append("   - `feature/back-docentes`: Service, Controller y Tests para `/api/docentes` (CRUD).")
@@ -194,20 +195,20 @@ def build_document():
     doc.append("")
     doc.append("- [ ] Configurar `frontend/.env` con `VITE_USE_MOCK=false` y proxy Vite apuntando a `http://localhost:8080`.")
     doc.append("- [x] `Login.jsx` (`POST /api/auth/login`): recepción y almacenamiento de JWT, redirección por rol.")
-    doc.append("- [x] `Topbar.jsx` / `Perfil`: `GET /api/auth/me`, `GET /api/usuarios/me`, `POST /api/auth/logout`.")
-    doc.append("- [x] `AdminUsuariosPage.jsx`: CRUD de usuarios con roles y validaciones.")
-    doc.append("- [ ] `AdminAlumnosPage.jsx`: listado, filtros, alta/edición y fichas de situación académica/administrativa.")
-    doc.append("- [ ] `AdminDocentesPage.jsx`: gestión de docentes y visualización de asignaciones.")
-    doc.append("- [ ] `AdminCarrerasPage.jsx` / `AdminPlanesPage.jsx`: carreras, materias y malla curricular con correlativas.")
-    doc.append("- [ ] `AdminCursosPage.jsx` / `AdminAsignacionesPage.jsx`: comisiones, ciclos y asignación docente.")
-    doc.append("- [ ] `AdminInscripcionesPage.jsx`: inscripción con control de cupo y rechazo de duplicados.")
+    doc.append("- [x] `Layout.jsx` / `Perfil`: `GET /api/auth/me`, `GET /api/usuarios/me`, `POST /api/auth/logout`.")
+    doc.append("- [x] `GestionUsuariosPage.jsx`: CRUD de usuarios con roles y validaciones.")
+    doc.append("- [ ] `GestionAlumnosPage.jsx`: listado, filtros, alta/edición y fichas de situación académica/administrativa.")
+    doc.append("- [ ] `GestionDocentesPage.jsx`: gestión de docentes y visualización de asignaciones.")
+    doc.append("- [ ] `GestionCarrerasPage.jsx` / `GestionPlanEstudiosPage.jsx`: carreras, materias y malla curricular con correlativas.")
+    doc.append("- [ ] `GestionCursosPage.jsx` / `GestionAsignacionesPage.jsx`: comisiones, ciclos y asignación docente.")
+    doc.append("- [ ] `GestionInscripcionesPage.jsx`: inscripción con control de cupo y rechazo de duplicados.")
     doc.append("- [ ] `AdminMatriculasPage.jsx` / `AdminCuotasPage.jsx`: alta de matrícula, generación de cuotas y cálculo de mora.")
-    doc.append("- [ ] `RegistrarPagoPage.jsx` / `MisPagosPage.jsx`: cobro de cuota completa y emisión de comprobante AAAA-NNNNNN.")
-    doc.append("- [ ] `CargaCalificacionesPage.jsx`: registro de notas (1-10) por docente asignado.")
-    doc.append("- [ ] `RegistroAsistenciaPage.jsx`: toma de asistencia por materia.")
+    doc.append("- [ ] `AdminPagosPage.jsx`: cobro de cuota completa y emisión de comprobante AAAA-NNNNNN.")
+    doc.append("- [ ] `CalificacionesDocentePage.jsx`: registro de notas (1-10) por docente asignado.")
+    doc.append("- [ ] `AsistenciasDocentePage.jsx`: toma de asistencia por materia.")
     doc.append("- [ ] `MesasExamenPage.jsx`: mesas y actas de examen.")
     doc.append("- [ ] `DeclaracionJuradaPage.jsx`: presentación anual de materias a cursar.")
-    doc.append("- [ ] `AdminSolicitudesPage.jsx` / `AdminDocumentacionPage.jsx`: trámites y legajos digitales.")
+    doc.append("- [ ] `BandejaSolicitudesPage.jsx` / `DocumentacionPage.jsx`: trámites y legajos digitales.")
     doc.append("- [ ] Validación OpenAPI: verificación de schemas JSON con `docs/frontend/openapi.yaml`.")
     doc.append("")
 

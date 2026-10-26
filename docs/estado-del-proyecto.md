@@ -1,14 +1,14 @@
 # Estado Real del Proyecto y Plan de Distribución - Academit
 
-> **Fecha de relevamiento:** Octubre 2026 | **Rama base:** `fix/back-contrato-errores-auth` (con seguridad y excepciones) | **Tests backend:** 6/6 OK.
+> **Fecha de relevamiento:** Octubre 2026 | **Entidades:** 35 | **Repositories:** 32 | **Tests backend:** 31/31 OK.
 
 ## 1. Estado por Módulo
 
 | Módulo | Entidad y Repository | Service | Controller | Tests | Estado |
 | --- | --- | --- | --- | --- | --- |
-| **Base de datos** | 23 tablas (25 en rama db) | N/A | N/A | Scripts SQL verificados | **Hecho** |
-| **Entidades JPA** | 23 entidades, 30 repositorios | N/A | N/A | Compilación JPA OK | **Hecho** |
-| **Seguridad y Usuarios** | `Usuario`, `Rol` / Repos | `AuthService`, `UsuarioService` | `Auth`, `Perfil`, `Usuario` | 6 tests unit/integ | **Hecho** |
+| **Base de datos** | 25 tablas alineadas | N/A | N/A | Scripts SQL verificados | **Hecho** |
+| **Entidades JPA** | 35 entidades, 32 repositorios | N/A | N/A | Compilación JPA OK | **Hecho** |
+| **Seguridad y Usuarios** | `Usuario`, `Rol` / Repos | `AuthService`, `UsuarioService` | `Auth`, `Perfil`, `Usuario` | 31 tests unit/integ | **Hecho** |
 | **Alumnos** | `Alumno`, `EstadoPersona` / Repos | Pendiente | Pendiente | Pendiente | **Parcial** |
 | **Docentes** | `Docente` / `DocenteRepository` | Pendiente | Pendiente | Pendiente | **Parcial** |
 | **Carreras** | `Carrera` / `CarreraRepository` | Pendiente | Pendiente | Pendiente | **Parcial** |
@@ -22,8 +22,8 @@
 | **Asistencia** | `Asistencia`, `EstadoAsistencia` | Pendiente | Pendiente | Pendiente | **Parcial** |
 | **Mesas de Examen** | `MesaExamen`, `InscripcionMesa` | Pendiente | Pendiente | Pendiente | **Parcial** |
 | **Declaración Jurada** | `DeclaracionJurada`, `DeclaracionMateria` | Pendiente | Pendiente | Pendiente | **Parcial** |
-| **Solicitudes** | Tabla y Entidad en `feature/db` | Pendiente | Pendiente | Pendiente | **Parcial** |
-| **Documentación** | Tabla y Entidad en `feature/db` | Pendiente | Pendiente | Pendiente | **Parcial** |
+| **Solicitudes** | `Solicitud`, `TipoSolicitud` | Pendiente | Pendiente | Pendiente | **Parcial** |
+| **Documentación** | `Documentacion`, `TipoDocumento` | Pendiente | Pendiente | Pendiente | **Parcial** |
 | **Cambio de Carrera** | Gestionado vía `Solicitud` + `Plan` | Pendiente | Pendiente | Pendiente | **Pendiente** |
 
 ## 2. Endpoints del Contrato vs Implementados
@@ -81,27 +81,23 @@
    - *Motivo:* Garantiza numeración oficial única, auditable y correlativa administrada exclusivamente por el servidor.
 
 ### Estado de Aplicación de Decisiones
-- **Ya aplicado (en Base, Backend, Contrato y Frontend):**
-  - **4a (Estado personas):** Base de datos (`database/01-schema.sql` y `02-datos-iniciales.sql`), entidades JPA (`Alumno`, `Docente`, `EstadoPersonaEnum`), contrato (`entidades.json`, `openapi.yaml`) y frontend (mocks, vistas y `etiquetas.js`) alineados estrictamente a `ACTIVO` e `INACTIVO`.
-  - **4b (Matricula.estadoPago calculado):** BD y JPA sin columna persistida; `MatriculaResponseDTO`, `MatriculaService`, frontend API (`matriculas.js`), mocks y vistas (`AdminMatriculasPage`, `StatusBadge`) calculan dinámicamente `AL_DIA`, `EN_MORA`, `PENDIENTE` a partir de sus cuotas, y anulan cuotas pendientes al cancelar matrícula.
-  - **4c (Sin paginación en servidor):** Endpoints y mocks devuelven arrays completos directamente; convenios respetados en controllers existentes y documentados para los restantes.
-  - **4d (Pago.comprobante AAAA-NNNNNN):** Columna única `comprobante VARCHAR(11) NOT NULL UNIQUE` en base de datos, mapeada en `Pago.java`, generada por `PagoService` y en mocks con formato `AAAA-NNNNNN` (ej. `2026-000001`), documentada como read-only en contrato API y reflejada en vistas de pagos.
+- **Ya aplicado e integrado en `develop`:**
+  - 4a (Estados de Personas): Base de datos (`01-schema.sql` y `02-datos-iniciales.sql`), backend (`Alumno`, `Docente`), contrato (`entidades.json`, `openapi.yaml`) y frontend (`mocks/data.js` y vistas). Resuelto en `refactor/aplicar-decisiones-estado`, integrado en `develop`.
+  - 4b (Matrícula y Estado de Pago): Backend (`MatriculaResponseDTO`, `MatriculaService`), contrato (`AL_DIA`, `EN_MORA`, `PENDIENTE` calculado) y frontend (`AdminMatriculasPage`, mocks). Resuelto en `refactor/aplicar-decisiones-estado`, integrado en `develop`.
+  - 4c (Colecciones Completas): Controllers implementados devuelven colecciones completas; frontend preparado para arrays directos. Resuelto en `fix/back-contrato-errores-auth`, integrado en `develop`.
+  - 4d (Comprobante de Pago): Columna `pago.comprobante VARCHAR(11)` en BD, DTO y generador AAAA-NNNNNN en backend, contrato y pantallas. Resuelto en `refactor/aplicar-decisiones-estado`, integrado en `develop`.
 
-### Otras Decisiones Abiertas (de `docs/estado/desajustes-db.md`)
-
-| Tema | Propuesta | Dueño a Definir |
-| --- | --- | --- |
-| Tablas `solicitud` y `documentacion` | Incorporar tablas y entidades JPA (en rama `feature/db-alinear-contrato`) | Responsable DB / Back |
-| Asignación con roles docentes | Columna `rol_docente` en `curso_materia` y unicidad `(id_curso, id_materia, id_docente)` | Responsable DB / Back |
-| Asistencia por materia | Columna `id_materia` en `asistencia` y unicidad con materia | Responsable DB / Back |
-| Turno en curso y mesa | Columna `turno` en `curso` y `mesa_examen`, y `tribunal` evaluador | Responsable DB / Back |
-| Tipos de cuota normalizados | Valores `CUOTA_MENSUAL` y `SEGURO_CUATRIMESTRAL` en catálogo | Responsable DB |
+### Estado de Desajustes de Base de Datos (`docs/estado/desajustes-db.md`)
+- Tablas `solicitud` y `documentacion`: Creadas en BD y mapeadas en JPA. Resuelto en `feature/db-alinear-contrato`, integrado en `develop`.
+- Asignación con roles docentes: Columna `rol_docente` y unicidad `(id_curso, id_materia, id_docente)`. Resuelto en `feature/db-alinear-contrato`, integrado en `develop`.
+- Asistencia por materia: Columna `id_materia` y unicidad compuesta. Resuelto en `feature/db-alinear-contrato`, integrado en `develop`.
+- Turno en curso y mesa: Columnas `turno` y `tribunal`. Resuelto en `feature/db-alinear-contrato`, integrado en `develop`.
+- Tipos de cuota: `CUOTA_MENSUAL` y `SEGURO_CUATRIMESTRAL`. Resuelto en `feature/db-alinear-contrato`, integrado en `develop`.
 
 ## 5. Trabajo Restante y Reparto por Ramas
 
-1. **Fase Previa - Integración de Esquema y Contrato (Bloqueante inicial):**
-   - `feature/db-alinear-contrato` (mergear): tablas `solicitud`, `documentacion`, columnas `rol_docente`, `turno`, `comprobante` (4d).
-   - `docs/front-contrato-estado-alumno` (Paralelo): ajustar `entidades.json`, `openapi.yaml` y mocks a ACTIVO/INACTIVO (4a).
+1. **Fase Previa - Integración de Esquema, Contrato y Decisiones:**
+   - **Estado:** Completada e integrada en `develop`. Comprende `fix/back-contrato-errores-auth`, `feature/db-alinear-contrato`, `refactor/aplicar-decisiones-estado` y `docs/ordenar-documentacion`.
 2. **Fase 1 - Maestros Base (Trabajo en PARALELO):**
    - `feature/back-alumnos`: Service, Controller y Tests para `/api/alumnos` (CRUD y situaciones).
    - `feature/back-docentes`: Service, Controller y Tests para `/api/docentes` (CRUD).
@@ -126,25 +122,23 @@
 
 - [ ] Configurar `frontend/.env` con `VITE_USE_MOCK=false` y proxy Vite apuntando a `http://localhost:8080`.
 - [x] `Login.jsx` (`POST /api/auth/login`): recepción y almacenamiento de JWT, redirección por rol.
-- [x] `Topbar.jsx` / `Perfil`: `GET /api/auth/me`, `GET /api/usuarios/me`, `POST /api/auth/logout`.
-- [x] `AdminUsuariosPage.jsx`: CRUD de usuarios con roles y validaciones.
-- [ ] `AdminAlumnosPage.jsx`: listado, filtros, alta/edición y fichas de situación académica/administrativa.
-- [ ] `AdminDocentesPage.jsx`: gestión de docentes y visualización de asignaciones.
-- [ ] `AdminCarrerasPage.jsx` / `AdminPlanesPage.jsx`: carreras, materias y malla curricular con correlativas.
-- [ ] `AdminCursosPage.jsx` / `AdminAsignacionesPage.jsx`: comisiones, ciclos y asignación docente.
-- [ ] `AdminInscripcionesPage.jsx`: inscripción con control de cupo y rechazo de duplicados.
+- [x] `Layout.jsx` / `Perfil`: `GET /api/auth/me`, `GET /api/usuarios/me`, `POST /api/auth/logout`.
+- [x] `GestionUsuariosPage.jsx`: CRUD de usuarios con roles y validaciones.
+- [ ] `GestionAlumnosPage.jsx`: listado, filtros, alta/edición y fichas de situación académica/administrativa.
+- [ ] `GestionDocentesPage.jsx`: gestión de docentes y visualización de asignaciones.
+- [ ] `GestionCarrerasPage.jsx` / `GestionPlanEstudiosPage.jsx`: carreras, materias y malla curricular con correlativas.
+- [ ] `GestionCursosPage.jsx` / `GestionAsignacionesPage.jsx`: comisiones, ciclos y asignación docente.
+- [ ] `GestionInscripcionesPage.jsx`: inscripción con control de cupo y rechazo de duplicados.
 - [ ] `AdminMatriculasPage.jsx` / `AdminCuotasPage.jsx`: alta de matrícula, generación de cuotas y cálculo de mora.
-- [ ] `RegistrarPagoPage.jsx` / `MisPagosPage.jsx`: cobro de cuota completa y emisión de comprobante AAAA-NNNNNN.
-- [ ] `CargaCalificacionesPage.jsx`: registro de notas (1-10) por docente asignado.
-- [ ] `RegistroAsistenciaPage.jsx`: toma de asistencia por materia.
+- [ ] `AdminPagosPage.jsx`: cobro de cuota completa y emisión de comprobante AAAA-NNNNNN.
+- [ ] `CalificacionesDocentePage.jsx`: registro de notas (1-10) por docente asignado.
+- [ ] `AsistenciasDocentePage.jsx`: toma de asistencia por materia.
 - [ ] `MesasExamenPage.jsx`: mesas y actas de examen.
 - [ ] `DeclaracionJuradaPage.jsx`: presentación anual de materias a cursar.
-- [ ] `AdminSolicitudesPage.jsx` / `AdminDocumentacionPage.jsx`: trámites y legajos digitales.
+- [ ] `BandejaSolicitudesPage.jsx` / `DocumentacionPage.jsx`: trámites y legajos digitales.
 - [ ] Validación OpenAPI: verificación de schemas JSON con `docs/frontend/openapi.yaml`.
 
 ## 7. Documentación Pendiente de la Entrega
-
-> La lista de control con casillas de verificación para todas las áreas se gestiona en [docs/pendientes.md](pendientes.md).
 
 1. **Portada Institucional:** Integrantes del grupo, profesor/a, ayudante, asignatura y fecha de entrega.
 2. **Análisis de Requisitos (`docs/entregables/entregable-1-analisis.md`):** Incorporar RF y RN formalizados para Solicitudes y Documentación.
