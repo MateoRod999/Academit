@@ -147,18 +147,19 @@ body.bloqueado {
 }
 
 .salir {
-  background: none;
-  border: 1px solid var(--lateral-suave);
-  color: var(--sobre-lateral);
+  width: 100%;
+  background: var(--primario);
+  border: 1px solid var(--primario-hover);
+  color: var(--sobre-primario);
   border-radius: 3px;
-  padding: 6px 12px;
-  justify-self: start;
+  padding: 8px 14px;
+  min-height: 44px;
   cursor: pointer;
   font-size: 14px;
 }
 
 .salir:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--primario-hover);
 }
 
 .velo {
@@ -560,6 +561,17 @@ input:focus, select.c:focus, textarea:focus {
   color: var(--lateral-suave);
   max-width: 38ch;
   font-size: 15px;
+}
+
+.ingreso .pie-login {
+  margin-top: auto;
+  padding-top: 24px;
+  text-align: center;
+}
+
+.ingreso .pie-login small {
+  color: var(--lateral-suave);
+  font-size: 0.78rem;
 }
 
 .ingreso .der {
