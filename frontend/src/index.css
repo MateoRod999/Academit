@@ -147,18 +147,19 @@ body.bloqueado {
 }
 
 .salir {
-  background: none;
-  border: 1px solid var(--lateral-suave);
-  color: var(--sobre-lateral);
+  width: 100%;
+  background: var(--primario);
+  border: 1px solid var(--primario-hover);
+  color: var(--sobre-primario);
   border-radius: 3px;
-  padding: 6px 12px;
-  justify-self: start;
+  padding: 8px 14px;
+  min-height: 44px;
   cursor: pointer;
   font-size: 14px;
 }
 
 .salir:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--primario-hover);
 }
 
 .velo {
@@ -396,6 +397,12 @@ td.nw {
   white-space: nowrap;
 }
 
+/* Los correos y textos largos de una palabra pueden desbordar celdas */
+td,
+dl.ficha dd {
+  overflow-wrap: anywhere;
+}
+
 tbody tr:first-child td {
   border-top: 0;
 }
@@ -546,9 +553,16 @@ input:focus, select.c:focus, textarea:focus {
   color: var(--sobre-lateral);
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  align-items: center;
+  text-align: center;
   gap: 14px;
   padding-block: 48px;
+}
+
+/* El auto margen reparte el espacio: bloque de presentación al medio
+   y el pie pegado abajo */
+.ingreso .izq .escudo {
+  margin-top: auto;
 }
 
 .ingreso .izq b {
@@ -560,6 +574,17 @@ input:focus, select.c:focus, textarea:focus {
   color: var(--lateral-suave);
   max-width: 38ch;
   font-size: 15px;
+}
+
+.ingreso .pie-login {
+  margin-top: auto;
+  padding-top: 24px;
+  text-align: center;
+}
+
+.ingreso .pie-login small {
+  color: var(--lateral-suave);
+  font-size: 0.78rem;
 }
 
 .ingreso .der {
@@ -642,9 +667,18 @@ input:focus, select.c:focus, textarea:focus {
   }
   .ingreso {
     grid-template-columns: minmax(0, 1fr);
+    /* En apilado la altura la marca el contenido: con height fijo los
+       paneles se apretaban y el contenido se recortaba en celulares */
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
   }
   .ingreso .izq {
+    min-height: 0;
     padding-block: 32px;
+  }
+  .ingreso .der {
+    min-height: 60vh;
   }
   dl.ficha {
     grid-template-columns: minmax(0, 1fr);
