@@ -83,26 +83,15 @@ body.bloqueado {
   padding-top: 10px;
 }
 
-.grupo > button {
+.grupo > .titulo {
   display: flex;
   width: 100%;
   align-items: center;
   justify-content: space-between;
-  background: none;
-  border: 0;
   padding: 6px 20px;
   color: var(--lateral-suave);
   font-size: 13px;
   text-align: left;
-  cursor: pointer;
-}
-
-.grupo > button:hover {
-  color: var(--sobre-lateral);
-}
-
-.grupo > button span {
-  font-size: 11px;
 }
 
 .grupo ul {
@@ -635,9 +624,8 @@ input:focus, select.c:focus, textarea:focus {
     display: flex;
     align-items: center;
   }
-  .grupo > button {
+  .grupo > .titulo {
     padding-block: 10px;
-    min-height: 44px;
   }
   .salir {
     min-height: 44px;

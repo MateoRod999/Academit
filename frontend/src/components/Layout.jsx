@@ -7,7 +7,6 @@ import { MENU_GRUPOS } from '../config/menu'
 export const Layout = ({ children }) => {
   const { isAuthenticated, rol, nombre, usuario, logout } = useAuth()
   const [showMockAlert, setShowMockAlert] = useState(true)
-  const [cerrados, setCerrados] = useState({})
   const [menuAbierto, setMenuAbierto] = useState(false)
   const abrirBtnRef = useRef(null)
   const cerrarBtnRef = useRef(null)
@@ -38,14 +37,6 @@ export const Layout = ({ children }) => {
       itemActivo = it
       break
     }
-  }
-
-  // Toggle de grupo abierto/cerrado (abierto por defecto)
-  const toggleGrupo = (grupoId) => {
-    setCerrados((prev) => ({
-      ...prev,
-      [grupoId]: !prev[grupoId],
-    }))
   }
 
   const abrirMenu = () => {
@@ -162,39 +153,27 @@ export const Layout = ({ children }) => {
           </button>
         </div>
 
-        {/* Navegación por grupos plegables */}
+        {/* Navegación por grupos */}
         <nav className="nav" id="nav" aria-label="Principal">
-          {gruposVisibles.map((grupo) => {
-            const estaAbierto = !cerrados[grupo.id]
-            return (
-              <div key={grupo.id} className="grupo">
-                <button
-                  type="button"
-                  aria-expanded={estaAbierto}
-                  onClick={() => toggleGrupo(grupo.id)}
-                >
-                  {grupo.titulo}
-                  <span aria-hidden="true">{estaAbierto ? '▾' : '▸'}</span>
-                </button>
-                {estaAbierto && (
-                  <ul>
-                    {grupo.items.map((item) => (
-                      <li key={item.path}>
-                        <NavLink
-                          to={item.path}
-                          end={item.path === '/'}
-                          className={({ isActive }) => `item ${isActive ? 'activo' : ''}`.trim()}
-                          onClick={cerrarMenu}
-                        >
-                          {item.label}
-                        </NavLink>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            )
-          })}
+          {gruposVisibles.map((grupo) => (
+            <div key={grupo.id} className="grupo">
+              <div className="titulo">{grupo.titulo}</div>
+              <ul>
+                {grupo.items.map((item) => (
+                  <li key={item.path}>
+                    <NavLink
+                      to={item.path}
+                      end={item.path === '/'}
+                      className={({ isActive }) => `item ${isActive ? 'activo' : ''}`.trim()}
+                      onClick={cerrarMenu}
+                    >
+                      {item.label}
+                    </NavLink>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </nav>
 
         {/* Pie de barra lateral fijo con usuario y botón Salir */}
