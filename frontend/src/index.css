@@ -397,6 +397,12 @@ td.nw {
   white-space: nowrap;
 }
 
+/* Los correos y textos largos de una palabra pueden desbordar celdas */
+td,
+dl.ficha dd {
+  overflow-wrap: anywhere;
+}
+
 tbody tr:first-child td {
   border-top: 0;
 }
@@ -661,9 +667,18 @@ input:focus, select.c:focus, textarea:focus {
   }
   .ingreso {
     grid-template-columns: minmax(0, 1fr);
+    /* En apilado la altura la marca el contenido: con height fijo los
+       paneles se apretaban y el contenido se recortaba en celulares */
+    height: auto;
+    min-height: 100vh;
+    min-height: 100dvh;
   }
   .ingreso .izq {
+    min-height: 0;
     padding-block: 32px;
+  }
+  .ingreso .der {
+    min-height: 60vh;
   }
   dl.ficha {
     grid-template-columns: minmax(0, 1fr);
