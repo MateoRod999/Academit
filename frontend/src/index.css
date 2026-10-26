@@ -547,9 +547,16 @@ input:focus, select.c:focus, textarea:focus {
   color: var(--sobre-lateral);
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  align-items: center;
+  text-align: center;
   gap: 14px;
   padding-block: 48px;
+}
+
+/* El auto margen reparte el espacio: bloque de presentación al medio
+   y el pie pegado abajo */
+.ingreso .izq .escudo {
+  margin-top: auto;
 }
 
 .ingreso .izq b {
