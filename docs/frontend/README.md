@@ -84,3 +84,10 @@ node tools/generar-contrato.mjs
 ```
 
 El script valida automáticamente la concordancia de endpoints entre todos los formatos, verifica la presencia de todas las funciones exportadas en `src/api/` y ejecuta el linter de OpenAPI (`@redocly/cli`).
+
+---
+
+## 7. Sistema de Diseño y Personalización Visual
+
+El diseño y las variables visuales están centralizados en `frontend/src/styles/theme.css`. Para cambiar la paleta de colores institucional, se modifican las variables CSS del bloque `:root` (modo claro) y de `@media (prefers-color-scheme: dark)` (modo oscuro automático según el sistema operativo, sin selectores manuales ni JavaScript): `--fondo`, `--papel`, `--linea`, `--linea-fuerte`, `--texto`, `--suave`, `--cabecera`, `--primario`, `--acento` y `--error`. El modo ficha de las tablas entra en acción automáticamente en pantallas móviles (ancho ≤ 700px): oculta visualmente el encabezado `<thead>` sin perder accesibilidad, transforma cada fila `<tr>` en una tarjeta individual, convierte cada celda `<td>` en una línea flex que antepone su etiqueta correspondiente (`td::before { content: attr(data-l) }`), promueve la primera celda como título de la tarjeta y oculta celdas vacías para garantizar legibilidad completa sin desplazamiento horizontal.
+

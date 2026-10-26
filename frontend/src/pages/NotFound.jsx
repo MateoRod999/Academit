@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom'
 export const NotFound = () => {
   return (
     <Container className="py-5 text-center">
-      <Card className="p-5 shadow-sm border-0 mx-auto" style={{ maxWidth: '540px' }}>
+      <Card className="p-5  border-0 mx-auto" style={{ maxWidth: '540px' }}>
         <h1 className="display-1 fw-bold text-primary mb-2">404</h1>
         <h3 className="fw-bold mb-3">Página no encontrada</h3>
         <p className="text-muted mb-4">

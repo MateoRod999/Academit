@@ -131,7 +131,7 @@ export const SituacionAcademicaArancelariaPage = () => {
             {/* Tarjetas resumen arancelario */}
             <Row className="g-3 mb-4">
               <Col sm={6} lg={3}>
-                <Card className="border-0 shadow-sm h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
+                <Card className="border-0  h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
                   <Card.Body className="p-3">
                     <span className="text-muted small text-uppercase fw-semibold">Matrícula Anual 2026</span>
                     <h4 className="fw-bold mt-1 mb-1" style={{ color: 'var(--m-onSurface)' }}>
@@ -146,7 +146,7 @@ export const SituacionAcademicaArancelariaPage = () => {
               </Col>
 
               <Col sm={6} lg={3}>
-                <Card className="border-0 shadow-sm h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
+                <Card className="border-0  h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
                   <Card.Body className="p-3">
                     <span className="text-muted small text-uppercase fw-semibold">Total Abonado</span>
                     <h4 className="fw-bold mt-1 mb-1 text-success">
@@ -158,7 +158,7 @@ export const SituacionAcademicaArancelariaPage = () => {
               </Col>
 
               <Col sm={6} lg={3}>
-                <Card className="border-0 shadow-sm h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
+                <Card className="border-0  h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
                   <Card.Body className="p-3">
                     <span className="text-muted small text-uppercase fw-semibold">Importe Adeudado</span>
                     <h4 className="fw-bold mt-1 mb-1 text-danger">
@@ -172,7 +172,7 @@ export const SituacionAcademicaArancelariaPage = () => {
               </Col>
 
               <Col sm={6} lg={3}>
-                <Card className="border-0 shadow-sm h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
+                <Card className="border-0  h-100" style={{ backgroundColor: 'var(--m-surface)' }}>
                   <Card.Body className="p-3">
                     <span className="text-muted small text-uppercase fw-semibold">Resumen de Cuotas</span>
                     <div className="d-flex justify-content-between small mt-2">
@@ -210,7 +210,7 @@ export const SituacionAcademicaArancelariaPage = () => {
           <Tab.Pane eventKey="academica">
             <Row className="g-3 mb-4">
               <Col sm={6} md={4}>
-                <Card className="border-0 shadow-sm" style={{ backgroundColor: 'var(--m-surface)' }}>
+                <Card className="border-0 " style={{ backgroundColor: 'var(--m-surface)' }}>
                   <Card.Body className="p-3">
                     <span className="text-muted small text-uppercase fw-semibold">Materias Aprobadas</span>
                     <h3 className="fw-bold mt-1 mb-0 text-success">
@@ -222,7 +222,7 @@ export const SituacionAcademicaArancelariaPage = () => {
               </Col>
 
               <Col sm={6} md={4}>
-                <Card className="border-0 shadow-sm" style={{ backgroundColor: 'var(--m-surface)' }}>
+                <Card className="border-0 " style={{ backgroundColor: 'var(--m-surface)' }}>
                   <Card.Body className="p-3">
                     <span className="text-muted small text-uppercase fw-semibold">Promedio General</span>
                     <h3 className="fw-bold mt-1 mb-0" style={{ color: 'var(--m-primary)' }}>
@@ -234,7 +234,7 @@ export const SituacionAcademicaArancelariaPage = () => {
               </Col>
 
               <Col sm={6} md={4}>
-                <Card className="border-0 shadow-sm" style={{ backgroundColor: 'var(--m-surface)' }}>
+                <Card className="border-0 " style={{ backgroundColor: 'var(--m-surface)' }}>
                   <Card.Body className="p-3">
                     <span className="text-muted small text-uppercase fw-semibold">Avance en la Carrera</span>
                     <h3 className="fw-bold mt-1 mb-1" style={{ color: 'var(--m-onSurface)' }}>

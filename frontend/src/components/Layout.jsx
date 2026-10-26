@@ -1,31 +1,23 @@
-import { useState } from 'react'
-import { Nav, Button, Badge, Offcanvas, Alert } from 'react-bootstrap'
-import { NavLink, useLocation, useNavigate, Link } from 'react-router-dom'
+import { useState, useEffect, useRef } from 'react'
+import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { Alert } from 'react-bootstrap'
 import { useAuth } from '../context/AuthContext'
 import { MENU_GRUPOS } from '../config/menu'
 
 export const Layout = ({ children }) => {
   const { isAuthenticated, rol, nombre, usuario, logout } = useAuth()
-  const [showMobileSidebar, setShowMobileSidebar] = useState(false)
   const [showMockAlert, setShowMockAlert] = useState(true)
+  const [cerrados, setCerrados] = useState({})
+  const [menuAbierto, setMenuAbierto] = useState(false)
+  const abrirBtnRef = useRef(null)
+  const cerrarBtnRef = useRef(null)
+
   const location = useLocation()
   const navigate = useNavigate()
 
   const isMock = import.meta.env.VITE_USE_MOCK === 'true'
 
-  // Si no está autenticado o está en login, renderizar children directamente
-  if (!isAuthenticated || location.pathname === '/login') {
-    return <main>{children}</main>
-  }
-
-  const handleLogout = async () => {
-    setShowMobileSidebar(false)
-    await logout()
-    navigate('/login')
-  }
-
   // Filtrar grupos y opciones según el rol del usuario activo
-  // Regla: "Cada grupo solo aparece si el rol tiene al menos una opción en él."
   const gruposVisibles = MENU_GRUPOS.map((grupo) => {
     const itemsPermitidos = grupo.items.filter((item) =>
       rol ? item.roles.includes(rol) : false
@@ -36,204 +28,255 @@ export const Layout = ({ children }) => {
     }
   }).filter((grupo) => grupo.items.length > 0)
 
-  // Obtener el título activo para la barra superior
-  const todosLosItems = MENU_GRUPOS.flatMap((g) => g.items)
-  const activeItem = todosLosItems.find((item) => item.path === location.pathname)
-  const activeTitle = activeItem ? activeItem.label : 'Inicio'
+  // Determinar grupo y pantalla activa para miga de pan
+  let grupoActivo = null
+  let itemActivo = null
+  for (const g of gruposVisibles) {
+    const it = g.items.find((item) => item.path === location.pathname)
+    if (it) {
+      grupoActivo = g
+      itemActivo = it
+      break
+    }
+  }
 
-  // Renderizar enlaces organizados por grupos con encabezado y divisor
-  const renderNavGrupos = (onItemClick) => (
-    <Nav className="flex-column gap-1">
-      {gruposVisibles.map((grupo, gIdx) => (
-        <div key={grupo.id} className="mb-2">
-          {gIdx > 0 && <hr className="sidebar-divider" />}
-          <div className="sidebar-section-title">{grupo.titulo}</div>
+  // Toggle de grupo abierto/cerrado (abierto por defecto)
+  const toggleGrupo = (grupoId) => {
+    setCerrados((prev) => ({
+      ...prev,
+      [grupoId]: !prev[grupoId],
+    }))
+  }
 
-          <div className="d-flex flex-column gap-1 mt-1">
-            {grupo.items.map((item) => (
-              <Nav.Link
-                key={item.path}
-                as={NavLink}
-                to={item.path}
-                end={item.path === '/'}
-                onClick={onItemClick}
-                className="sidebar-link"
-              >
-                <i className={`bi ${item.icon}`} />
-                <span>{item.label}</span>
-              </Nav.Link>
-            ))}
-          </div>
-        </div>
-      ))}
-    </Nav>
-  )
+  const abrirMenu = () => {
+    setMenuAbierto(true)
+    document.body.classList.add('bloqueado')
+    setTimeout(() => {
+      cerrarBtnRef.current?.focus()
+    }, 0)
+  }
+
+  const cerrarMenu = () => {
+    setMenuAbierto(false)
+    document.body.classList.remove('bloqueado')
+    abrirBtnRef.current?.focus()
+  }
+
+  // Cerrar con Escape
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && menuAbierto) {
+        cerrarMenu()
+      }
+    }
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [menuAbierto])
+
+  // Cerrar panel automáticamente en >= 901px
+  useEffect(() => {
+    const mql = window.matchMedia('(min-width: 901px)')
+    const handleChange = (e) => {
+      if (e.matches) {
+        setMenuAbierto(false)
+        document.body.classList.remove('bloqueado')
+      }
+    }
+    mql.addEventListener('change', handleChange)
+    return () => mql.removeEventListener('change', handleChange)
+  }, [])
+
+  // Limpieza al desmontar
+  useEffect(() => {
+    return () => {
+      document.body.classList.remove('bloqueado')
+    }
+  }, [])
+
+  // Si no está autenticado o está en login, renderizar children directamente
+  if (!isAuthenticated || location.pathname === '/login') {
+    return <main>{children}</main>
+  }
+
+  const handleLogout = async () => {
+    await logout()
+    navigate('/login')
+  }
+
+  const formatRol = (r) => {
+    if (!r) return ''
+    if (r === 'ALUMNO') return 'Alumno'
+    if (r === 'DOCENTE') return 'Docente'
+    if (r === 'ADMINISTRATIVO') return 'Administrativo'
+    if (r === 'ADMINISTRADOR') return 'Administrador'
+    return r.charAt(0) + r.slice(1).toLowerCase()
+  }
 
   return (
-    <div className="app-container">
-      {/* 1. BARRA LATERAL FIJA EN ESCRITORIO (>= lg) */}
-      <aside className="desktop-sidebar d-none d-lg-flex">
-        {/* Identidad de marca Academit */}
-        <div className="p-3 border-bottom border-secondary border-opacity-25">
-          <Link to="/" className="text-decoration-none d-flex align-items-center gap-2">
-            <img src="/avatar-graduado.svg" alt="Academit" width="32" height="32" className="flex-shrink-0" />
+    <div className="app">
+      {/* Velo oscuro para mobile */}
+      {menuAbierto && (
+        <div
+          className="velo"
+          id="velo"
+          onClick={cerrarMenu}
+          aria-hidden="true"
+        />
+      )}
+
+      {/* 1. Barra lateral fija de 276px (o panel responsive <= 900px) */}
+      <aside
+        className={`lateral ${menuAbierto ? 'abierto' : ''}`.trim()}
+        id="lateral"
+        aria-label="Navegación"
+      >
+        <div className="marca">
+          <Link
+            to="/"
+            style={{ display: 'flex', alignItems: 'center', gap: '12px', textDecoration: 'none', color: 'inherit' }}
+            onClick={cerrarMenu}
+          >
+            <svg
+              className="escudo"
+              width="40"
+              height="40"
+              viewBox="0 0 56 56"
+              aria-hidden="true"
+            >
+              <circle cx="28" cy="28" r="26" fill="none" stroke="currentColor" strokeWidth="1.5" />
+              <circle cx="28" cy="28" r="21" fill="none" stroke="currentColor" strokeWidth=".8" />
+              <text
+                x="28"
+                y="37"
+                textAnchor="middle"
+                fontFamily="Georgia, serif"
+                fontSize="27"
+                fontWeight="700"
+                fill="currentColor"
+              >
+                A
+              </text>
+            </svg>
             <div>
-              <div className="fw-bold fs-5 lh-1" style={{ color: 'var(--m-primary)' }}>
-                Academit
-              </div>
-              <small className="text-muted" style={{ fontSize: '0.72rem' }}>
-                Gestión Institucional
-              </small>
+              <b>Academit</b>
+              <small>Instituto de formación superior</small>
             </div>
           </Link>
+
+          <button
+            className="cerrar"
+            type="button"
+            id="cerrar"
+            ref={cerrarBtnRef}
+            onClick={cerrarMenu}
+            aria-label="Cerrar menú"
+          >
+            ✕
+          </button>
         </div>
 
-        {/* Tarjeta de usuario en sidebar */}
-        <div
-          className="px-3 py-2 border-bottom border-secondary border-opacity-25"
-          style={{ backgroundColor: 'var(--m-surface)' }}
-        >
-          <div className="d-flex align-items-center justify-content-between mb-1">
-            <span
-              className="fw-semibold text-truncate small"
-              style={{ color: 'var(--m-on-surface)', maxWidth: '140px' }}
-            >
-              {nombre || usuario}
-            </span>
-            <Badge bg="secondary" className="small">
-              {rol}
-            </Badge>
-          </div>
-          <div className="text-muted" style={{ fontSize: '0.72rem' }}>
-            <i className="bi bi-person me-1" />
-            @{usuario}
-          </div>
-        </div>
+        {/* Navegación por grupos plegables */}
+        <nav className="nav" id="nav" aria-label="Principal">
+          {gruposVisibles.map((grupo) => {
+            const estaAbierto = !cerrados[grupo.id]
+            return (
+              <div key={grupo.id} className="grupo">
+                <button
+                  type="button"
+                  aria-expanded={estaAbierto}
+                  onClick={() => toggleGrupo(grupo.id)}
+                >
+                  {grupo.titulo}
+                  <span aria-hidden="true">{estaAbierto ? '▾' : '▸'}</span>
+                </button>
+                {estaAbierto && (
+                  <ul>
+                    {grupo.items.map((item) => (
+                      <li key={item.path}>
+                        <NavLink
+                          to={item.path}
+                          end={item.path === '/'}
+                          className={({ isActive }) => `item ${isActive ? 'activo' : ''}`.trim()}
+                          onClick={cerrarMenu}
+                        >
+                          {item.label}
+                        </NavLink>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            )
+          })}
+        </nav>
 
-        {/* Menú de grupos navegables con scroll */}
-        <div className="p-3 flex-grow-1 overflow-auto">
-          {renderNavGrupos()}
+        {/* Pie de barra lateral fijo con usuario y botón Salir */}
+        <div className="pie">
+          <div>
+            <b id="u-nombre">{nombre || usuario}</b>
+            <small id="u-rol">{formatRol(rol)}</small>
+          </div>
+          <button
+            className="salir"
+            type="button"
+            onClick={handleLogout}
+            aria-label="Cerrar sesión"
+          >
+            Salir
+          </button>
         </div>
       </aside>
 
-      {/* 2. ÁREA DE CONTENIDO Y BARRA SUPERIOR */}
-      <div className="content-wrapper">
-        {/* Barra superior con Academit, Usuario, Rol y botón Salir */}
-        <header className="top-navbar d-flex align-items-center justify-content-between">
-          <div className="d-flex align-items-center">
-            {/* Botón hamburguesa sólo en pantallas chicas (< lg) */}
-            <Button
-              variant="outline-light"
-              size="sm"
-              onClick={() => setShowMobileSidebar(true)}
-              className="d-lg-none me-3 p-1 px-2 border-secondary d-flex align-items-center justify-content-center"
-              aria-label="Abrir menú lateral"
-            >
-              <i className="bi bi-list fs-5" />
-            </Button>
-
-            {/* Nombre de la institución | Página activa */}
-            <span className="fw-bold me-2" style={{ color: 'var(--m-primary)' }}>
-              Academit
-            </span>
-            <span className="text-muted me-2 opacity-50">|</span>
-            <span
-              className="fw-semibold small text-truncate"
-              style={{ color: 'var(--m-on-surface)', maxWidth: '300px' }}
-            >
-              {activeTitle}
-            </span>
-          </div>
-
-          {/* Datos del usuario y botón Salir en la barra superior */}
-          <div className="d-flex align-items-center gap-3">
-            <div className="d-none d-sm-flex align-items-center gap-2">
-              <span className="small text-muted">{nombre || usuario}</span>
-              <Badge bg="secondary" className="text-uppercase small">
-                {rol}
-              </Badge>
-            </div>
-
-            <Button
-              variant="outline-danger"
-              size="sm"
-              onClick={handleLogout}
-              className="d-flex align-items-center gap-1 py-1 px-2 fw-semibold"
-            >
-              <i className="bi bi-box-arrow-right" />
-              <span>Salir</span>
-            </Button>
-          </div>
-        </header>
-
-        {/* Alerta descartable superior: 'Vista de maqueta con datos de ejemplo' si VITE_USE_MOCK=true */}
-        {isMock && showMockAlert && (
-          <Alert
-            variant="warning"
-            dismissible
-            onClose={() => setShowMockAlert(false)}
-            className="m-3 mb-0 py-2 px-3 small shadow-sm d-flex align-items-center gap-2"
+      {/* 2. Área principal */}
+      <div className="principal">
+        {/* Franja superior con botón Menú (mobile), miga de pan y usuario */}
+        <div className="superior gutter">
+          <button
+            className="abrir"
+            type="button"
+            id="abrir"
+            ref={abrirBtnRef}
+            aria-controls="lateral"
+            aria-expanded={menuAbierto}
+            onClick={abrirMenu}
           >
-            <i className="bi bi-info-circle-fill fs-6" />
-            <div className="flex-grow-1">
-              <strong>Vista de maqueta con datos de ejemplo:</strong> Todas las operaciones simulan su efecto de manera local en el frontend sin comunicarse con un servidor real.
+            <svg width="18" height="14" viewBox="0 0 18 14" aria-hidden="true">
+              <path d="M0 1h18M0 7h18M0 13h18" stroke="currentColor" strokeWidth="2" />
+            </svg>
+            Menú
+          </button>
+
+          <div className="miga" id="miga">
+            {grupoActivo ? grupoActivo.titulo : 'Inicio'} / <b>{itemActivo ? itemActivo.label : 'Inicio'}</b>
+          </div>
+
+          <div className="quien">
+            <b id="q-nombre">{nombre || usuario}</b> · <span id="q-rol">{formatRol(rol)}</span>
+          </div>
+        </div>
+
+        {/* Alerta de maqueta si VITE_USE_MOCK=true */}
+        {isMock && showMockAlert && (
+          <div className="gutter pt-3">
+            <div className="pagina" style={{ paddingBlock: 0 }}>
+              <Alert
+                variant="warning"
+                dismissible
+                transition={false}
+                onClose={() => setShowMockAlert(false)}
+                className="py-2 px-3 small d-flex justify-content-between align-items-center mb-0"
+                style={{ backgroundColor: 'var(--papel)', borderColor: 'var(--acento)', color: 'var(--texto)' }}
+              >
+                <div>
+                  <strong>Vista de maqueta:</strong> Operaciones simuladas en memoria local.
+                </div>
+              </Alert>
             </div>
-          </Alert>
+          </div>
         )}
 
-        {/* 3. BARRA LATERAL OFFCANVAS PARA MÓVILES (< lg) */}
-        <Offcanvas
-          show={showMobileSidebar}
-          onHide={() => setShowMobileSidebar(false)}
-          placement="start"
-          className="d-lg-none"
-        >
-          <Offcanvas.Header closeButton>
-            <Offcanvas.Title
-              className="d-flex align-items-center gap-2 fs-6 fw-bold"
-              style={{ color: 'var(--m-primary)' }}
-            >
-              <img src="/avatar-graduado.svg" alt="Academit" width="22" height="22" />
-              <span>Academit</span>
-            </Offcanvas.Title>
-          </Offcanvas.Header>
-
-          <Offcanvas.Body className="d-flex flex-column p-0">
-            {/* Cabecera del usuario en móvil */}
-            <div
-              className="p-3 border-bottom border-secondary border-opacity-25"
-              style={{ backgroundColor: 'var(--m-surface)' }}
-            >
-              <div className="fw-semibold" style={{ color: 'var(--m-on-surface)' }}>
-                {nombre || usuario}
-              </div>
-              <div className="d-flex align-items-center justify-content-between mt-1">
-                <span className="text-muted small">@{usuario}</span>
-                <Badge bg="secondary">{rol}</Badge>
-              </div>
-            </div>
-
-            {/* Opciones agrupadas */}
-            <div className="p-3 flex-grow-1 overflow-auto">
-              {renderNavGrupos(() => setShowMobileSidebar(false))}
-            </div>
-
-            {/* Botón Salir al pie del drawer móvil */}
-            <div className="p-3 border-top border-secondary border-opacity-25 mt-auto">
-              <Button
-                variant="outline-danger"
-                className="w-100 d-flex align-items-center justify-content-center gap-2 py-2"
-                onClick={handleLogout}
-              >
-                <i className="bi bi-box-arrow-right" />
-                <span className="fw-semibold">Cerrar sesión</span>
-              </Button>
-            </div>
-          </Offcanvas.Body>
-        </Offcanvas>
-
         {/* Contenido principal de la página */}
-        <main className="p-3 p-lg-4 flex-grow-1">
+        <main className="pagina gutter">
           {children}
         </main>
       </div>

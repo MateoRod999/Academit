@@ -1,12 +1,10 @@
 import { useState } from 'react'
-import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 export const Login = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
-  const [validated, setValidated] = useState(false)
   const [errorMsg, setErrorMsg] = useState('')
   const [errorErrors, setErrorErrors] = useState([])
   const [loading, setLoading] = useState(false)
@@ -15,16 +13,15 @@ export const Login = () => {
   const navigate = useNavigate()
   const location = useLocation()
 
-  // Ruta a la que intentaba acceder antes de ser redirigido
   const from = location.state?.from?.pathname || '/'
 
   const handleSubmit = async (e) => {
     e.preventDefault()
     setErrorMsg('')
+    setErrorErrors([])
 
-    // Validación de campos obligatorios
     if (!username.trim() || !password.trim()) {
-      setValidated(true)
+      setErrorMsg('Ingresá tu usuario y contraseña.')
       return
     }
 
@@ -40,7 +37,6 @@ export const Login = () => {
     }
   }
 
-  // Atajo para autocompletar usuario de prueba y facilitar la corrección
   const handleQuickFill = (user) => {
     setUsername(user)
     setPassword('1234')
@@ -49,131 +45,134 @@ export const Login = () => {
   }
 
   return (
-    <Container className="py-5">
-      <Row className="justify-content-center">
-        <Col xs={12} sm={10} md={8} lg={5}>
-          <Card className="shadow-sm border-0">
-            <Card.Body className="p-4 p-md-5">
-              <div className="text-center mb-4">
-                <img
-                  src="/avatar-graduado.svg"
-                  alt="Academit Logo"
-                  width="76"
-                  height="76"
-                  className="d-inline-block"
-                />
-              </div>
+    <section className="ingreso" aria-label="Ingreso">
+      <div className="izq gutter">
+        <svg
+          className="escudo"
+          width="56"
+          height="56"
+          viewBox="0 0 56 56"
+          aria-hidden="true"
+        >
+          <circle cx="28" cy="28" r="26" fill="none" stroke="currentColor" strokeWidth="1.5" />
+          <circle cx="28" cy="28" r="21" fill="none" stroke="currentColor" strokeWidth=".8" />
+          <text
+            x="28"
+            y="37"
+            textAnchor="middle"
+            fontFamily="Georgia, serif"
+            fontSize="27"
+            fontWeight="700"
+            fill="currentColor"
+          >
+            A
+          </text>
+        </svg>
+        <b>Academit</b>
+        <p>
+          Ingresá con el usuario que te dio la secretaría. Si olvidaste la contraseña, pedí el cambio en administración.
+        </p>
+        <div style={{ marginTop: 'auto', paddingTop: '24px' }}>
+          <small style={{ color: 'var(--lateral-suave)', fontSize: '0.78rem' }}>
+            Este programa fue hecho como proyecto para Taller Integrador III y licenciado con BSD3.
+          </small>
+        </div>
+      </div>
 
-              {errorMsg && (
-                <Alert variant="danger" className="py-2 small">
-                  <div className="d-flex align-items-center gap-1">
-                    <span className="nf-glyph"></span>
-                    <strong>{errorMsg}</strong>
-                  </div>
-                  {errorErrors.length > 0 && (
-                    <ul className="mb-0 ps-3 mt-1">
-                      {errorErrors.map((e, idx) => (
-                        <li key={idx}>
-                          {e.campo && e.campo !== 'general' && <strong>{e.campo}: </strong>}
-                          {e.mensaje}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                </Alert>
+      <div className="der gutter">
+        <form onSubmit={handleSubmit} noValidate>
+          <h1>Ingresar</h1>
+
+          {errorMsg && (
+            <div
+              className="error-campo"
+              role="alert"
+              style={{
+                padding: '8px 12px',
+                border: '1px solid var(--error)',
+                backgroundColor: 'var(--papel)',
+              }}
+            >
+              <strong>{errorMsg}</strong>
+              {errorErrors.length > 0 && (
+                <ul style={{ margin: '6px 0 0', paddingLeft: '18px' }}>
+                  {errorErrors.map((e, idx) => (
+                    <li key={idx}>
+                      {e.campo && e.campo !== 'general' && <strong>{e.campo}: </strong>}
+                      {e.mensaje}
+                    </li>
+                  ))}
+                </ul>
               )}
+            </div>
+          )}
 
-              <Form noValidate validated={validated} onSubmit={handleSubmit}>
-                <Form.Group className="mb-3" controlId="formUsername">
-                  <Form.Label className="fw-semibold small">Usuario</Form.Label>
-                  <Form.Control
-                    type="text"
-                    placeholder="Ej. admin, docente..."
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    El nombre de usuario es obligatorio.
-                  </Form.Control.Feedback>
-                </Form.Group>
-
-                <Form.Group className="mb-4" controlId="formPassword">
-                  <Form.Label className="fw-semibold small">Contraseña</Form.Label>
-                  <Form.Control
-                    type="password"
-                    placeholder="Contraseña"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                  <Form.Control.Feedback type="invalid">
-                    La contraseña es obligatoria.
-                  </Form.Control.Feedback>
-                </Form.Group>
-
-                <Button
-                  variant="primary"
-                  type="submit"
-                  className="w-100 py-2 fw-semibold"
-                  disabled={loading}
-                >
-                  {loading ? 'Ingresando...' : 'Iniciar Sesión'}
-                </Button>
-              </Form>
-
-              <hr className="my-4 border-secondary border-opacity-25" />
-
-              <div className="p-3 rounded" style={{ backgroundColor: 'var(--m-surface)', border: '1px solid var(--m-outline)' }}>
-                <p className="small text-muted fw-bold mb-2">
-                  <span className="nf-glyph me-1"></span>
-                  Usuarios de prueba (Contraseña: <code>1234</code>):
-                </p>
-                <div className="d-flex flex-wrap gap-1">
-                  <Button
-                    variant="outline-secondary"
-                    size="sm"
-                    className="small"
-                    onClick={() => handleQuickFill('admin')}
-                  >
-                    admin (Admin)
-                  </Button>
-                  <Button
-                    variant="outline-secondary"
-                    size="sm"
-                    className="small"
-                    onClick={() => handleQuickFill('administrativo')}
-                  >
-                    administrativo
-                  </Button>
-                  <Button
-                    variant="outline-secondary"
-                    size="sm"
-                    className="small"
-                    onClick={() => handleQuickFill('docente')}
-                  >
-                    docente
-                  </Button>
-                  <Button
-                    variant="outline-secondary"
-                    size="sm"
-                    className="small"
-                    onClick={() => handleQuickFill('alumno')}
-                  >
-                    alumno
-                  </Button>
-                </div>
-              </div>
-            </Card.Body>
-          </Card>
-          <div className="text-center mt-4">
-            <small className="text-muted" style={{ fontSize: '0.78rem' }}>
-              Este programa fue hecho como proyecto para Taller Integrador III y licenciado con BSD3.
-            </small>
+          <div className="campo">
+            <label htmlFor="usuario">Usuario</label>
+            <input
+              id="usuario"
+              type="text"
+              autoComplete="username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
           </div>
-        </Col>
-      </Row>
-    </Container>
+
+          <div className="campo">
+            <label htmlFor="clave">Contraseña</label>
+            <input
+              id="clave"
+              type="password"
+              autoComplete="current-password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+
+          <button className="btn" type="submit" disabled={loading} style={{ width: '100%' }}>
+            {loading ? 'Cargando…' : 'Ingresar'}
+          </button>
+
+          <div style={{ marginTop: '16px', borderTop: '1px solid var(--linea)', paddingTop: '12px' }}>
+            <p style={{ fontSize: '13px', color: 'var(--suave)', marginBottom: '8px' }}>
+              Usuarios de prueba (clave: <code>1234</code>):
+            </p>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+              <button
+                type="button"
+                className="btn lig chico"
+                onClick={() => handleQuickFill('admin')}
+              >
+                admin
+              </button>
+              <button
+                type="button"
+                className="btn lig chico"
+                onClick={() => handleQuickFill('administrativo')}
+              >
+                administrativo
+              </button>
+              <button
+                type="button"
+                className="btn lig chico"
+                onClick={() => handleQuickFill('docente')}
+              >
+                docente
+              </button>
+              <button
+                type="button"
+                className="btn lig chico"
+                onClick={() => handleQuickFill('alumno')}
+              >
+                alumno
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </section>
   )
 }
 

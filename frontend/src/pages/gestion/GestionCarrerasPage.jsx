@@ -385,7 +385,7 @@ export const GestionCarrerasPage = () => {
         onHide={() => setCarreraDetalle(null)}
         size="lg"
         centered
-        contentClassName="border-0 shadow-lg"
+        animation={false}
       >
         <Modal.Header
           closeButton
@@ -406,7 +406,7 @@ export const GestionCarrerasPage = () => {
             <Row className="g-4">
               {/* Sección Planes de Estudio */}
               <Col md={6}>
-                <Card className="border-0 shadow-sm h-100" style={{ backgroundColor: 'var(--m-surfaceVariant)' }}>
+                <Card className="border-0  h-100" style={{ backgroundColor: 'var(--m-surfaceVariant)' }}>
                   <Card.Header
                     className="p-3 border-bottom border-secondary border-opacity-25 d-flex justify-content-between align-items-center"
                     style={{ backgroundColor: 'transparent' }}
@@ -448,7 +448,7 @@ export const GestionCarrerasPage = () => {
 
               {/* Sección Cursos / Comisiones */}
               <Col md={6}>
-                <Card className="border-0 shadow-sm h-100" style={{ backgroundColor: 'var(--m-surfaceVariant)' }}>
+                <Card className="border-0  h-100" style={{ backgroundColor: 'var(--m-surfaceVariant)' }}>
                   <Card.Header
                     className="p-3 border-bottom border-secondary border-opacity-25 d-flex justify-content-between align-items-center"
                     style={{ backgroundColor: 'transparent' }}

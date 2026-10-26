@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Alert, Card, Form, Row, Col, Button, Spinner } from 'react-bootstrap'
+import { Alert, Card, Form, Row, Col, Button } from 'react-bootstrap'
 import PageHeader from '../../components/PageHeader'
 import DataTable from '../../components/DataTable'
 import StatusBadge from '../../components/StatusBadge'
@@ -104,7 +104,7 @@ export const DeclaracionJuradaPage = () => {
       </Alert>
 
       {/* Formulario de Presentación de DJ */}
-      <Card className="border-0 shadow-sm mb-4" style={{ backgroundColor: 'var(--m-surface)' }}>
+      <Card className="border-0  mb-4" style={{ backgroundColor: 'var(--m-surface)' }}>
         <Card.Header
           className="p-3 border-bottom border-secondary border-opacity-25 d-flex align-items-center gap-2"
           style={{ backgroundColor: 'var(--m-surfaceVariant)' }}
@@ -184,19 +184,9 @@ export const DeclaracionJuradaPage = () => {
                   variant="primary"
                   type="submit"
                   disabled={loading}
-                  className="d-flex align-items-center gap-2 px-4"
+                  className="px-4"
                 >
-                  {loading ? (
-                    <>
-                      <Spinner size="sm" animation="border" />
-                      <span>Presentando...</span>
-                    </>
-                  ) : (
-                    <>
-                      <i className="bi bi-file-earmark-check-fill" />
-                      <span>Presentar Declaración Jurada</span>
-                    </>
-                  )}
+                  {loading ? 'Cargando…' : 'Presentar Declaración Jurada'}
                 </Button>
               </Col>
             </Row>
