@@ -14,26 +14,26 @@
 | [ ] | Tarea | Depende de | Dueño | Referencia |
 | :---: | :--- | :--- | :--- | :--- |
 | [x] | Módulo Ciclos Lectivos (3 de 3 endpoints pendientes) | `auth`, `usuarios` | Alfredo | [Ficha](backend/guia-de-modulos.md#54-módulo-ciclos-lectivos-ciclos-lectivos) |
-| [ ] | Módulo Carreras (7 de 7 endpoints pendientes) | `auth`, `usuarios` | | [Ficha](backend/guia-de-modulos.md#53-módulo-carreras-carreras) |
-| [ ] | Módulo Planes de Estudio (2 de 2 endpoints pendientes) | `carreras` | | [Ficha](backend/guia-de-modulos.md#56-módulo-planes-de-estudio-planes-estudio) |
-| [ ] | Módulo Materias (3 de 3 endpoints pendientes) | `planes-estudio` | | [Ficha](backend/guia-de-modulos.md#55-módulo-materias-materias) |
-| [ ] | Módulo Alumnos (7 de 7 endpoints pendientes) | `ciclos-lectivos`, `planes-estudio` | | [Ficha](backend/guia-de-modulos.md#57-módulo-alumnos-alumnos) |
-| [ ] | Módulo Docentes (4 de 4 endpoints pendientes) | `auth`, `usuarios` | | [Ficha](backend/guia-de-modulos.md#58-módulo-docentes-docentes) |
-| [ ] | Módulo Cursos (3 de 3 endpoints pendientes) | `ciclos-lectivos`, `carreras` | | [Ficha](backend/guia-de-modulos.md#510-módulo-cursos-comisiones-cursos) |
-| [ ] | Módulo Asignaciones Docentes (3 de 3 endpoints pendientes) | `cursos`, `materias`, `docentes` | | [Ficha](backend/guia-de-modulos.md#59-módulo-asignaciones-docentes-asignaciones) |
-| [ ] | Módulo Inscripciones a Cursos (3 de 3 endpoints pendientes) | `alumnos`, `cursos`, `ciclos-lectivos` | | [Ficha](backend/guia-de-modulos.md#511-módulo-inscripciones-a-cursos-inscripciones) |
-| [ ] | Módulo Matrículas Anuales (4 de 4 endpoints pendientes) | `alumnos`, `ciclos-lectivos` | | [Ficha](backend/guia-de-modulos.md#513-módulo-matrículas-anuales-matriculas) |
-| [ ] | Módulo Cuotas y Aranceles (2 de 2 endpoints pendientes) | `matriculas` | | [Ficha](backend/guia-de-modulos.md#512-módulo-cuotas-y-aranceles-cuotas) |
-| [ ] | Módulo Pagos y Comprobantes (2 de 2 endpoints pendientes) | `matriculas`, `cuotas`, `alumnos` | | [Ficha](backend/guia-de-modulos.md#514-módulo-pagos-y-comprobantes-pagos) |
-| [ ] | Módulo Evaluaciones (3 de 3 endpoints pendientes) | `cursos`, `materias`, `docentes` | | [Ficha](backend/guia-de-modulos.md#517-módulo-evaluaciones-evaluaciones) |
-| [ ] | Módulo Calificaciones (2 de 2 endpoints pendientes) | `evaluaciones`, `alumnos`, `docentes` | | [Ficha](backend/guia-de-modulos.md#516-módulo-calificaciones-calificaciones) |
-| [ ] | Módulo Asistencias (2 de 2 endpoints pendientes) | `cursos`, `materias`, `alumnos` | | [Ficha](backend/guia-de-modulos.md#515-módulo-asistencias-asistencias) |
-| [ ] | Módulo Mesas de Examen (5 de 5 endpoints pendientes) | `materias`, `ciclos-lectivos`, `docentes` | | [Ficha](backend/guia-de-modulos.md#518-módulo-mesas-de-examen-mesas-examen) |
-| [ ] | Módulo Declaraciones Juradas (2 de 2 endpoints pendientes) | `alumnos`, `ciclos-lectivos`, `materias` | | [Ficha](backend/guia-de-modulos.md#519-módulo-declaraciones-juradas-declaraciones-juradas) |
-| [ ] | Módulo Documentación y Legajos (2 de 2 endpoints pendientes) | `alumnos` | | [Ficha](backend/guia-de-modulos.md#520-módulo-documentación-y-legajos-documentacion) |
-| [ ] | Módulo Solicitudes y Trámites (3 de 3 endpoints pendientes) | `alumnos`, `usuarios` | | [Ficha](backend/guia-de-modulos.md#521-módulo-solicitudes-y-trámites-solicitudes) |
-| [ ] | Tarea programada para marcar cuotas impagas como vencidas | `matriculas`, `cuotas` | | RN07, RF30 |
-| [ ] | Verificar permisos por rol (`x-roles`) y tests Mockito/WebMvc en cada controller | Módulos respectivos | | [guia-de-modulos.md](backend/guia-de-modulos.md#3-plantilla-de-un-módulo-pasos-de-desarrollo) |
+| [ ] | Módulo Carreras (7 de 7 endpoints pendientes) | `auth`, `usuarios` | Alfredo | [Ficha](backend/guia-de-modulos.md#53-módulo-carreras-carreras) |
+| [ ] | Módulo Planes de Estudio (2 de 2 endpoints pendientes) | `carreras` | Alfredo | [Ficha](backend/guia-de-modulos.md#56-módulo-planes-de-estudio-planes-estudio) |
+| [ ] | Módulo Materias (3 de 3 endpoints pendientes) | `planes-estudio` | Alfredo | [Ficha](backend/guia-de-modulos.md#55-módulo-materias-materias) |
+| [ ] | Módulo Alumnos (7 de 7 endpoints pendientes) | `ciclos-lectivos`, `planes-estudio` | Santiago | [Ficha](backend/guia-de-modulos.md#57-módulo-alumnos-alumnos) |
+| [ ] | Módulo Docentes (4 de 4 endpoints pendientes) | `auth`, `usuarios` | Santiago | [Ficha](backend/guia-de-modulos.md#58-módulo-docentes-docentes) |
+| [ ] | Módulo Cursos (3 de 3 endpoints pendientes) | `ciclos-lectivos`, `carreras` | Alfredo | [Ficha](backend/guia-de-modulos.md#510-módulo-cursos-comisiones-cursos) |
+| [ ] | Módulo Asignaciones Docentes (3 de 3 endpoints pendientes) | `cursos`, `materias`, `docentes` | Santiago | [Ficha](backend/guia-de-modulos.md#59-módulo-asignaciones-docentes-asignaciones) |
+| [ ] | Módulo Inscripciones a Cursos (3 de 3 endpoints pendientes) | `alumnos`, `cursos`, `ciclos-lectivos` | Santiago | [Ficha](backend/guia-de-modulos.md#511-módulo-inscripciones-a-cursos-inscripciones) |
+| [ ] | Módulo Matrículas Anuales (4 de 4 endpoints pendientes) | `alumnos`, `ciclos-lectivos` | Matias | [Ficha](backend/guia-de-modulos.md#513-módulo-matrículas-anuales-matriculas) |
+| [ ] | Módulo Cuotas y Aranceles (2 de 2 endpoints pendientes) | `matriculas` | Matias | [Ficha](backend/guia-de-modulos.md#512-módulo-cuotas-y-aranceles-cuotas) |
+| [ ] | Módulo Pagos y Comprobantes (2 de 2 endpoints pendientes) | `matriculas`, `cuotas`, `alumnos` | Matias | [Ficha](backend/guia-de-modulos.md#514-módulo-pagos-y-comprobantes-pagos) |
+| [ ] | Módulo Evaluaciones (3 de 3 endpoints pendientes) | `cursos`, `materias`, `docentes` | Mateo | [Ficha](backend/guia-de-modulos.md#517-módulo-evaluaciones-evaluaciones) |
+| [ ] | Módulo Calificaciones (2 de 2 endpoints pendientes) | `evaluaciones`, `alumnos`, `docentes` | Mateo | [Ficha](backend/guia-de-modulos.md#516-módulo-calificaciones-calificaciones) |
+| [ ] | Módulo Asistencias (2 de 2 endpoints pendientes) | `cursos`, `materias`, `alumnos` | Mateo | [Ficha](backend/guia-de-modulos.md#515-módulo-asistencias-asistencias) |
+| [ ] | Módulo Mesas de Examen (5 de 5 endpoints pendientes) | `materias`, `ciclos-lectivos`, `docentes` | Mateo | [Ficha](backend/guia-de-modulos.md#518-módulo-mesas-de-examen-mesas-examen) |
+| [ ] | Módulo Declaraciones Juradas (2 de 2 endpoints pendientes) | `alumnos`, `ciclos-lectivos`, `materias` | Mateo | [Ficha](backend/guia-de-modulos.md#519-módulo-declaraciones-juradas-declaraciones-juradas) |
+| [ ] | Módulo Documentación y Legajos (2 de 2 endpoints pendientes) | `alumnos` | Matias | [Ficha](backend/guia-de-modulos.md#520-módulo-documentación-y-legajos-documentacion) |
+| [ ] | Módulo Solicitudes y Trámites (3 de 3 endpoints pendientes) | `alumnos`, `usuarios` | Matias | [Ficha](backend/guia-de-modulos.md#521-módulo-solicitudes-y-trámites-solicitudes) |
+| [ ] | Tarea programada para marcar cuotas impagas como vencidas | `matriculas`, `cuotas` | Matias | RN07, RF30 |
+| [ ] | Verificar permisos por rol (`x-roles`) y tests Mockito/WebMvc en cada controller | Módulos respectivos | Todos (en su módulo) | [guia-de-modulos.md](backend/guia-de-modulos.md#3-plantilla-de-un-módulo-pasos-de-desarrollo) |
 
 ## 3. Integración con el Frontend
 | [ ] | Tarea | Depende de | Dueño | Referencia |
