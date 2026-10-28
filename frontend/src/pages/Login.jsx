@@ -59,8 +59,8 @@ export const Login = () => {
         <p>
           Ingresá con el usuario que te dio la secretaría. Si olvidaste la contraseña, pedí el cambio en administración.
         </p>
-        <div style={{ marginTop: 'auto', paddingTop: '24px' }}>
-          <small style={{ color: 'var(--lateral-suave)', fontSize: '0.78rem' }}>
+        <div className="pie-login">
+          <small>
             Este programa fue hecho como proyecto para Taller Integrador III y licenciado con BSD3.
           </small>
         </div>
